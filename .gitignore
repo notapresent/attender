@@ -31,3 +31,5 @@ nbactions.xml
 
 target/
 
+# Exclude local settings
+/src/main/webapp/WEB-INF/config.properties
