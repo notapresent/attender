@@ -29,4 +29,5 @@ appengine-generated/
 nbactions.xml
 *.iml
 
+target/
 
