@@ -8,4 +8,6 @@
     <resource-files>
         <include path="/WEB-INF/config.properties"/>
     </resource-files>
+    <!-- User URLFetch for all outbound HTTP(S) requests -->
+    <url-stream-handler>urlfetch</url-stream-handler>
 </appengine-web-app>
