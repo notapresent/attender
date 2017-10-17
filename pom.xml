@@ -42,7 +42,12 @@
       <artifactId>jstl</artifactId>
       <version>1.2</version>
     </dependency>
- 
+
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>23.1-jre</version>
+    </dependency>
 
 
 
@@ -56,6 +61,13 @@
     <dependency>
       <groupId>com.google.appengine</groupId>
       <artifactId>appengine-api-stubs</artifactId>
+      <version>1.9.58</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.appengine</groupId>
+      <artifactId>appengine-local-runtime</artifactId>
       <version>1.9.58</version>
       <scope>test</scope>
     </dependency>
