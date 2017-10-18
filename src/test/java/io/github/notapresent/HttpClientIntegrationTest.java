@@ -10,12 +10,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookieStore;
+
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 
 public class HttpClientIntegrationTest {
+    public static final String HTTPBIN = "http://eu.httpbin.org";
     private final LocalServiceTestHelper helper =
             new LocalServiceTestHelper(new LocalURLFetchServiceTestConfig());
     private HttpClient client;
@@ -34,10 +39,10 @@ public class HttpClientIntegrationTest {
 
     @Test
     public void testRequestGetsContent() {
-        String html = new String(doRequest("http://httpbin.org/").getContent(), Charsets.UTF_8);
+        String html = new String(client.request("http://eu.httpbin.org/").getContent(), Charsets.UTF_8);
 
         assertThat(html)
-                .named("Contents of http://httpbin.org/")
+                .named("Contents of http://eu.httpbin.org/")
                 .contains("httpbin(1): HTTP Request &amp; Response Service");
     }
 
@@ -49,42 +54,42 @@ public class HttpClientIntegrationTest {
     @Test(expected = HttpException.class)
     public void testRequestThrowsOnHttpError() throws HttpException {
         try {
-            client.request("https://httpbin.org/status/404");
+            client.request("http://eu.httpbin.org/status/404");
         }
         catch(HttpException e) {
             assertEquals(404, e.getResponseCode());
             throw e;
         }
-
     }
 
     @Test
     public void testRedirectOff() {
         client.setFollowRedirects(false);
-        HTTPResponse resp = client.request("http://httpbin.org/redirect/1");
+        HTTPResponse resp = client.request("http://eu.httpbin.org/redirect/1");
         assertEquals(302, resp.getResponseCode());
     }
 
     @Test
     public void testRedirectOn() {
-        HTTPResponse resp = client.request("http://httpbin.org/redirect/1");
+        HTTPResponse resp = client.request("http://eu.httpbin.org/redirect/1");
         assertEquals(200, resp.getResponseCode());
     }
 
     @Test
     public void testMaxRedirects() {
-        HTTPResponse resp = client.request("http://httpbin.org/redirect/6");
+        HTTPResponse resp = client.request("http://eu.httpbin.org/redirect/6");
         assertEquals(302, resp.getResponseCode());
     }
 
-    private HTTPResponse doRequest(String urlStr) {
-        try {
-            return client.request(urlStr);
-        }
-        catch (HttpException e) {
-            fail(e.getMessage());
-        }
-        return null;
-    }
+    @Test
+    public void testCookiePersistence() {
+        URLFetchCookieManager cm = new URLFetchCookieManager();
+        client.setCookieManager(cm);
+        HTTPResponse resp = client.request("http://eu.httpbin.org/cookies/set?k2=v2&k1=v1");
+        String html = new String(resp.getContent(), Charsets.UTF_8);
 
+        assertEquals(200, resp.getResponseCode());
+        assertThat(html).named("response").contains("\"k1\": \"v1\"");
+        assertThat(html).named("response").contains("\"k2\": \"v2\"");
+    }
 }
