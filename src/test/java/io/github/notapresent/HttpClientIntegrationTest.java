@@ -9,14 +9,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookieStore;
-
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 
 public class HttpClientIntegrationTest {
