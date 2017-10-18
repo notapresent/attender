@@ -58,6 +58,24 @@ public class HttpClientIntegrationTest {
 
     }
 
+    @Test
+    public void testRedirectOff() {
+        client.setFollowRedirects(false);
+        HTTPResponse resp = client.request("http://httpbin.org/redirect/1");
+        assertEquals(302, resp.getResponseCode());
+    }
+
+    @Test
+    public void testRedirectOn() {
+        HTTPResponse resp = client.request("http://httpbin.org/redirect/1");
+        assertEquals(200, resp.getResponseCode());
+    }
+
+    @Test
+    public void testMaxRedirects() {
+        HTTPResponse resp = client.request("http://httpbin.org/redirect/6");
+        assertEquals(302, resp.getResponseCode());
+    }
 
     private HTTPResponse doRequest(String urlStr) {
         try {
@@ -68,6 +86,5 @@ public class HttpClientIntegrationTest {
         }
         return null;
     }
-
 
 }
