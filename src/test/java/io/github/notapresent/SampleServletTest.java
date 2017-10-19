@@ -1,10 +1,7 @@
 package io.github.notapresent;
 
-import static com.google.common.truth.Truth.assertThat;
-import static org.mockito.Mockito.when;
-
+import com.google.appengine.tools.development.jetty9.AppEngineWebAppContext;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,12 +9,22 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import static com.google.common.truth.Truth.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for {@link SampleServlet}.
@@ -33,7 +40,9 @@ public class SampleServletTest {
     private HttpServletRequest mockRequest;
     @Mock
     private HttpServletResponse mockResponse;
+
     private StringWriter responseWriter;
+
     private SampleServlet servletUnderTest;
 
     @Before
@@ -48,7 +57,27 @@ public class SampleServletTest {
         responseWriter = new StringWriter();
         when(mockResponse.getWriter()).thenReturn(new PrintWriter(responseWriter));
 
+        ServletConfig servletConfig = mock(ServletConfig.class);
+
+        Config mockConfig = mock(Config.class);
+        when(mockConfig .getProperty(anyString())).thenAnswer(new Answer<String>() {
+            @Override
+            public String answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                return "Fake property for " + (String) args[0];
+            }
+        });
+        //when(mockConfig.getProperty(any(String.class))).thenReturn("fake property value");
+
+        ServletContext servletContext = mock(ServletContext.class);
+        when(servletContext.getAttribute(any(String.class))).thenReturn(mockConfig);
+
+
+        when(servletConfig.getServletContext()).thenReturn(servletContext);
+
+
         servletUnderTest = new SampleServlet();
+        servletUnderTest.init(servletConfig);
     }
 
     @After
