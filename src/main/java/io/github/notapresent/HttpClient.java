@@ -108,7 +108,7 @@ public class HttpClient {
                 }
                 url = new URL(url, location);
             }
-            return resp;
+            throw new HttpException("Too many redirects (" + hops + ")");
         }
         catch(MalformedURLException e) {
             throw new HttpException(e);

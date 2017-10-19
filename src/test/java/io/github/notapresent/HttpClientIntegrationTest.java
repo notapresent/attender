@@ -73,10 +73,9 @@ public class HttpClientIntegrationTest {
         assertEquals(200, resp.getResponseCode());
     }
 
-    @Test
-    public void testMaxRedirects() {
+    @Test(expected = HttpException.class)
+    public void testMaxRedirectsThrows() {
         HTTPResponse resp = client.request(HTTPBIN + "redirect/6");
-        assertEquals(302, resp.getResponseCode());
     }
 
     @Test
