@@ -5,9 +5,12 @@ import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalURLFetchServiceTestConfig;
 import com.google.common.base.Charsets;
+import com.google.common.collect.ImmutableMap;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Map;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -85,5 +88,18 @@ public class HttpClientIntegrationTest {
         assertEquals(200, resp.getResponseCode());
         assertThat(html).named("response").contains("\"k1\": \"v1\"");
         assertThat(html).named("response").contains("\"k2\": \"v2\"");
+    }
+
+    @Test
+    public void testHeaders(){
+        Map<String, String> headers = ImmutableMap.of(
+                "header1", "one",
+                "header2", "two"
+        );
+        client.getHeaders().putAll(headers);
+        HTTPResponse resp = client.request(HTTPBIN + "/headers");
+        String lowerCaseHtml = new String(resp.getContent(), Charsets.UTF_8).toLowerCase();
+        assertThat(lowerCaseHtml ).named("response").contains("\"header1\": \"one\"");
+        assertThat(lowerCaseHtml ).named("response").contains("\"header2\": \"two\"");
     }
 }

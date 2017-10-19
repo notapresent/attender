@@ -2,10 +2,13 @@ package io.github.notapresent;
 
 
 import com.google.appengine.api.urlfetch.*;
+import com.google.appengine.repackaged.com.google.common.collect.ImmutableMap;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import static io.github.notapresent.URLFetchHelpers.getHeader;
 import static io.github.notapresent.URLFetchHelpers.isRedirect;
@@ -14,11 +17,19 @@ import static com.google.appengine.api.urlfetch.FetchOptions.Builder;
 
 public class HttpClient {
     public static final int MAX_REDIRECTS = 5;
-    static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36 attender/1.0";
-
+    public static final Map<String, String> DEFAULT_HEADERS;
     private boolean followRedirects = true;
     private URLFetchService urlFetch;
     private URLFetchCookieManager cookieManager;
+
+    private Map<String, String> headers;
+
+    static {
+        DEFAULT_HEADERS = ImmutableMap.of(
+                "user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) attender/1.0",
+                "accept", "text/html"
+        );
+    }
 
     public URLFetchCookieManager getCookieManager() {
         return cookieManager;
@@ -36,9 +47,17 @@ public class HttpClient {
         this.followRedirects = followRedirects;
     }
 
+
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
     public HttpClient(URLFetchService urlFetch) {
         this.urlFetch = urlFetch;
+        headers = new HashMap<>();
+        headers.putAll(DEFAULT_HEADERS);
     }
+
 
     protected HTTPResponse doRequest(HTTPRequest req) throws HttpException {
         try {
@@ -102,6 +121,11 @@ public class HttpClient {
                     .disallowTruncate()
                     .doNotValidateCertificate();
             HTTPRequest req = new HTTPRequest(url, HTTPMethod.GET, opts);
+
+            for(Map.Entry<String, String> hdr : headers.entrySet()) {
+                req.setHeader(new HTTPHeader(hdr.getKey(), hdr.getValue()));
+            }
+
             return req;
     }
 }
