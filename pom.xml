@@ -112,6 +112,25 @@
         </configuration>
       </plugin>
 
+        <plugin>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <version>2.20.1</version>
+            <configuration>
+                <includes>
+                    <include>**/*.class</include>
+                </includes>
+                <groups>io.github.notapresent.IntegrationTest</groups>
+            </configuration>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>integration-test</goal>
+                        <goal>verify</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>versions-maven-plugin</artifactId>
@@ -156,6 +175,9 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.20</version>
+        <configuration>
+          <excludedGroups>io.github.notapresent.IntegrationTest</excludedGroups>
+        </configuration>
       </plugin>
 
       <plugin>

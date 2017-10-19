@@ -9,13 +9,14 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.util.Map;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
 
-
+@Category(IntegrationTest.class)
 public class HttpClientIntegrationTest {
     public static final String HTTPBIN = "http://eu.httpbin.org/";
     private final LocalServiceTestHelper helper =
