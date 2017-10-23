@@ -34,12 +34,11 @@ public class URLFetchSession implements URLFetchService {
         HTTPResponse resp = null;
         while(++numHops < MAX_REDIRECTS) {
             resp = service.fetch(req);
-            if (!followRedirects || resp.getResponseCode() == 200) {
+            if (!followRedirects || !isRedirect(resp.getResponseCode())) {
                 break;
             }
             req = makeRedirectRequest(req.getURL(), resp);
         }
-        resp.getFinalUrl();
         return resp;
     }
 
@@ -108,8 +107,8 @@ public class URLFetchSession implements URLFetchService {
         return rv;
     }
 
-    public static HTTPRequest prepRequest(HTTPRequest origReq) {
-        FetchOptions newFetchOpts = copyFetchOptions(origReq.getFetchOptions()).doNotFollowRedirects();
-        return copyWithFetchOptions(origReq, newFetchOpts);
+    public static HTTPRequest prepRequest(HTTPRequest req) {
+        FetchOptions newFetchOpts = copyFetchOptions(req.getFetchOptions()).doNotFollowRedirects();
+        return copyWithFetchOptions(req, newFetchOpts);
     }
 }

@@ -8,13 +8,9 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -38,7 +34,7 @@ public class URLFetchSessionTest {
 
         HTTPResponse realResp = session.fetch(new URL("http://fake.url"));
 
-        verify(mockService, times(1)); // .fetch(any(URL.class));
+        verify(mockService, times(1)).fetch(any(HTTPRequest.class));
         assertSame(resp, realResp);
     }
 
@@ -97,6 +93,18 @@ public class URLFetchSessionTest {
                 new byte[1], null, redirHdrs);
         HTTPRequest req = URLFetchSession.makeRedirectRequest(url, resp);
         assertEquals("http://redir.url", req.getURL().toString());
+    }
+
+    @Test
+    public void testIsRedirect() {
+        int[] redirectCodes = {301, 302, 303 };
+        int[] nonRedirectCodes = {200, 404, 500};
+        for(int i=0; i < redirectCodes.length; i++) {
+            assertTrue(URLFetchSession.isRedirect(redirectCodes[i]));
+        }
+        for(int i=0; i < nonRedirectCodes.length; i++) {
+            assertFalse(URLFetchSession.isRedirect(nonRedirectCodes[i]));
+        }
     }
 
     private static HTTPResponse makeResponse(int code, String content, List<HTTPHeader> headers) {
