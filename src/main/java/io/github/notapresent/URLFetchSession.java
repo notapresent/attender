@@ -1,12 +1,11 @@
 package io.github.notapresent;
 
 import com.google.appengine.api.urlfetch.*;
-import com.sun.istack.internal.NotNull;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.Future;
 
 
@@ -32,7 +31,6 @@ public class URLFetchSession implements URLFetchService {
 
     private HTTPResponse doRequest(HTTPRequest req, boolean followRedirects) throws IOException {
         int numHops = 0;
-        @NotNull
         HTTPResponse resp = null;
         while(++numHops < MAX_REDIRECTS) {
             resp = service.fetch(req);
@@ -41,6 +39,7 @@ public class URLFetchSession implements URLFetchService {
             }
             req = makeRedirectRequest(req.getURL(), resp);
         }
+        resp.getFinalUrl();
         return resp;
     }
 
@@ -56,10 +55,10 @@ public class URLFetchSession implements URLFetchService {
 
     public static HTTPRequest makeRedirectRequest(URL originalUrl, HTTPResponse resp)
             throws MalformedURLException {
-        String location = getHeader(resp, "location");
+        String location = getHeader(resp.getHeaders(), "location");
 
         if(location == null) {
-            throw new IllegalArgumentException("Redirect response withuut location header");
+            throw new IllegalArgumentException("Redirect response without location header");
         }
         return new HTTPRequest(new URL(originalUrl, location),
                 HTTPMethod.GET,
@@ -70,8 +69,8 @@ public class URLFetchSession implements URLFetchService {
         return code >= 301 && code <= 303;
     }
 
-    public static String getHeader(HTTPResponse resp, String  name) {
-        for(HTTPHeader hdr: resp.getHeaders()) {
+    public static String getHeader(List<HTTPHeader> headers, String  name) {
+        for(HTTPHeader hdr: headers) {
             if(hdr.getName().equalsIgnoreCase(name)) {
                 return hdr.getValue();
             }

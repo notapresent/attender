@@ -1,21 +1,16 @@
 package io.github.notapresent;
 
 import com.google.appengine.api.urlfetch.*;
-import com.google.appengine.repackaged.com.google.api.client.http.HttpResponse;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -38,12 +33,13 @@ public class URLFetchSessionTest {
 
     @Test
     public void testFetchForwards() throws IOException {
-        HTTPResponse mockResp = makeMockResponse();
-        when(mockService.fetch(any(HTTPRequest.class))).thenReturn(mockResp);
+        HTTPResponse resp = makeResponse(200, "");
+        when(mockService.fetch(any(HTTPRequest.class))).thenReturn(resp);
 
-        HTTPResponse resp = session.fetch(new URL("http://fake.url"));
+        HTTPResponse realResp = session.fetch(new URL("http://fake.url"));
+
         verify(mockService, times(1)); // .fetch(any(URL.class));
-        assertSame(resp, mockResp);
+        assertSame(resp, realResp);
     }
 
     @Test
@@ -61,28 +57,57 @@ public class URLFetchSessionTest {
         assertEquals(src.getValidateCertificate(), dest.getValidateCertificate());
     }
 
+    @Test public void testGetHeaderReturnsHeader() {
+        List<HTTPHeader> headers = Collections.singletonList(
+                new HTTPHeader("Name", "Value"));
+        assertEquals("Value", URLFetchSession.getHeader(headers, "Name"));
+    }
+
+    @Test public void testGetHeaderReturnsNull() {
+        List<HTTPHeader> headers = new LinkedList<>();
+        assertEquals(null, URLFetchSession.getHeader(headers, "Anything"));
+    }
+
     @Test
     public void testRedirectRedirects() throws IOException {
-        List<HTTPHeader> redirHdrs = Collections.singletonList(
-                new HTTPHeader("location", "http://redir.url"));
-        HTTPResponse redirResp = makeMockResponse("Redirecting", 302, redirHdrs);
-        HTTPResponse okResp = makeMockResponse();
+        HTTPResponse redirResp = makeRedirectResponse(302, "");
+        HTTPResponse okResp = makeResponse(200, "");
         when(mockService.fetch(any(HTTPRequest.class))).thenReturn(redirResp, okResp);
 
-        HTTPResponse resp = session.fetch(new URL("http://fake.url"));
-        assertSame(resp, okResp);
+        HTTPResponse realResp = session.fetch(new URL("http://fake.url"));
+
+        assertSame(realResp, okResp);
         verify(mockService, times(2)).fetch(any(HTTPRequest.class));
     }
 
-    private HTTPResponse makeMockResponse(String content, int statusCode, List<HTTPHeader> headers) {
-        HTTPResponse rv = mock(HTTPResponse.class);
-        when(rv.getResponseCode()).thenReturn(statusCode);
-        when(rv.getContent()).thenReturn(content.getBytes());
-        when(rv.getHeaders()).thenReturn(headers == null ? new ArrayList<>() : headers);
-        return rv;
+    @Test(expected = IllegalArgumentException.class)
+    public void testMakeRedirectRequestThrows() throws IOException {
+        URL url = new URL("http://fake.url");
+        HTTPResponse resp = new HTTPResponse(302,
+                new byte[1], url, new LinkedList<HTTPHeader>() );
+        URLFetchSession.makeRedirectRequest(url, resp);
     }
 
-    private HTTPResponse makeMockResponse() {
-        return makeMockResponse("Dummy vontent", 200, null);
+    @Test
+    public void testMakeRedirectRequestBuildsURL() throws IOException {
+        URL url = new URL("http://fake.url");
+        List<HTTPHeader> redirHdrs = Collections.singletonList(
+                new HTTPHeader("location", "http://redir.url"));
+        HTTPResponse resp = new HTTPResponse(302,
+                new byte[1], null, redirHdrs);
+        HTTPRequest req = URLFetchSession.makeRedirectRequest(url, resp);
+        assertEquals("http://redir.url", req.getURL().toString());
+    }
+
+    private static HTTPResponse makeResponse(int code, String content, List<HTTPHeader> headers) {
+        return new HTTPResponse(code, content.getBytes(), null, headers);
+    }
+    private static HTTPResponse makeResponse(int code, String content) {
+        return makeResponse(code, content, new LinkedList<>());
+    }
+    private static HTTPResponse makeRedirectResponse(int code, String location) {
+        List<HTTPHeader> headers = Collections.singletonList(
+                new HTTPHeader("location", location));
+        return makeResponse(code, "", headers);
     }
 }
