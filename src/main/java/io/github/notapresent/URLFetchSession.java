@@ -3,6 +3,7 @@ package io.github.notapresent;
 import com.google.appengine.api.urlfetch.*;
 
 import java.io.IOException;
+import java.net.CookieHandler;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -12,10 +13,12 @@ import java.util.concurrent.Future;
 public class URLFetchSession implements URLFetchService {
     public static final int MAX_REDIRECTS = 5;
     private URLFetchService service;
+    private CookieHandler cookieManager;
 
 
-    public URLFetchSession(URLFetchService service) {
+    public URLFetchSession(URLFetchService service, CookieHandler cookieManager) {
         this.service = service;
+        this.cookieManager = cookieManager;
     }
 
     public HTTPResponse fetch(URL url) throws IOException {

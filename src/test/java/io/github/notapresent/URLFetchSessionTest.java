@@ -1,12 +1,14 @@
 package io.github.notapresent;
 
 import com.google.appengine.api.urlfetch.*;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
+import java.net.CookieManager;
 import java.net.URL;
 import java.util.*;
 
@@ -18,13 +20,14 @@ import static org.mockito.Mockito.*;
 public class URLFetchSessionTest {
     @Mock
     private URLFetchService mockService;
-
+    private CookieManager cookieManager;
     private URLFetchSession session;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        session = new URLFetchSession(mockService);
+        cookieManager = new CookieManager();
+        session = new URLFetchSession(mockService, cookieManager);
     }
 
     @Test
@@ -99,11 +102,11 @@ public class URLFetchSessionTest {
     public void testIsRedirect() {
         int[] redirectCodes = {301, 302, 303 };
         int[] nonRedirectCodes = {200, 404, 500};
-        for(int i=0; i < redirectCodes.length; i++) {
-            assertTrue(URLFetchSession.isRedirect(redirectCodes[i]));
+        for (int redirectCode : redirectCodes) {
+            assertTrue(URLFetchSession.isRedirect(redirectCode));
         }
-        for(int i=0; i < nonRedirectCodes.length; i++) {
-            assertFalse(URLFetchSession.isRedirect(nonRedirectCodes[i]));
+        for (int nonRedirectCode : nonRedirectCodes) {
+            assertFalse(URLFetchSession.isRedirect(nonRedirectCode));
         }
     }
 

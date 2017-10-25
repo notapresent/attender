@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import java.io.IOException;
+import java.net.CookieManager;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -22,11 +23,13 @@ public class URLFetchSessionIntegrationTest {
     private final LocalServiceTestHelper helper =
             new LocalServiceTestHelper(new LocalURLFetchServiceTestConfig());
     private URLFetchSession session;
+    private CookieManager cookieManager;
 
     @Before
     public void setUp() {
         helper.setUp();
-        session = new URLFetchSession(URLFetchServiceFactory.getURLFetchService());
+        cookieManager = new CookieManager();
+        session = new URLFetchSession(URLFetchServiceFactory.getURLFetchService(), cookieManager);
     }
 
     @After
