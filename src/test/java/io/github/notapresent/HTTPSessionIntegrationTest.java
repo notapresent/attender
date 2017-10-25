@@ -18,18 +18,18 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
 
 @Category(IntegrationTest.class)
-public class URLFetchSessionIntegrationTest {
+public class HTTPSessionIntegrationTest {
     private static final String HTTPBIN = "http://httpbin.org";
     private final LocalServiceTestHelper helper =
             new LocalServiceTestHelper(new LocalURLFetchServiceTestConfig());
-    private URLFetchSession session;
+    private HTTPSession session;
     private CookieManager cookieManager;
 
     @Before
     public void setUp() {
         helper.setUp();
         cookieManager = new CookieManager();
-        session = new URLFetchSession(URLFetchServiceFactory.getURLFetchService(), cookieManager);
+        session = new HTTPSession(URLFetchServiceFactory.getURLFetchService(), cookieManager);
     }
 
     @After
@@ -46,7 +46,7 @@ public class URLFetchSessionIntegrationTest {
 
     @Test
     public void testRedirectsOff() throws IOException {
-        HTTPRequest req = new HTTPRequest(
+        HTTPSessionRequest req = new HTTPSessionRequest(
                 new URL(HTTPBIN + "/redirect/1"), HTTPMethod.GET,
                 FetchOptions.Builder.doNotFollowRedirects());
         HTTPResponse resp = session.fetch(req);
@@ -55,7 +55,7 @@ public class URLFetchSessionIntegrationTest {
 
     @Test
     public void testRedirectsOn() throws IOException {
-        HTTPRequest req = new HTTPRequest(
+        HTTPSessionRequest req = new HTTPSessionRequest(
                 new URL(HTTPBIN + "/redirect/3"), HTTPMethod.GET,
                 FetchOptions.Builder.followRedirects());
         HTTPResponse resp = session.fetch(req);

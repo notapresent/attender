@@ -10,9 +10,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.google.appengine.api.urlfetch.FetchOptions.Builder;
 import static io.github.notapresent.URLFetchHelpers.getHeader;
 import static io.github.notapresent.URLFetchHelpers.isRedirect;
-import static com.google.appengine.api.urlfetch.FetchOptions.Builder;
 
 
 public class HttpClient {
@@ -59,7 +59,7 @@ public class HttpClient {
     }
 
 
-    protected HTTPResponse doRequest(HTTPRequest req) throws HttpException {
+    protected HTTPResponse doRequest(HTTPSessionRequest req) throws HttpException {
         try {
             HTTPResponse resp = urlFetch.fetch(req);
             int responseCode = resp.getResponseCode();
@@ -73,7 +73,7 @@ public class HttpClient {
         }
     }
 
-    protected HTTPResponse doRequestWithCookies(HTTPRequest req) throws HttpException {
+    protected HTTPResponse doRequestWithCookies(HTTPSessionRequest req) throws HttpException {
         cookieManager.loadToRequest(req);
         HTTPResponse resp = doRequest(req);
         cookieManager.saveFromResponse(req.getURL(), resp);
@@ -82,7 +82,7 @@ public class HttpClient {
 
     public HTTPResponse request(String urlStr) throws HttpException {
         int hops = 0;
-        HTTPRequest req;
+        HTTPSessionRequest req;
         HTTPResponse resp = null;
         URL url;
         String location;
@@ -116,11 +116,11 @@ public class HttpClient {
 
     }
 
-    protected HTTPRequest prepareRequest(URL url) {
+    protected HTTPSessionRequest prepareRequest(URL url) {
             FetchOptions opts = Builder.doNotFollowRedirects()
                     .disallowTruncate()
                     .doNotValidateCertificate();
-            HTTPRequest req = new HTTPRequest(url, HTTPMethod.GET, opts);
+            HTTPSessionRequest req = new HTTPSessionRequest(url, HTTPMethod.GET, opts);
 
             for(Map.Entry<String, String> hdr : headers.entrySet()) {
                 req.setHeader(new HTTPHeader(hdr.getKey(), hdr.getValue()));
