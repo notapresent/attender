@@ -2,24 +2,34 @@ package io.github.notapresent;
 
 import com.google.appengine.api.urlfetch.*;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
-import java.net.CookieManager;
-import java.net.URL;
+import java.net.*;
+import java.util.*;
 
+import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 
 public class HTTPSessionTest {
-    @Mock
-    private URLFetchService mockService;
+    private static URL url;
+
     private CookieManager cookieManager;
     private HTTPSession session;
+    @Mock
+    private URLFetchService mockService;
+
+    @BeforeClass
+    public static void setUpBeforeClass() throws MalformedURLException {
+        url = new URL("http://fake.url");
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -33,7 +43,7 @@ public class HTTPSessionTest {
         HTTPResponse resp = TestUtil.makeResponse(200, "");
         when(mockService.fetch(any(HTTPSessionRequest.class))).thenReturn(resp);
 
-        HTTPResponse realResp = session.fetch(new URL("http://fake.url"));
+        HTTPResponse realResp = session.fetch(url);
 
         verify(mockService, times(1)).fetch(any(HTTPSessionRequest.class));
         assertSame(resp, realResp);
@@ -45,9 +55,42 @@ public class HTTPSessionTest {
         HTTPResponse okResp = TestUtil.makeResponse(200, "");
         when(mockService.fetch(any(HTTPSessionRequest.class))).thenReturn(redirResp, okResp);
 
-        HTTPResponse realResp = session.fetch(new URL("http://fake.url"));
+        HTTPResponse realResp = session.fetch(url);
 
         assertSame(realResp, okResp);
         verify(mockService, times(2)).fetch(any(HTTPSessionRequest.class));
+    }
+
+    @Test
+    public void testSessionSavesCookies() throws IOException, URISyntaxException {
+        List<HTTPHeader> setCookieHdrs = Collections.singletonList(
+                new HTTPHeader("set-cookie", "k1=v1; Path=/"));
+        HTTPResponse resp = TestUtil.makeResponse(200, "", setCookieHdrs);
+        when(mockService.fetch(any(HTTPSessionRequest.class))).thenReturn(resp);
+
+        session.fetch(url);
+
+        Map<String, List<String>> storedHeaders = cookieManager.get(url.toURI(), new HashMap<>());
+        assertThat(storedHeaders).hasSize(1);
+        String cookieHeader = String.join("", storedHeaders.values().iterator().next());
+        assertThat(cookieHeader).contains("k1");
+        assertThat(cookieHeader).contains("v1");
+    }
+
+    @Test
+    public void testSessionLoadsCookies() throws Exception {
+        HTTPRequest req;
+        Map<String, List<String>> cookieHeaders = new HashMap<>();
+        cookieHeaders.put("set-cookie", Arrays.asList("k1=v1; Path=/"));
+        cookieManager.put(url.toURI(),cookieHeaders);
+        ArgumentCaptor<HTTPSessionRequest> requestCaptor = ArgumentCaptor.forClass(HTTPSessionRequest.class);
+
+        when(mockService.fetch(any(HTTPSessionRequest.class))).thenReturn(TestUtil.makeResponse(200, ""));
+
+        session.fetch(url);
+        verify(mockService, times(1)).fetch(requestCaptor.capture());
+        String cookieHeader = HTTPUtil.getHeader(requestCaptor.getValue().getHeaders(), "cookie");
+        assertThat(cookieHeader).contains("k1");
+        assertThat(cookieHeader).contains("v1");
     }
 }

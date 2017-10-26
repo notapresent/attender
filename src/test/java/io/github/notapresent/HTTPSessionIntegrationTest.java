@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.CookieManager;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -61,5 +62,26 @@ public class HTTPSessionIntegrationTest {
         HTTPResponse resp = session.fetch(req);
         assertEquals(200, resp.getResponseCode());
         // assertEquals(HTTPBIN + "/get", resp.getFinalUrl()); // TODO
+    }
+
+    @Test
+    public void testCookiesAreRetained() throws IOException {
+        HTTPSessionRequest req = new HTTPSessionRequest(new URL(HTTPBIN + "/cookies/set?k2=v2&k1=v1"));
+        HTTPResponse resp = session.fetch(req);
+        String html = new String (resp.getContent(), Charsets.UTF_8);
+        assertEquals(200, resp.getResponseCode());
+        assertThat(html).containsMatch("\"k1\":\\s+\"v1\"");
+        assertThat(html).containsMatch("\"k2\":\\s+\"v2\"");
+    }
+
+    @Test
+    public void testTest() throws Exception {
+        HTTPSessionRequest req = new HTTPSessionRequest(new URL(HTTPBIN + "/headers"));
+        req.addHeader(new HTTPHeader("cookie", "k2=v2; Path=/"));
+        req.addHeader(new HTTPHeader("cookie", "k1=v1; Path=/"));
+        HTTPResponse resp = session.fetch(req);
+        String html = new String (resp.getContent(), Charsets.UTF_8);
+
+        System.out.println(html);
     }
 }
