@@ -73,15 +73,4 @@ public class HTTPSessionIntegrationTest {
         assertThat(html).containsMatch("\"k1\":\\s+\"v1\"");
         assertThat(html).containsMatch("\"k2\":\\s+\"v2\"");
     }
-
-    @Test
-    public void testTest() throws Exception {
-        HTTPSessionRequest req = new HTTPSessionRequest(new URL(HTTPBIN + "/headers"));
-        req.addHeader(new HTTPHeader("cookie", "k2=v2; Path=/"));
-        req.addHeader(new HTTPHeader("cookie", "k1=v1; Path=/"));
-        HTTPResponse resp = session.fetch(req);
-        String html = new String (resp.getContent(), Charsets.UTF_8);
-
-        System.out.println(html);
-    }
 }
