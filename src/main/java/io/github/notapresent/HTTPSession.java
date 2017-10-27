@@ -1,17 +1,9 @@
 package io.github.notapresent;
 
 import com.google.appengine.api.urlfetch.*;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.io.IOException;
-import java.net.CookieHandler;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 public class HTTPSession {
@@ -35,7 +27,7 @@ public class HTTPSession {
         boolean followRedirects = req.getFollowRedirects();
         HTTPResponse resp = null;
 
-        while(++numHops < MAX_REDIRECTS) {
+        while (++numHops < MAX_REDIRECTS) {
             resp = doRequest(req);
 
             if (!followRedirects || !HTTPUtil.isRedirect(resp.getResponseCode())) {
@@ -49,7 +41,7 @@ public class HTTPSession {
     private HTTPResponse doRequest(HTTPSessionRequest req) throws IOException {
         HTTPHeader cookieHeader = cookieManager.load(req.getURL());
 
-        if ( cookieHeader != null) {
+        if (cookieHeader != null) {
             req.addHeader(cookieHeader);
         }
 

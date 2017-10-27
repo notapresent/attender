@@ -10,6 +10,10 @@ public class Config implements ServletContextListener {
     private static final String ATTRIBUTE_NAME = "config";
     private Properties config = new Properties();
 
+    public static Config getInstance(ServletContext context) {
+        return (Config) context.getAttribute(ATTRIBUTE_NAME);
+    }
+
     @Override
     public void contextInitialized(ServletContextEvent event) {
         try {
@@ -23,10 +27,6 @@ public class Config implements ServletContextListener {
     @Override
     public void contextDestroyed(ServletContextEvent event) {
         // NOOP.
-    }
-
-    public static Config getInstance(ServletContext context) {
-        return (Config) context.getAttribute(ATTRIBUTE_NAME);
     }
 
     public String getProperty(String key) {

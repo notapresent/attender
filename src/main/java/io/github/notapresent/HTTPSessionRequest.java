@@ -24,18 +24,18 @@ public class HTTPSessionRequest extends com.google.appengine.api.urlfetch.HTTPRe
         followRedirects = opts.getFollowRedirects();
     }
 
-    public boolean getFollowRedirects() {
-        return followRedirects;
-    }
-
     public static HTTPSessionRequest makeRedirect(HTTPSessionRequest prev, HTTPResponse resp) throws MalformedURLException {
         String location = HTTPUtil.getHeader(resp.getHeaders(), "location");
-        if(location == null) {
+        if (location == null) {
             throw new IllegalArgumentException("Redirect response without location header");
         }
 
         return new HTTPSessionRequest(new URL(prev.getURL(), location),
                 HTTPMethod.GET, prev.getFetchOptions());
+    }
+
+    public boolean getFollowRedirects() {
+        return followRedirects;
     }
 
 }

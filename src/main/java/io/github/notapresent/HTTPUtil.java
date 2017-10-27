@@ -9,9 +9,9 @@ public class HTTPUtil {
         return code >= 301 && code <= 303;
     }
 
-    public static String getHeader(List<HTTPHeader> headers, String  name) {
-        for(HTTPHeader hdr: headers) {
-            if(hdr.getName().equalsIgnoreCase(name)) {
+    public static String getHeader(List<HTTPHeader> headers, String name) {
+        for (HTTPHeader hdr : headers) {
+            if (hdr.getName().equalsIgnoreCase(name)) {
                 return hdr.getValue();
             }
         }

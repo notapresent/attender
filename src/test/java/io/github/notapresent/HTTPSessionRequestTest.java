@@ -1,24 +1,18 @@
 package io.github.notapresent;
 
-import com.google.appengine.api.urlfetch.*;
-import org.junit.Before;
+import com.google.appengine.api.urlfetch.FetchOptions;
+import com.google.appengine.api.urlfetch.HTTPHeader;
+import com.google.appengine.api.urlfetch.HTTPMethod;
+import com.google.appengine.api.urlfetch.HTTPResponse;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mortbay.util.SingletonList;
 
 import java.io.IOException;
-import java.net.CookieManager;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
 
 public class HTTPSessionRequestTest {
     private static URL url;
@@ -43,14 +37,14 @@ public class HTTPSessionRequestTest {
     }
 
     @Test
-    public void testFetchOptionsSteCorrectly(){
+    public void testFetchOptionsSteCorrectly() {
         // all non-default options
         FetchOptions src = FetchOptions.Builder.withDefaults()
                 .allowTruncate()
                 .doNotFollowRedirects()
                 .setDeadline(33.33)
                 .validateCertificate();
-        HTTPSessionRequest req = new HTTPSessionRequest(url , HTTPMethod.GET, src);
+        HTTPSessionRequest req = new HTTPSessionRequest(url, HTTPMethod.GET, src);
         FetchOptions dest = req.getFetchOptions();
         assertEquals(src.getAllowTruncate(), dest.getAllowTruncate());
         assertEquals(src.getDeadline(), dest.getDeadline());

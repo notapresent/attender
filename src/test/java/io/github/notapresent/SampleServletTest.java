@@ -1,6 +1,5 @@
 package io.github.notapresent;
 
-import com.google.appengine.tools.development.jetty9.AppEngineWebAppContext;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import org.junit.After;
 import org.junit.Before;
@@ -16,7 +15,6 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -60,7 +58,7 @@ public class SampleServletTest {
         ServletConfig servletConfig = mock(ServletConfig.class);
 
         Config mockConfig = mock(Config.class);
-        when(mockConfig .getProperty(anyString())).thenAnswer(new Answer<String>() {
+        when(mockConfig.getProperty(anyString())).thenAnswer(new Answer<String>() {
             @Override
             public String answer(InvocationOnMock invocation) throws Throwable {
                 Object[] args = invocation.getArguments();

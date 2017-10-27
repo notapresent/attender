@@ -1,6 +1,9 @@
 package io.github.notapresent;
 
-import com.google.appengine.api.urlfetch.*;
+import com.google.appengine.api.urlfetch.FetchOptions;
+import com.google.appengine.api.urlfetch.HTTPMethod;
+import com.google.appengine.api.urlfetch.HTTPResponse;
+import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalURLFetchServiceTestConfig;
 import com.google.common.base.Charsets;
@@ -10,10 +13,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import java.io.IOException;
-import java.net.CookieManager;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -68,7 +69,7 @@ public class HTTPSessionIntegrationTest {
     public void testCookiesAreRetained() throws IOException {
         HTTPSessionRequest req = new HTTPSessionRequest(new URL(HTTPBIN + "/cookies/set?k2=v2&k1=v1"));
         HTTPResponse resp = session.fetch(req);
-        String html = new String (resp.getContent(), Charsets.UTF_8);
+        String html = new String(resp.getContent(), Charsets.UTF_8);
         assertEquals(200, resp.getResponseCode());
         assertThat(html).containsMatch("\"k1\":\\s+\"v1\"");
         assertThat(html).containsMatch("\"k2\":\\s+\"v2\"");

@@ -1,6 +1,9 @@
 package io.github.notapresent;
 
-import com.google.appengine.api.urlfetch.*;
+import com.google.appengine.api.urlfetch.HTTPHeader;
+import com.google.appengine.api.urlfetch.HTTPRequest;
+import com.google.appengine.api.urlfetch.HTTPResponse;
+import com.google.appengine.api.urlfetch.URLFetchService;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -9,11 +12,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.*;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -82,7 +87,7 @@ public class HTTPSessionTest {
         HTTPRequest req;
         Map<String, List<String>> cookieHeaders = new HashMap<>();
         cookieHeaders.put("set-cookie", Arrays.asList("k1=v1; Path=/"));
-        cookieManager.put(url.toURI(),cookieHeaders);
+        cookieManager.put(url.toURI(), cookieHeaders);
         ArgumentCaptor<HTTPSessionRequest> requestCaptor = ArgumentCaptor.forClass(HTTPSessionRequest.class);
 
         when(mockService.fetch(any(HTTPSessionRequest.class))).thenReturn(TestUtil.makeResponse(200, ""));
