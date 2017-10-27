@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 public class HTTPSessionTest {
     private static URL url;
 
-    private CookieManager cookieManager;
+    private HTTPSessionCookieManager cookieManager;
     private HTTPSession session;
     @Mock
     private URLFetchService mockService;
@@ -34,7 +34,7 @@ public class HTTPSessionTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        cookieManager = new CookieManager();
+        cookieManager = new HTTPSessionCookieManager();
         session = new HTTPSession(mockService, cookieManager);
     }
 

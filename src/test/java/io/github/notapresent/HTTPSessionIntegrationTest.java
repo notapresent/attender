@@ -24,12 +24,12 @@ public class HTTPSessionIntegrationTest {
     private final LocalServiceTestHelper helper =
             new LocalServiceTestHelper(new LocalURLFetchServiceTestConfig());
     private HTTPSession session;
-    private CookieManager cookieManager;
+    private HTTPSessionCookieManager cookieManager;
 
     @Before
     public void setUp() {
         helper.setUp();
-        cookieManager = new CookieManager();
+        cookieManager = new HTTPSessionCookieManager();
         session = new HTTPSession(URLFetchServiceFactory.getURLFetchService(), cookieManager);
     }
 

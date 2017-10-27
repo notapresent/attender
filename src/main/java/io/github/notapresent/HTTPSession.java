@@ -17,9 +17,9 @@ import java.util.Map;
 public class HTTPSession {
     public static final int MAX_REDIRECTS = 5;
     private URLFetchService service;
-    private CookieHandler cookieManager;
+    private HTTPSessionCookieManager cookieManager;
 
-    public HTTPSession(URLFetchService service, CookieHandler cookieManager) {
+    public HTTPSession(URLFetchService service, HTTPSessionCookieManager cookieManager) {
         this.service = service;
         this.cookieManager = cookieManager;
     }
@@ -47,48 +47,16 @@ public class HTTPSession {
     }
 
     private HTTPResponse doRequest(HTTPSessionRequest req) throws IOException {
-        /* Load cookies start */
-        try {
-            URI uri = req.getURL().toURI();
-            List<String> cookies = cookieManager.get(uri, new HashMap<>()).get("Cookie");
-            if(cookies != null && cookies.size() > 0) {
-                HTTPHeader cookieHeader = new HTTPHeader("cookie", String.join("; ", cookies));
-                req.addHeader(cookieHeader);
-            }
+        HTTPHeader cookieHeader = cookieManager.load(req.getURL());
+
+        if ( cookieHeader != null) {
+            req.addHeader(cookieHeader);
         }
-        catch (URISyntaxException e) {
-            throw new RuntimeException("Failed to convert URL " + req.getURL() + " to URI");
-        }
-        /* Load cookies end */
 
         HTTPResponse resp = service.fetch(req);
 
-        /* Save cookies start */
-        try {
-            URI uri = req.getURL().toURI();
-            Map<String, List<String>> respHeaders = convertHeaders(resp.getHeadersUncombined());
-            cookieManager.put(uri, respHeaders);
-        }
-
-        catch (URISyntaxException e) {
-            throw new RuntimeException("Failed to convert URL " + req.getURL() + " to URI");
-        }
-        /* Save cookies end */
+        cookieManager.save(req.getURL(), resp.getHeadersUncombined());
 
         return resp;
-    }
-
-    public static Map<String, List<String>> convertHeaders(List<HTTPHeader> headers) {
-        Map<String, List<String>> rv = new HashMap<>();
-        for(HTTPHeader hdr : headers) {
-            String key = hdr.getName().toLowerCase();
-            String value = hdr.getValue();
-            if(value == null || value.length() == 0) {
-                continue;
-            }
-            rv.putIfAbsent(key, new ArrayList<>());
-            rv.get(key).add(value);
-        }
-        return rv;
     }
 }
