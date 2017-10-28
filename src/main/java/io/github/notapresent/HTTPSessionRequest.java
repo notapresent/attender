@@ -1,12 +1,14 @@
 package io.github.notapresent;
 
 import com.google.appengine.api.urlfetch.FetchOptions;
+import com.google.appengine.api.urlfetch.HTTPHeader;
 import com.google.appengine.api.urlfetch.HTTPMethod;
 import com.google.appengine.api.urlfetch.HTTPResponse;
 import org.apache.commons.lang3.SerializationUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 public class HTTPSessionRequest extends com.google.appengine.api.urlfetch.HTTPRequest {
     private final boolean followRedirects;
@@ -32,6 +34,12 @@ public class HTTPSessionRequest extends com.google.appengine.api.urlfetch.HTTPRe
 
         return new HTTPSessionRequest(new URL(prev.getURL(), location),
                 HTTPMethod.GET, prev.getFetchOptions());
+    }
+
+    public void addHeaders(List<HTTPHeader> headers) {
+        for(HTTPHeader header : headers) {
+            addHeader(header);
+        }
     }
 
     public boolean getFollowRedirects() {

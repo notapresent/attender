@@ -4,6 +4,7 @@ import com.google.appengine.api.urlfetch.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 
 public class HTTPSession {
@@ -26,6 +27,7 @@ public class HTTPSession {
         int numHops = 0;
         boolean followRedirects = req.getFollowRedirects();
         HTTPResponse resp = null;
+        List<HTTPHeader> originalHeaders = req.getHeaders();
 
         while (++numHops < MAX_REDIRECTS) {
             resp = doRequest(req);
@@ -34,6 +36,7 @@ public class HTTPSession {
                 break;
             }
             req = HTTPSessionRequest.makeRedirect(req, resp);
+            req.addHeaders(originalHeaders);
         }
         return resp;
     }

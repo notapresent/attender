@@ -1,9 +1,6 @@
 package io.github.notapresent;
 
-import com.google.appengine.api.urlfetch.FetchOptions;
-import com.google.appengine.api.urlfetch.HTTPMethod;
-import com.google.appengine.api.urlfetch.HTTPResponse;
-import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
+import com.google.appengine.api.urlfetch.*;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalURLFetchServiceTestConfig;
 import com.google.common.base.Charsets;
@@ -66,12 +63,21 @@ public class HTTPSessionIntegrationTest {
     }
 
     @Test
-    public void testCookiesAreRetained() throws IOException {
+    public void testSessionRetainsCookies() throws IOException {
         HTTPSessionRequest req = new HTTPSessionRequest(new URL(HTTPBIN + "/cookies/set?k2=v2&k1=v1"));
         HTTPResponse resp = session.fetch(req);
         String html = new String(resp.getContent(), Charsets.UTF_8);
         assertEquals(200, resp.getResponseCode());
         assertThat(html).containsMatch("\"k1\":\\s+\"v1\"");
         assertThat(html).containsMatch("\"k2\":\\s+\"v2\"");
+    }
+
+    @Test
+    public void testSessionRetainsHeadersOnRedirect() throws IOException {
+        HTTPSessionRequest req = new HTTPSessionRequest(new URL(HTTPBIN + "/redirect-to?url=/headers"));
+        req.addHeader(new HTTPHeader("custom-header", "custom-value"));
+        HTTPResponse resp = session.fetch(req);
+        String html = new String(resp.getContent(), Charsets.UTF_8);
+        assertThat(html).containsMatch("(?i)\"custom-header\":\\s+\"custom-value\"");
     }
 }

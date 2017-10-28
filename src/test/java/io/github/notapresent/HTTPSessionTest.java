@@ -1,9 +1,6 @@
 package io.github.notapresent;
 
-import com.google.appengine.api.urlfetch.HTTPHeader;
-import com.google.appengine.api.urlfetch.HTTPRequest;
-import com.google.appengine.api.urlfetch.HTTPResponse;
-import com.google.appengine.api.urlfetch.URLFetchService;
+import com.google.appengine.api.urlfetch.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -86,16 +83,38 @@ public class HTTPSessionTest {
     public void testSessionLoadsCookies() throws Exception {
         HTTPRequest req;
         Map<String, List<String>> cookieHeaders = new HashMap<>();
-        cookieHeaders.put("set-cookie", Arrays.asList("k1=v1; Path=/"));
+        cookieHeaders.put("set-cookie", Collections.singletonList("k1=v1; Path=/"));
         cookieManager.put(url.toURI(), cookieHeaders);
         ArgumentCaptor<HTTPSessionRequest> requestCaptor = ArgumentCaptor.forClass(HTTPSessionRequest.class);
-
         when(mockService.fetch(any(HTTPSessionRequest.class))).thenReturn(TestUtil.makeResponse(200, ""));
 
         session.fetch(url);
+
         verify(mockService, times(1)).fetch(requestCaptor.capture());
         String cookieHeader = HTTPUtil.getHeader(requestCaptor.getValue().getHeaders(), "cookie");
         assertThat(cookieHeader).contains("k1");
         assertThat(cookieHeader).contains("v1");
     }
+
+    @Test
+    public void testSessionRetainsHeaders() throws IOException {
+        HTTPResponse redirResp = TestUtil.makeRedirectResponse(302, "/blah");
+        HTTPResponse okResp = TestUtil.makeResponse(200, "");
+        HTTPHeader testHeader = new HTTPHeader("some-header", "some-value");
+
+        ArgumentCaptor<HTTPSessionRequest> requestCaptor = ArgumentCaptor.forClass(HTTPSessionRequest.class);
+        when(mockService.fetch(any(HTTPSessionRequest.class))).thenReturn(redirResp, okResp);
+        HTTPSessionRequest req = new HTTPSessionRequest(url, HTTPMethod.GET);
+        req.addHeader(testHeader);
+
+        session.fetch(req);
+
+        verify(mockService, times(2)).fetch(requestCaptor.capture());
+        HTTPSessionRequest request2 = requestCaptor.getAllValues().get(1);
+        List<HTTPHeader> headers = request2.getHeaders();
+        assertThat(HTTPUtil.getHeader(request2.getHeaders(), "some-header")).isEqualTo("some-value");
+    }
+
+
 }
+
