@@ -28,7 +28,7 @@
     <dependency>
       <groupId>com.google.appengine</groupId>
       <artifactId>appengine-api-1.0-sdk</artifactId>
-      <version>1.9.58</version>
+      <version>1.9.59</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -46,7 +46,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>23.1-jre</version>
+      <version>23.3-jre</version>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
@@ -62,34 +62,34 @@
     <dependency>
       <groupId>com.google.appengine</groupId>
       <artifactId>appengine-testing</artifactId>
-      <version>1.9.58</version>
+      <version>1.9.59</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.appengine</groupId>
       <artifactId>appengine-api-stubs</artifactId>
-      <version>1.9.58</version>
+      <version>1.9.59</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>com.google.appengine</groupId>
       <artifactId>appengine-local-runtime</artifactId>
-      <version>1.9.58</version>
+      <version>1.9.59</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>com.google.appengine</groupId>
       <artifactId>appengine-tools-sdk</artifactId>
-      <version>1.9.58</version>
+      <version>1.9.59</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>com.google.truth</groupId>
       <artifactId>truth</artifactId>
-      <version>0.33</version>
+      <version>0.36</version>
       <scope>test</scope>
     </dependency>
 
@@ -102,7 +102,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-all</artifactId>
-      <version>1.10.19</version>
+      <version>2.0.2-beta</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -141,7 +141,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>versions-maven-plugin</artifactId>
-        <version>2.3</version>
+        <version>2.5</version>
         <executions>
           <execution>
             <phase>compile</phase>
@@ -161,12 +161,12 @@
 
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.2.0</version>
       </plugin>
 
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.6.1</version>
+        <version>3.7.0</version>
       </plugin>
 
       <plugin>
@@ -181,7 +181,7 @@
 
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.20</version>
+        <version>2.20.1</version>
         <configuration>
           <excludedGroups>io.github.notapresent.IntegrationTest</excludedGroups>
         </configuration>
@@ -195,6 +195,9 @@
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <version>3.0.2</version>
+        <configuration>
+          <encoding>UTF-8</encoding>
+        </configuration>
       </plugin>
 
       <plugin>
@@ -204,7 +207,7 @@
 
       <plugin>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>1.4.1</version>
+        <version>3.0.0-M1</version>
         <executions>
           <execution>
             <id>enforce-maven</id>
