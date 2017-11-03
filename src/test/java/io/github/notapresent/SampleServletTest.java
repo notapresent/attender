@@ -1,6 +1,8 @@
 package io.github.notapresent;
 
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.google.inject.Guice;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -74,7 +76,10 @@ public class SampleServletTest {
         when(servletConfig.getServletContext()).thenReturn(servletContext);
 
 
-        servletUnderTest = new SampleServlet();
+        servletUnderTest = new SampleServlet(Guice.createInjector(
+            new AttenderServletModule(),
+            new SamplerModule()
+        ));
         servletUnderTest.init(servletConfig);
     }
 

@@ -1,7 +1,7 @@
 package io.github.notapresent;
 
 import com.google.appengine.api.urlfetch.*;
-
+import com.google.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -12,6 +12,7 @@ public class HTTPSession {
     private URLFetchService service;
     private HTTPSessionCookieManager cookieManager;
 
+    @Inject
     public HTTPSession(URLFetchService service, HTTPSessionCookieManager cookieManager) {
         this.service = service;
         this.cookieManager = cookieManager;
