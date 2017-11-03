@@ -33,3 +33,9 @@ target/
 
 # Exclude local settings
 /src/main/webapp/WEB-INF/config.properties
+
+# VSCode artifacts
+.settings/
+.vscode/
+.classpath
+.project
