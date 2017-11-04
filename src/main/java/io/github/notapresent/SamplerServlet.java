@@ -20,7 +20,7 @@ public class SamplerServlet extends HttpServlet {
     private String indexUrl;
 
     @Inject
-    public SamplerServlet(HTTPSession sess, @Named("indexUrl") String indexUrl) {
+    public SamplerServlet(HTTPSession sess, @Named("urls.index") String indexUrl) {
         this.session = sess;
         this.indexUrl = indexUrl;
     }
