@@ -1,5 +1,7 @@
 package io.github.notapresent;
 
+import com.google.appengine.api.urlfetch.HTTPRequest;
+import com.google.appengine.api.urlfetch.HTTPResponse;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.inject.Guice;
 
@@ -13,37 +15,47 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URL;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
- * Unit tests for {@link SampleServlet}.
+ * Unit tests for {@link SamplerServlet}.
  */
 
 @RunWith(JUnit4.class)
-public class SampleServletTest {
-    private static final String FAKE_URL = "fake.fk/hello";
+public class SamplerServletTest {
+    private static final String FAKE_URL = "http://fake.fk/hello";
+    private static final String FAKE_SESSION_RESPONSE = "Fake session response";
+
     // Set up a helper so that the ApiProxy returns a valid environment for local testing.
     private final LocalServiceTestHelper helper = new LocalServiceTestHelper();
 
     @Mock
     private HttpServletRequest mockRequest;
+
     @Mock
     private HttpServletResponse mockResponse;
 
+    @Mock
+    private HTTPSession mockSesion;
+    @Mock
+    private HTTPResponse mockSessionResponse;
+
     private StringWriter responseWriter;
 
-    private SampleServlet servletUnderTest;
+    @Mock
+    private HTTPSession mockSession;
+
+    private SamplerServlet servletUnderTest;
 
     @Before
     public void setUp() throws Exception {
@@ -57,14 +69,14 @@ public class SampleServletTest {
         responseWriter = new StringWriter();
         when(mockResponse.getWriter()).thenReturn(new PrintWriter(responseWriter));
 
-        ServletConfig servletConfig = mock(ServletConfig.class);
+        javax.servlet.ServletConfig servletConfig = mock(javax.servlet.ServletConfig.class);
 
         Config mockConfig = mock(Config.class);
         when(mockConfig.getProperty(anyString())).thenAnswer(new Answer<String>() {
             @Override
             public String answer(InvocationOnMock invocation) throws Throwable {
                 Object[] args = invocation.getArguments();
-                return "Fake property for " + (String) args[0];
+                return FAKE_URL;
             }
         });
         //when(mockConfig.getProperty(any(String.class))).thenReturn("fake property value");
@@ -75,11 +87,10 @@ public class SampleServletTest {
 
         when(servletConfig.getServletContext()).thenReturn(servletContext);
 
+        when(mockSessionResponse.getContent()).thenReturn(FAKE_SESSION_RESPONSE.getBytes());
+        when(mockSession.fetch(any(URL.class))).thenReturn(mockSessionResponse);
 
-        servletUnderTest = new SampleServlet(Guice.createInjector(
-            new AttenderServletModule(),
-            new SamplerModule()
-        ));
+        servletUnderTest = new SamplerServlet(mockSession);
         servletUnderTest.init(servletConfig);
     }
 
@@ -89,12 +100,18 @@ public class SampleServletTest {
     }
 
     @Test
-    public void doGet_writesResponse() throws Exception {
+    public void doGetwritesResponse() throws Exception {
         servletUnderTest.doGet(mockRequest, mockResponse);
 
+        String strResponse = responseWriter.toString();
+
         // We expect our hello world response.
-        assertThat(responseWriter.toString())
-                .named("SampleServlet response")
+        assertThat(strResponse)
+                .named("SamplerServlet response")
                 .contains("App Engine Standard");
+
+        assertThat(strResponse)
+                .named("SamplerServlet response")
+                .contains(FAKE_SESSION_RESPONSE);
     }
 }

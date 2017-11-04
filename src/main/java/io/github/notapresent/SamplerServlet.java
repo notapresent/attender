@@ -15,13 +15,12 @@ import java.net.URL;
 import java.util.Properties;
 
 @Singleton
-//@WebServlet(name = "SampleServlet", value = "/sample")
-public class SampleServlet extends HttpServlet {
-    private Injector injector;
+public class SamplerServlet extends HttpServlet {
+    private HTTPSession session;
 
     @Inject
-    public SampleServlet(Injector injector) {
-        this.injector = injector;
+    public SamplerServlet(HTTPSession sess) {
+        this.session = sess;
     }
 
     @Override
@@ -31,15 +30,16 @@ public class SampleServlet extends HttpServlet {
         Config config = Config.getInstance(getServletContext());
         String indexUrl = config.getProperty("urls.index");
 
-         HTTPSession sess =  injector.getInstance(HTTPSession.class);
-         HTTPResponse resp = sess.fetch(new URL("http://httpbin.org/headers"));
+        HTTPResponse resp = session.fetch(new URL(indexUrl));
 
         Properties properties = System.getProperties();
         response.setContentType("text/plain");
         response.getWriter().println(
-                "App Engine Standard using " + SystemProperty.version.get()
-                        + " Java " + properties.get("java.specification.version")
-                        + new String(resp.getContent(), Charsets.UTF_8)
+            "App Engine Standard using " + SystemProperty.version.get()
+            + " Java " + properties.get("java.specification.version")
+            + "\nGot "
+            + new String(resp.getContent(), Charsets.UTF_8)
+            + " characters"
 
         );
     }

@@ -16,7 +16,7 @@
     </filter-mapping>
 
   <listener>
-    <listener-class>io.github.notapresent.AttenderGuiceServletContextListener</listener-class>
+    <listener-class>io.github.notapresent.GuiceListener</listener-class>
   </listener>
 
     <listener>

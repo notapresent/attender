@@ -5,7 +5,7 @@ import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
-public class SamplerModule extends AbstractModule {
+public class ServicesModule extends AbstractModule {
     @Override 
     protected void configure() {
     

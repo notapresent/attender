@@ -13,7 +13,7 @@
       <td colspan="2" style="font-weight:bold;">Available Servlets:</td>
     </tr>
     <tr>
-      <td><a href='/sample'>SampleServlet</a></td>
+      <td><a href='/sampler'>SamplerServlet</a></td>
     </tr>
   </table>
 
