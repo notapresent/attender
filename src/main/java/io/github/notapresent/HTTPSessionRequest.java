@@ -37,7 +37,7 @@ public class HTTPSessionRequest extends com.google.appengine.api.urlfetch.HTTPRe
     }
 
     public void addHeaders(List<HTTPHeader> headers) {
-        for(HTTPHeader header : headers) {
+        for (HTTPHeader header : headers) {
             addHeader(header);
         }
     }

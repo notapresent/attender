@@ -12,7 +12,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertSame;

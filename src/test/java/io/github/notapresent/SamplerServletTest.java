@@ -1,10 +1,7 @@
 package io.github.notapresent;
 
-import com.google.appengine.api.urlfetch.HTTPRequest;
 import com.google.appengine.api.urlfetch.HTTPResponse;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.google.inject.Guice;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,10 +9,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
@@ -24,8 +18,8 @@ import java.net.URL;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for {@link SamplerServlet}.
@@ -47,6 +41,7 @@ public class SamplerServletTest {
 
     @Mock
     private HTTPSession mockSesion;
+
     @Mock
     private HTTPResponse mockSessionResponse;
 
@@ -70,27 +65,10 @@ public class SamplerServletTest {
         when(mockResponse.getWriter()).thenReturn(new PrintWriter(responseWriter));
 
         javax.servlet.ServletConfig servletConfig = mock(javax.servlet.ServletConfig.class);
-
-        Config mockConfig = mock(Config.class);
-        when(mockConfig.getProperty(anyString())).thenAnswer(new Answer<String>() {
-            @Override
-            public String answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                return FAKE_URL;
-            }
-        });
-        //when(mockConfig.getProperty(any(String.class))).thenReturn("fake property value");
-
-        ServletContext servletContext = mock(ServletContext.class);
-        when(servletContext.getAttribute(any(String.class))).thenReturn(mockConfig);
-
-
-        when(servletConfig.getServletContext()).thenReturn(servletContext);
-
         when(mockSessionResponse.getContent()).thenReturn(FAKE_SESSION_RESPONSE.getBytes());
         when(mockSession.fetch(any(URL.class))).thenReturn(mockSessionResponse);
 
-        servletUnderTest = new SamplerServlet(mockSession);
+        servletUnderTest = new SamplerServlet(mockSession, FAKE_URL);
         servletUnderTest.init(servletConfig);
     }
 
