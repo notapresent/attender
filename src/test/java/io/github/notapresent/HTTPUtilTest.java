@@ -1,11 +1,8 @@
 package io.github.notapresent;
 
 import com.google.appengine.api.urlfetch.HTTPHeader;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,13 +10,6 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class HTTPUtilTest {
-    private static URL url;
-
-    @BeforeClass
-    public static void setUpBeforeClass() throws MalformedURLException {
-        url = new URL("http://fake.url");
-    }
-
     @Test
     public void testIsRedirect() {
         int[] redirectCodes = {301, 302, 303};

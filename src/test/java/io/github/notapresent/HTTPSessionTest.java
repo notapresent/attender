@@ -84,7 +84,6 @@ public class HTTPSessionTest {
 
     @Test
     public void testSessionLoadsCookies() throws Exception {
-        HTTPRequest req;
         Map<String, List<String>> cookieHeaders = new HashMap<>();
         cookieHeaders.put("set-cookie", Collections.singletonList("k1=v1; Path=/"));
         cookieManager.put(url.toURI(), cookieHeaders);
@@ -115,7 +114,7 @@ public class HTTPSessionTest {
         verify(mockService, times(2)).fetch(requestCaptor.capture());
         HTTPSessionRequest request2 = requestCaptor.getAllValues().get(1);
         List<HTTPHeader> headers = request2.getHeaders();
-        assertThat(HTTPUtil.getHeader(request2.getHeaders(), "some-header")).isEqualTo("some-value");
+        assertThat(HTTPUtil.getHeader(headers, "some-header")).isEqualTo("some-value");
     }
 
 
