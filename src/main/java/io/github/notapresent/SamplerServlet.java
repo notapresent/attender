@@ -16,8 +16,8 @@ import java.util.Properties;
 
 @Singleton
 public class SamplerServlet extends HttpServlet {
-    private HTTPSession session;
-    private String indexUrl;
+    private final HTTPSession session;
+    private final String indexUrl;
 
     @Inject
     public SamplerServlet(HTTPSession sess, @Named("urls.index") String indexUrl) {

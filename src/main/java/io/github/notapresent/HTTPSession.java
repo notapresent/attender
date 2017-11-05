@@ -10,8 +10,8 @@ import java.util.List;
 
 public class HTTPSession {
     public static final int MAX_REDIRECTS = 5;
-    private URLFetchService service;
-    private HTTPSessionCookieManager cookieManager;
+    private final URLFetchService service;
+    private final HTTPSessionCookieManager cookieManager;
 
     @Inject
     public HTTPSession(URLFetchService service, HTTPSessionCookieManager cookieManager) {
