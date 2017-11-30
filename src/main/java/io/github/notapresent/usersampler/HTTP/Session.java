@@ -4,5 +4,4 @@ import java.io.IOException;
 
 public interface Session <R extends Request>{
     Response send(R request) throws IOException;
-    //Future<Response> asyncRequest(Request request);
 }

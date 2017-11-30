@@ -10,7 +10,7 @@ import java.net.URL;
 public class URLFetchRequest implements Request {
     private final String url;
     private final Method method;
-    private RedirectHandlingPolicy redirectHandlingPolicy;
+    private RedirectHandlingPolicy redirectHandlingPolicy = RedirectHandlingPolicy.FOLLOW;
     private double timeout = 5.0;
 
     public URLFetchRequest(String url, Method method) {
