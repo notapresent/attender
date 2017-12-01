@@ -47,7 +47,7 @@ public class URLFetchCookieManager extends CookieManager {
 
     public void saveFromResponse(URL url, HTTPResponse response) {
         Map<String, List<String>> setCookieHeaders = new HashMap<>();
-        response.getHeaders()
+        response.getHeadersUncombined()
                 .stream()
                 .filter((h) -> isCookieHeader(h.getName()))
                 .filter((h) -> h.getValue() != null)

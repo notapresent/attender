@@ -16,10 +16,7 @@ import org.mockito.MockitoAnnotations;
 import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
@@ -33,9 +30,9 @@ public class URLFetchSessionTest {
     private static String url = "http://fake.url";
     private static URLFetchRequest request = URLFetchRequest.GET(url);
     private static List<HTTPHeader> emptyHeaders = new ArrayList<HTTPHeader>();
-    private static List<HTTPHeader> redirectHeaders = Arrays.asList(
+    private static List<HTTPHeader> redirectHeaders = Collections.singletonList(
             new HTTPHeader("location", url));
-    private static List<HTTPHeader> setCookieHeaders = Arrays.asList(
+    private static List<HTTPHeader> setCookieHeaders = Collections.singletonList(
             new HTTPHeader("set-cookie", "foo=bar"));
     private static HTTPResponse okResponse, redirectResponse,
             redirectResponseWithCookie;

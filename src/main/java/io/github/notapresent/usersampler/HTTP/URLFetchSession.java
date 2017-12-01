@@ -2,6 +2,7 @@ package io.github.notapresent.usersampler.HTTP;
 
 
 import com.google.appengine.api.urlfetch.*;
+import com.google.inject.Inject;
 
 
 import java.io.IOException;
@@ -18,6 +19,12 @@ public class URLFetchSession implements Session {
 
     public URLFetchSession(URLFetchService urlFetch) {
         this.urlFetch = urlFetch;
+    }
+
+    @Inject
+    public URLFetchSession(URLFetchService urlFetch, CookieHandler cookieManager) {
+        this.urlFetch = urlFetch;
+        this.cookieManager = (URLFetchCookieManager) cookieManager;
     }
 
     public int getMaxRedirects() {

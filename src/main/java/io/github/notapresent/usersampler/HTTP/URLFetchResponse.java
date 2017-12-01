@@ -3,6 +3,7 @@ package io.github.notapresent.usersampler.HTTP;
 import com.google.appengine.api.urlfetch.HTTPHeader;
 import com.google.appengine.api.urlfetch.HTTPResponse;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +24,12 @@ public class URLFetchResponse implements Response {
     }
 
     public static URLFetchResponse fromHTTPResponse(HTTPResponse response) {
+        URL finalUrl = response.getFinalUrl();
         return new URLFetchResponse(
                 response.getResponseCode(),
                 response.getContent(),
                 headersListToMap(response.getHeadersUncombined()),
-                response.getFinalUrl().toString());
+                 finalUrl == null ? null : finalUrl.toString());
     }
 
     protected static Map<String, String> headersListToMap(List<HTTPHeader> headersList) {
