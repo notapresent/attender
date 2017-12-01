@@ -39,3 +39,4 @@ target/
 .vscode/
 .classpath
 .project
+*.code-workspace
