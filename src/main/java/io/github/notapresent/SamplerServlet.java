@@ -56,5 +56,4 @@ public class SamplerServlet extends HttpServlet {
                 respStr.substring(0, Math.min(150, respStr.length()))
         );
     }
-
 }
