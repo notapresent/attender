@@ -2,6 +2,10 @@ package io.github.notapresent;
 
 import com.google.appengine.api.urlfetch.HTTPResponse;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import io.github.notapresent.usersampler.HTTP.Request;
+import io.github.notapresent.usersampler.HTTP.RequestFactory;
+import io.github.notapresent.usersampler.HTTP.Response;
+import io.github.notapresent.usersampler.HTTP.Session;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,22 +37,19 @@ public class SamplerServletTest {
     // Set up a helper so that the ApiProxy returns a valid environment for local testing.
     private final LocalServiceTestHelper helper = new LocalServiceTestHelper();
 
-    @Mock
-    private HttpServletRequest mockRequest;
+    // Servlet stuff
+    @Mock private HttpServletRequest mockRequest;
+    @Mock private HttpServletResponse mockResponse;
 
-    @Mock
-    private HttpServletResponse mockResponse;
 
-    @Mock
-    private HTTPSession mockSesion;
+    @Mock private Session mockSession;
+    @Mock private RequestFactory mockRequestFactory;
+    @Mock private Request mockSessionRequest;
+    @Mock private Response mockSessionResponse;
 
-    @Mock
-    private HTTPResponse mockSessionResponse;
+
 
     private StringWriter responseWriter;
-
-    @Mock
-    private HTTPSession mockSession;
 
     private SamplerServlet servletUnderTest;
 
@@ -58,17 +59,19 @@ public class SamplerServletTest {
         helper.setUp();
 
         //  Set up some fake HTTP requests
-        when(mockRequest.getRequestURI()).thenReturn(FAKE_URL);
+        when(mockRequest.getRequestURI()).thenReturn(FAKE_URL); // FIXME: delete
 
         // Set up a fake HTTP response.
         responseWriter = new StringWriter();
         when(mockResponse.getWriter()).thenReturn(new PrintWriter(responseWriter));
 
         javax.servlet.ServletConfig servletConfig = mock(javax.servlet.ServletConfig.class);
-        when(mockSessionResponse.getContent()).thenReturn(FAKE_SESSION_RESPONSE.getBytes());
-        when(mockSession.fetch(any(URL.class))).thenReturn(mockSessionResponse);
 
-        servletUnderTest = new SamplerServlet(mockSession, FAKE_URL);
+        when(mockRequestFactory.GET(any(String.class))).thenReturn(mockSessionRequest);
+        when(mockSessionResponse.getContentBytes()).thenReturn(FAKE_SESSION_RESPONSE.getBytes());
+        when(mockSession.send(any(Request.class))).thenReturn(mockSessionResponse);
+
+        servletUnderTest = new SamplerServlet(mockSession, mockRequestFactory, FAKE_URL);
         servletUnderTest.init(servletConfig);
     }
 
