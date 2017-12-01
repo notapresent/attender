@@ -76,7 +76,6 @@ public class URLFetchSessionTest {
         when(mockURLFetch.fetch(any(HTTPRequest.class))).thenReturn(redirectResponse, okResponse);
         URLFetchResponse resp = session.send(request);
         assertEquals(resp.getFinalUrl(), okResponse.getFinalUrl().toString());
-        System.out.println(resp.getFinalUrl());
     }
 
     @Test
@@ -87,7 +86,6 @@ public class URLFetchSessionTest {
         URLFetchResponse resp = session.send(request);
         verify(mockURLFetch, times(2)).fetch(requestCaptor.capture());
         for(HTTPRequest req : requestCaptor.getAllValues()) {
-            System.out.format("%s - %s %n", req, req.getHeaders());
             Map<String, String> headerMap = req.getHeaders().stream().collect(
                     Collectors.toMap(HTTPHeader::getName, HTTPHeader::getValue));
             assertTrue(headerMap.get("foo").equals("bar"));
