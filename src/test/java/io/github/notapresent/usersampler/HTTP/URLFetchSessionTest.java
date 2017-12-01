@@ -45,7 +45,11 @@ public class URLFetchSessionTest {
     public static void setUpClass() throws IOException {
         URL urlObj = new URL(url);
         okResponse = new HTTPResponse(200, new byte[0], urlObj, emptyHeaders);
-        redirectResponse = new HTTPResponse(302, new byte[0], new URL("http://other.url"), redirectHeaders);
+        redirectResponse = new HTTPResponse(
+            302, 
+            new byte[0], 
+            new URL("http://other.url"), 
+            redirectHeaders);
     }
 
     @Before
@@ -58,34 +62,45 @@ public class URLFetchSessionTest {
 
     @Test
     public void itShouldRespondToRequestWithResponse() throws IOException {
-        when(mockURLFetch.fetch(any(HTTPRequest.class))).thenReturn(okResponse);
-        URLFetchRequest req = URLFetchRequest.GET(url);
-        URLFetchResponse resp = session.send(req);
+        when(mockURLFetch.fetch(any(HTTPRequest.class)))
+            .thenReturn(okResponse);
+        
+        URLFetchResponse resp = session.send(request);
+        
         assertEquals(resp.getFinalUrl(), url);
     }
 
     @Test
     public void itShouldFollowRedirects() throws IOException {
-        when(mockURLFetch.fetch(any(HTTPRequest.class))).thenReturn(redirectResponse, okResponse);
+        when(mockURLFetch.fetch(any(HTTPRequest.class)))
+            .thenReturn(redirectResponse, okResponse);
+        
         URLFetchResponse resp = session.send(request);
+        
         assertEquals(okResponse.getResponseCode(), resp.getStatus());
     }
 
     @Test
     public void itShouldSetFinalUrlAfterRedirect() throws IOException {
-        when(mockURLFetch.fetch(any(HTTPRequest.class))).thenReturn(redirectResponse, okResponse);
+        when(mockURLFetch.fetch(any(HTTPRequest.class)))
+            .thenReturn(redirectResponse, okResponse);
+        
         URLFetchResponse resp = session.send(request);
+        
         assertEquals(resp.getFinalUrl(), okResponse.getFinalUrl().toString());
     }
 
     @Test
     public void itSholudRetainHeadersOnRedirect() throws IOException {
-        ArgumentCaptor<HTTPRequest> requestCaptor = ArgumentCaptor.forClass(HTTPRequest.class);
-        when(mockURLFetch.fetch(any(HTTPRequest.class))).thenReturn(redirectResponse, okResponse);
+        ArgumentCaptor<HTTPRequest> captor = ArgumentCaptor.forClass(HTTPRequest.class);
+        when(mockURLFetch.fetch(any(HTTPRequest.class)))
+            .thenReturn(redirectResponse, okResponse);
         request.getHeaders().put("foo", "bar");
-        URLFetchResponse resp = session.send(request);
-        verify(mockURLFetch, times(2)).fetch(requestCaptor.capture());
-        for(HTTPRequest req : requestCaptor.getAllValues()) {
+        
+        session.send(request);
+        
+        verify(mockURLFetch, times(2)).fetch(captor.capture());
+        for(HTTPRequest req : captor.getAllValues()) {
             Map<String, String> headerMap = req.getHeaders().stream().collect(
                     Collectors.toMap(HTTPHeader::getName, HTTPHeader::getValue));
             assertTrue(headerMap.get("foo").equals("bar"));
@@ -93,7 +108,13 @@ public class URLFetchSessionTest {
     }
 
     @Test
-    public void itShouldNotFollowMoreThanMaxRedirects() {
+    public void itShouldNotFollowMoreThanMaxRedirects() throws IOException {
+        when(mockURLFetch.fetch(any(HTTPRequest.class)))
+        .thenReturn(redirectResponse, redirectResponse, redirectResponse);
+        session.setMaxRedirects(2);
+        
+        session.send(request);
 
+        verify(mockURLFetch, times(2)).fetch(any(HTTPRequest.class));
     }
 }

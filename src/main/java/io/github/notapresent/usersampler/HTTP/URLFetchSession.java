@@ -16,6 +16,14 @@ public class URLFetchSession implements Session<URLFetchRequest> {
         this.urlFetch = urlFetch;
     }
 
+    public void setMaxRedirects(int maxRedirects) {
+        this.maxRedirects = maxRedirects;
+    }
+
+    public int getMaxRedirects() {
+        return maxRedirects;
+    }
+
     @Override
     public URLFetchResponse send(URLFetchRequest request) throws IOException {
         HTTPResponse ufResp;
@@ -30,11 +38,11 @@ public class URLFetchSession implements Session<URLFetchRequest> {
     }
 
     protected HTTPResponse handleRedirects(HTTPRequest req) throws IOException {
-        int numRedirects = 0;
+        int timesRedirected = 0;
         HTTPResponse resp = null;
         List<HTTPHeader> originalHeaders = req.getHeaders();
 
-        while(numRedirects++ < maxRedirects) {
+        while(timesRedirected++ < maxRedirects) {
             resp = doSend(req);
             if(!Util.isRedirect(resp.getResponseCode())) {
                 break;
@@ -46,7 +54,6 @@ public class URLFetchSession implements Session<URLFetchRequest> {
             for(HTTPHeader header : originalHeaders) {
                 req.addHeader(header);
             }
-            //originalHeaders.stream().map(req::addHeader);
         }
 
         return resp;
@@ -55,5 +62,4 @@ public class URLFetchSession implements Session<URLFetchRequest> {
     protected HTTPResponse doSend(HTTPRequest req) throws IOException {
         return urlFetch.fetch(req);
     }
-
 }
