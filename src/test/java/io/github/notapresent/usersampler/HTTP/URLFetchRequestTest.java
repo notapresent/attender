@@ -1,6 +1,7 @@
 package io.github.notapresent.usersampler.HTTP;
 
 import com.google.appengine.api.urlfetch.FetchOptions;
+import com.google.appengine.api.urlfetch.HTTPHeader;
 import com.google.appengine.api.urlfetch.HTTPMethod;
 import com.google.appengine.api.urlfetch.HTTPRequest;
 import org.junit.Before;
@@ -54,5 +55,21 @@ public class URLFetchRequestTest {
     public void itShouldBuildGetRequestWithGetMethod() {
         request = URLFetchRequest.GET(url);
         assertEquals(Method.GET, request.getMethod());
+    }
+
+    @Test
+    public void itShouldUseDEFAULTRedirectPolicyByDefault() {
+        request = URLFetchRequest.GET(url);
+        assertEquals(request.getRedirectHandlingPolicy(), Request.RedirectHandlingPolicy.DEFAULT);
+    }
+
+    @Test
+    public void itShouldRetainHeadersWhenConvertingToHTTPRequest() {
+        request.getHeaders().put("foo", "bar");
+        HTTPRequest httpRequest = request.toHTTPRequest();
+        HTTPHeader header = httpRequest.getHeaders().get(0);
+        assertEquals(header.getName(), "foo");
+        assertEquals(header.getValue(), "bar");
+
     }
 }

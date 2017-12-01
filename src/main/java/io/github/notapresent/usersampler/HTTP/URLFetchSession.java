@@ -1,13 +1,11 @@
 package io.github.notapresent.usersampler.HTTP;
 
 
-import com.google.appengine.api.urlfetch.HTTPMethod;
-import com.google.appengine.api.urlfetch.HTTPRequest;
-import com.google.appengine.api.urlfetch.HTTPResponse;
-import com.google.appengine.api.urlfetch.URLFetchService;
+import com.google.appengine.api.urlfetch.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 public class URLFetchSession implements Session<URLFetchRequest> {
     public static int DEFAULT_MAX_REDIRECTS = 5;
@@ -34,6 +32,7 @@ public class URLFetchSession implements Session<URLFetchRequest> {
     protected HTTPResponse handleRedirects(HTTPRequest req) throws IOException {
         int numRedirects = 0;
         HTTPResponse resp = null;
+        List<HTTPHeader> originalHeaders = req.getHeaders();
 
         while(numRedirects++ < maxRedirects) {
             resp = doSend(req);
@@ -44,6 +43,10 @@ public class URLFetchSession implements Session<URLFetchRequest> {
             String location = Util.getHeader(resp.getHeaders(), "location");
             URL redirectUrl = new URL(req.getURL(), location);
             req = new HTTPRequest(redirectUrl, HTTPMethod.GET, req.getFetchOptions());
+            for(HTTPHeader header : originalHeaders) {
+                req.addHeader(header);
+            }
+            //originalHeaders.stream().map(req::addHeader);
         }
 
         return resp;

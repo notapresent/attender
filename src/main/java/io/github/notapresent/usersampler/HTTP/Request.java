@@ -1,5 +1,7 @@
 package io.github.notapresent.usersampler.HTTP;
 
+import java.util.Map;
+
 public interface Request {
     String getUrl();
     Method getMethod();
@@ -9,6 +11,8 @@ public interface Request {
 
     void setTimeout(double timeout);
     double getTimeout();
+
+    Map<String, String> getHeaders();
 
     enum RedirectHandlingPolicy {
         FOLLOW,
