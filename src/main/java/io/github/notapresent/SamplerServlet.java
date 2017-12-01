@@ -39,11 +39,13 @@ public class SamplerServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         Request req = requestFactory.GET(indexUrl);
+        req.setRedirectHandlingPolicy(Request.RedirectPolicy.FOLLOW);
         Response resp = session.send(req);
         byte[] respBytes = resp.getContentBytes();
+        String respStr = new String(respBytes, Charsets.UTF_8);
 
         Properties properties = System.getProperties();
-        response.setContentType("text/plain");
+        response.setContentType("text/plain; charset=utf-8");
         String message = "App Engine Standard using %s%n" +
                 "Java %s%n%nGot %d bytes%nFirst 200 bytes are:%n%s" ;
         response.getWriter().format(
@@ -51,7 +53,7 @@ public class SamplerServlet extends HttpServlet {
                 SystemProperty.version.get(),
                 properties.get("java.specification.version"),
                 respBytes.length,
-                new String(respBytes, Charset.forName("windows-1251"))
+                respStr.substring(0, Math.min(150, respStr.length()))
         );
     }
 
