@@ -7,25 +7,29 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.net.URL;
-
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 public class URLFetchResponseTest {
-    private URLFetchResponse response;
-
     private static String url = "http://fake.url/";
-    private static List<HTTPHeader> headers =  Arrays.asList(
+    private static List<HTTPHeader> headers = Arrays.asList(
             new HTTPHeader("foo", "bar")
     );
     private static HTTPResponse okHTTPResponse;
+    private URLFetchResponse response;
 
     @BeforeClass
     public static void setUpClass() throws IOException {
-        okHTTPResponse = new HTTPResponse(200, new byte[0], new URL(url), headers);
+        okHTTPResponse = new HTTPResponse(
+                200,
+                new byte[0],
+                new URL(url),
+                headers
+        );
     }
 
     @Test

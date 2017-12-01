@@ -13,13 +13,17 @@ import java.util.Map;
 public class URLFetchRequest implements Request {
     private final String url;
     private final Method method;
-    private RedirectHandlingPolicy redirectHandlingPolicy = RedirectHandlingPolicy.DEFAULT;
+    private RedirectPolicy redirectHandlingPolicy = RedirectPolicy.DEFAULT;
     private double timeout = 5.0;
     private Map<String, String> headers = new HashMap<>();
 
     public URLFetchRequest(String url, Method method) {
         this.url = url;
         this.method = method;
+    }
+
+    public static URLFetchRequest GET(String url) {
+        return new URLFetchRequest(url, Method.GET);
     }
 
     @Override
@@ -33,8 +37,8 @@ public class URLFetchRequest implements Request {
     }
 
     @Override
-    public void setRedirectHandlingPolicy(RedirectHandlingPolicy policy) {
-        this.redirectHandlingPolicy = policy;
+    public double getTimeout() {
+        return timeout;
     }
 
     @Override
@@ -43,19 +47,18 @@ public class URLFetchRequest implements Request {
     }
 
     @Override
-    public double getTimeout(){
-        return timeout;
-    }
-
-    @Override
     public Map<String, String> getHeaders() {
         return headers;
     }
 
-    public RedirectHandlingPolicy getRedirectHandlingPolicy() {
+    public RedirectPolicy getRedirectHandlingPolicy() {
         return redirectHandlingPolicy;
     }
 
+    @Override
+    public void setRedirectHandlingPolicy(RedirectPolicy policy) {
+        this.redirectHandlingPolicy = policy;
+    }
 
     public HTTPRequest toHTTPRequest() {
         try {
@@ -64,7 +67,8 @@ public class URLFetchRequest implements Request {
                     HTTPMethod.valueOf(method.toString()),
                     buildFetchOptions()
             );
-            headers.forEach((name, value) -> httpRequest.addHeader(new HTTPHeader(name, value)));
+            headers.forEach((name, value) ->
+                    httpRequest.addHeader(new HTTPHeader(name, value)));
 
             return httpRequest;
 
@@ -76,17 +80,13 @@ public class URLFetchRequest implements Request {
     protected FetchOptions buildFetchOptions() {
         FetchOptions opts = FetchOptions.Builder.withDeadline(timeout);
 
-        if(redirectHandlingPolicy == RedirectHandlingPolicy.DEFAULT) {
+        if (redirectHandlingPolicy == RedirectPolicy.DEFAULT) {
             opts.followRedirects();
         } else {
             opts.doNotFollowRedirects();
         }
 
         return opts;
-    }
-
-    public static URLFetchRequest GET(String url) {
-        return new URLFetchRequest(url, Method.GET);
     }
 
 }

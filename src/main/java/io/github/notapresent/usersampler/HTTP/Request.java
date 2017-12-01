@@ -4,21 +4,25 @@ import java.util.Map;
 
 public interface Request {
     String getUrl();
+
     Method getMethod();
 
-    void setRedirectHandlingPolicy(RedirectHandlingPolicy policy);
-    RedirectHandlingPolicy getRedirectHandlingPolicy();
+    RedirectPolicy getRedirectHandlingPolicy();
+
+    void setRedirectHandlingPolicy(RedirectPolicy policy);
+
+    double getTimeout();
 
     void setTimeout(double timeout);
-    double getTimeout();
 
     Map<String, String> getHeaders();
 
-    enum RedirectHandlingPolicy {
+    enum RedirectPolicy {
         FOLLOW,
         DO_NOT_FOLLOW,
         DEFAULT;    // Default redirect handling policy for underlying implementation
 
-        private RedirectHandlingPolicy() {}
+        private RedirectPolicy() {
+        }
     }
 }

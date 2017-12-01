@@ -4,7 +4,10 @@ import java.util.Map;
 
 public interface Response {
     int getStatus();
+
     byte[] getContentBytes();
+
     String getFinalUrl();
+
     Map<String, String> getHeaders();
 }

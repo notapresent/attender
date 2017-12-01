@@ -1,6 +1,9 @@
 package io.github.notapresent;
 
-import com.google.appengine.api.urlfetch.*;
+import com.google.appengine.api.urlfetch.HTTPHeader;
+import com.google.appengine.api.urlfetch.HTTPMethod;
+import com.google.appengine.api.urlfetch.HTTPResponse;
+import com.google.appengine.api.urlfetch.URLFetchService;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

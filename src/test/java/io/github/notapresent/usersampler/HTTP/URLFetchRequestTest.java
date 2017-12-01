@@ -1,13 +1,9 @@
 package io.github.notapresent.usersampler.HTTP;
 
-import com.google.appengine.api.urlfetch.FetchOptions;
 import com.google.appengine.api.urlfetch.HTTPHeader;
-import com.google.appengine.api.urlfetch.HTTPMethod;
 import com.google.appengine.api.urlfetch.HTTPRequest;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.net.URL;
 
 import static org.junit.Assert.*;
 
@@ -18,37 +14,39 @@ public class URLFetchRequestTest {
     private String url = "http://fake.url/";
 
     @Before
-    public void setUp(){
+    public void setUp() {
         request = new URLFetchRequest(url, Method.GET);
     }
 
     @Test
     public void itShouldConvertToHTTPRequest() {
         HTTPRequest httpRequest = request.toHTTPRequest();
-        assertEquals(request.getMethod().toString(), httpRequest.getMethod().toString());
+        assertEquals(request.getMethod().toString(),
+                httpRequest.getMethod().toString());
         assertEquals(request.getUrl(), httpRequest.getURL().toString());
     }
 
     @Test
     public void itShouldSetFollowRedirectsIfDEFAULTPolicy() {
-        request.setRedirectHandlingPolicy(Request.RedirectHandlingPolicy.DEFAULT);
+        request.setRedirectHandlingPolicy(Request.RedirectPolicy.DEFAULT);
         HTTPRequest req = request.toHTTPRequest();
         assertTrue(req.getFetchOptions().getFollowRedirects());
     }
 
     @Test
     public void itShouldSetDontFollowRedirectsIfNotDEFAULTPolicy() {
-        request.setRedirectHandlingPolicy(Request.RedirectHandlingPolicy.FOLLOW);
+        request.setRedirectHandlingPolicy(Request.RedirectPolicy.FOLLOW);
         assertFalse(request.toHTTPRequest().getFetchOptions().getFollowRedirects());
 
-        request.setRedirectHandlingPolicy(Request.RedirectHandlingPolicy.DO_NOT_FOLLOW);
+        request.setRedirectHandlingPolicy(Request.RedirectPolicy.DO_NOT_FOLLOW);
         assertFalse(request.toHTTPRequest().getFetchOptions().getFollowRedirects());
     }
 
     @Test
     public void itShouldSetDeadlineToTimeout() {
         request.setTimeout(42.0);
-        assertEquals((Double)request.getTimeout(), request.toHTTPRequest().getFetchOptions().getDeadline());
+        assertEquals((Double) request.getTimeout(),
+                request.toHTTPRequest().getFetchOptions().getDeadline());
     }
 
     @Test
@@ -60,7 +58,8 @@ public class URLFetchRequestTest {
     @Test
     public void itShouldUseDEFAULTRedirectPolicyByDefault() {
         request = URLFetchRequest.GET(url);
-        assertEquals(request.getRedirectHandlingPolicy(), Request.RedirectHandlingPolicy.DEFAULT);
+        assertEquals(request.getRedirectHandlingPolicy(),
+                Request.RedirectPolicy.DEFAULT);
     }
 
     @Test

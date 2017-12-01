@@ -22,6 +22,22 @@ public class URLFetchResponse implements Response {
         this.finalUrl = finalUrl;
     }
 
+    public static URLFetchResponse fromHTTPResponse(HTTPResponse response) {
+        return new URLFetchResponse(
+                response.getResponseCode(),
+                response.getContent(),
+                headersListToMap(response.getHeadersUncombined()),
+                response.getFinalUrl().toString());
+    }
+
+    protected static Map<String, String> headersListToMap(List<HTTPHeader> headersList) {
+        Map<String, String> headersMap = new HashMap<>();
+        for (HTTPHeader header : headersList) {
+            headersMap.merge(header.getName(), header.getValue(), (oldVal, val) -> oldVal == null ? val : oldVal + ", " + val);
+        }
+        return headersMap;
+    }
+
     @Override
     public int getStatus() {
         return status;
@@ -40,21 +56,5 @@ public class URLFetchResponse implements Response {
     @Override
     public Map<String, String> getHeaders() {
         return unmodifiableMap(headers);
-    }
-
-    public static URLFetchResponse fromHTTPResponse(HTTPResponse response) {
-        return new URLFetchResponse(
-                response.getResponseCode(),
-                response.getContent(),
-                headersListToMap(response.getHeadersUncombined()),
-                response.getFinalUrl().toString());
-    }
-
-    protected static Map<String, String> headersListToMap(List<HTTPHeader> headersList) {
-        Map<String, String> headersMap = new HashMap<>();
-        for(HTTPHeader header : headersList) {
-            headersMap.merge(header.getName(), header.getValue(), (oldVal, val) -> oldVal == null ? val : oldVal + ", " + val);
-        }
-        return headersMap;
     }
 }
