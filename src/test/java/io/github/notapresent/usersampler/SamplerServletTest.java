@@ -1,11 +1,11 @@
-package io.github.notapresent;
+package io.github.notapresent.usersampler;
 
-import com.google.appengine.api.urlfetch.HTTPResponse;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import io.github.notapresent.usersampler.HTTP.Request;
 import io.github.notapresent.usersampler.HTTP.RequestFactory;
 import io.github.notapresent.usersampler.HTTP.Response;
 import io.github.notapresent.usersampler.HTTP.Session;
+import io.github.notapresent.usersampler.SamplerServlet;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.URL;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.any;

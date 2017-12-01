@@ -3,19 +3,13 @@ package io.github.notapresent.usersampler.HTTP;
 import com.google.appengine.api.urlfetch.*;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalURLFetchServiceTestConfig;
-import com.google.common.base.Charsets;
-import io.github.notapresent.HTTPSession;
-import io.github.notapresent.HTTPSessionCookieManager;
-import io.github.notapresent.HTTPSessionRequest;
-import io.github.notapresent.IntegrationTest;
+import io.github.notapresent.usersampler.IntegrationTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;

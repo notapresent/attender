@@ -1,4 +1,4 @@
-package io.github.notapresent;
+package io.github.notapresent.usersampler;
 
 /**
  * Marker interface for designating integration tests
