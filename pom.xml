@@ -6,7 +6,16 @@
   <version>1.0-SNAPSHOT</version>
 
   <groupId>io.github.notapresent.usersampler</groupId>
-  <artifactId>attender</artifactId>
+  <artifactId>webapp</artifactId>
+
+  <repositories>
+    <!--Local in-project repo for site adapters -->
+    <repository>
+      <id>project.local</id>
+      <name>project</name>
+      <url>file:${project.basedir}/repo</url>
+    </repository>
+  </repositories>
 
   <properties>
     <!-- uncomment if you wish to set your project here project- gcloud is used otherwise -->
@@ -61,8 +70,13 @@
         <version>4.1.0</version>
     </dependency>
 
+      <dependency>
+          <groupId>io.github.notapresent.usersampler</groupId>
+          <artifactId>siteservice</artifactId>
+          <version>1.0</version>
+      </dependency>
 
-    <!-- Test Dependencies -->
+      <!-- Test Dependencies -->
     <dependency>
       <groupId>com.google.appengine</groupId>
       <artifactId>appengine-testing</artifactId>
