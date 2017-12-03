@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler;
+package io.github.notapresent.usersampler.gaeapp;
 
 import com.google.inject.servlet.ServletModule;
 

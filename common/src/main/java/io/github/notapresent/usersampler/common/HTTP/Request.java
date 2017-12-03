@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler.HTTP;
+package io.github.notapresent.usersampler.common.HTTP;
 
 import java.util.Map;
 

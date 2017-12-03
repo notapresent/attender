@@ -1,10 +1,10 @@
-package io.github.notapresent.usersampler.HTTP;
+package io.github.notapresent.usersampler.gaeapp.HTTP;
 
 import com.google.appengine.api.urlfetch.HTTPHeader;
 
 import java.util.List;
 
-public class Util {
+public class URLFetchUtil {
     public static boolean isRedirect(int code) {
         return code >= 301 && code <= 303;
     }

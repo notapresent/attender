@@ -1,7 +1,8 @@
-package io.github.notapresent.usersampler.HTTP;
+package io.github.notapresent.usersampler.gaeapp.HTTP;
 
 import com.google.appengine.api.urlfetch.HTTPHeader;
 import com.google.appengine.api.urlfetch.HTTPResponse;
+import io.github.notapresent.usersampler.common.HTTP.Response;
 
 import java.net.URL;
 import java.util.HashMap;

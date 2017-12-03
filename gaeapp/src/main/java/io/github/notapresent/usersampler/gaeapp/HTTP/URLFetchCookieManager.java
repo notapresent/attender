@@ -1,8 +1,9 @@
-package io.github.notapresent.usersampler.HTTP;
+package io.github.notapresent.usersampler.gaeapp.HTTP;
 
 import com.google.appengine.api.urlfetch.HTTPHeader;
 import com.google.appengine.api.urlfetch.HTTPRequest;
 import com.google.appengine.api.urlfetch.HTTPResponse;
+import io.github.notapresent.usersampler.common.HTTP.Error;
 
 import java.io.IOException;
 import java.net.CookieManager;

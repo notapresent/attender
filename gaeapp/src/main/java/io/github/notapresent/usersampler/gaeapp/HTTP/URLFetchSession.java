@@ -1,15 +1,17 @@
-package io.github.notapresent.usersampler.HTTP;
+package io.github.notapresent.usersampler.gaeapp.HTTP;
 
 
 import com.google.appengine.api.urlfetch.*;
 import com.google.inject.Inject;
+import io.github.notapresent.usersampler.common.HTTP.Error;
+import io.github.notapresent.usersampler.common.HTTP.Request;
+import io.github.notapresent.usersampler.common.HTTP.Session;
 
 
 import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 
 public class URLFetchSession implements Session {
     public static int DEFAULT_MAX_REDIRECTS = 5;
@@ -56,11 +58,11 @@ public class URLFetchSession implements Session {
 
         while (timesRedirected++ < maxRedirects) {
             resp = doSend(req);
-            if (!Util.isRedirect(resp.getResponseCode())) {
+            if (!URLFetchUtil.isRedirect(resp.getResponseCode())) {
                 break;
             }
 
-            String location = Util.getHeaderValue(resp.getHeaders(), "location");
+            String location = URLFetchUtil.getHeaderValue(resp.getHeaders(), "location");
 
             if(location == null) {
                 throw new Error("Location header missing from redirect response");

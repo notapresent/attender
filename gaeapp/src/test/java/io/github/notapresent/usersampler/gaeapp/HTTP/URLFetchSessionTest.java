@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler.HTTP;
+package io.github.notapresent.usersampler.gaeapp.HTTP;
 
 import com.google.appengine.api.urlfetch.HTTPHeader;
 import com.google.appengine.api.urlfetch.HTTPRequest;
@@ -6,6 +6,11 @@ import com.google.appengine.api.urlfetch.HTTPResponse;
 import com.google.appengine.api.urlfetch.URLFetchService;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import io.github.notapresent.usersampler.common.HTTP.Request;
+import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchCookieManager;
+import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchRequest;
+import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchResponse;
+import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchSession;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

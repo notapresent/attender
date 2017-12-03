@@ -1,14 +1,10 @@
-package io.github.notapresent.usersampler;
+package io.github.notapresent.usersampler.gaeapp;
 
 import com.google.appengine.api.utils.SystemProperty;
-import com.google.common.base.Charsets;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
-import io.github.notapresent.usersampler.HTTP.Request;
-import io.github.notapresent.usersampler.HTTP.RequestFactory;
-import io.github.notapresent.usersampler.HTTP.Response;
-import io.github.notapresent.usersampler.HTTP.Session;
+import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
+import io.github.notapresent.usersampler.common.HTTP.Session;
 import io.github.notapresent.usersampler.common.SiteService;
 
 import javax.servlet.http.HttpServlet;
