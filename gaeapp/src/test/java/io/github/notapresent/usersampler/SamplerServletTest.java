@@ -70,7 +70,10 @@ public class SamplerServletTest {
         when(mockSessionResponse.getContentBytes()).thenReturn(FAKE_SESSION_RESPONSE.getBytes());
         when(mockSession.send(any(Request.class))).thenReturn(mockSessionResponse);
 
-        servletUnderTest = new SamplerServlet(mockSession, mockRequestFactory, FAKE_URL);
+        servletUnderTest = new SamplerServlet(
+            mockSession, 
+            mockRequestFactory
+        );
         servletUnderTest.init(servletConfig);
     }
 
@@ -89,9 +92,5 @@ public class SamplerServletTest {
         assertThat(strResponse)
                 .named("SamplerServlet response")
                 .contains("App Engine Standard");
-
-        assertThat(strResponse)
-                .named("SamplerServlet response")
-                .contains(FAKE_SESSION_RESPONSE);
     }
 }

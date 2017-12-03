@@ -11,15 +11,8 @@ import java.net.CookieHandler;
 import java.util.Properties;
 
 public class ServicesModule extends AbstractModule {
-    private final Properties serviceConfig;
-
-    public ServicesModule(Properties props) {
-        serviceConfig = props;
-    }
-
     @Override
     protected void configure() {
-        Names.bindProperties(binder(), serviceConfig);
         bind(RequestFactory.class).to(URLFetchRequestFactory.class);
         bind(Session.class).to(URLFetchSession.class);
         bind(CookieHandler.class).to(URLFetchCookieManager.class);

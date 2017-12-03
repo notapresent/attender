@@ -9,7 +9,7 @@ import io.github.notapresent.usersampler.HTTP.Request;
 import io.github.notapresent.usersampler.HTTP.RequestFactory;
 import io.github.notapresent.usersampler.HTTP.Response;
 import io.github.notapresent.usersampler.HTTP.Session;
-import io.github.notapresent.usersampler.siteservice.SiteService;
+import io.github.notapresent.usersampler.common.SiteService;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,15 +26,12 @@ import java.util.stream.Collectors;
 public class SamplerServlet extends HttpServlet {
     private final Session session;
     private final RequestFactory requestFactory;
-    private final String indexUrl;
 
     @Inject
     public SamplerServlet(
             Session sess,
-            RequestFactory requestFactory,
-            @Named("indexUrl") String indexUrl) {
+            RequestFactory requestFactory) {
         this.session = sess;
-        this.indexUrl = indexUrl;
         this.requestFactory = requestFactory;
     }
 
@@ -42,12 +39,6 @@ public class SamplerServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         SiteService siteService = SiteService.getInstance();
-        Request req = requestFactory.GET(indexUrl);
-        req.setRedirectHandlingPolicy(Request.RedirectPolicy.FOLLOW);
-        Response resp = session.send(req);
-        byte[] respBytes = resp.getContentBytes();
-        String respStr = new String(respBytes, Charsets.UTF_8);
-
         List<String> classPathURLS = Arrays.stream(
                 ((URLClassLoader) (Thread.currentThread().getContextClassLoader())).getURLs())
                 .map(URL::toString)
@@ -59,16 +50,15 @@ public class SamplerServlet extends HttpServlet {
 
         response.setContentType("text/plain; charset=utf-8");
         String message = "App Engine Standard using %s%n" +
-                "Java %s%n%nGot %d bytes%nFirst 200 bytes are:%n%s%n";
-        message += "%n%n== CLASSPATH: %n" + String.join("%n", classPathURLS) + "%n%n";
+                "Java %s%n";
+        message += "%n%n== CLASSPATH: %n" + 
+                String.join("%n", classPathURLS) + "%n%n";
         message  += serviceMessages;
 
         response.getWriter().format(
                 message,
                 SystemProperty.version.get(),
-                properties.get("java.specification.version"),
-                respBytes.length,
-                respStr.substring(0, Math.min(150, respStr.length()))
+                properties.get("java.specification.version")
         );
     }
 }

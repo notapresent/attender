@@ -1,4 +1,0 @@
-# Page containing list of all online users
-urls.index=http://localhost/users
-# User profile page url
-urls.profile=http://localhost/user/{0}
