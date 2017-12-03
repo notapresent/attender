@@ -6,7 +6,7 @@
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
   <groupId>io.github.notapresent.usersampler</groupId>
-  <artifactId>webapp</artifactId>
+  <artifactId>gaeapp</artifactId>
 
   <repositories>
     <!--Local in-project repo for site adapters -->
