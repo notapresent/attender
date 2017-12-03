@@ -87,6 +87,7 @@
       <artifactId>guice-servlet</artifactId>
       <version>4.1.0</version>
     </dependency>
+
     <!-- Test Dependencies -->
     <dependency>
       <groupId>com.google.appengine</groupId>
@@ -139,7 +140,6 @@
         <groupId>com.google.cloud.tools</groupId>
         <artifactId>appengine-maven-plugin</artifactId>
         <version>1.3.1</version>
-        <configuration></configuration>
       </plugin>
       <plugin>
         <artifactId>maven-failsafe-plugin</artifactId>
@@ -148,7 +148,7 @@
           <includes>
             <include>**/*.class</include>
           </includes>
-          <groups>io.github.notapresent.usersampler.IntegrationTest</groups>
+          <groups>io.github.notapresent.usersampler.gaeapp.IntegrationTest</groups>
         </configuration>
         <executions>
           <execution>
@@ -200,7 +200,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.20.1</version>
         <configuration>
-          <excludedGroups>io.github.notapresent.usersampler.IntegrationTest</excludedGroups>
+          <excludedGroups>io.github.notapresent.usersampler.gaeapp.IntegrationTest</excludedGroups>
         </configuration>
       </plugin>
       <plugin>
