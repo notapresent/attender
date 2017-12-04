@@ -4,10 +4,10 @@ import java.util.*;
 
 public class SiteService {
     private static SiteService service;
-    private ServiceLoader<SiteServiceProvider> loader;
+    private ServiceLoader<SiteAdapter> loader;
 
     private SiteService() {
-        loader = ServiceLoader.load(SiteServiceProvider.class);
+        loader = ServiceLoader.load(SiteAdapter.class);
     }
 
     public static synchronized SiteService getInstance() {
@@ -21,8 +21,8 @@ public class SiteService {
         List<String> messages = new ArrayList<>();
 
         try {
-            for (SiteServiceProvider adapter : loader) {
-                messages.add(adapter.getMessage(request));
+            for (SiteAdapter adapter : loader) {
+                messages.add(adapter.getAlias());
             }
         } catch (ServiceConfigurationError serviceError) {
             serviceError.printStackTrace();
