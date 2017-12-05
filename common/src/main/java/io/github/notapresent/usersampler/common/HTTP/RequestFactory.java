@@ -1,6 +1,11 @@
 package io.github.notapresent.usersampler.common.HTTP;
 
-public interface RequestFactory {
-    Request create(String url, Method method);
-    Request GET(String url);
+public class RequestFactory {
+    public Request create(String url, Method method) {
+        return new Request(url, method);
+    }
+
+    public Request create(String url) {
+        return create(url, Method.GET);
+    }
 }

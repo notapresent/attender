@@ -7,10 +7,6 @@ import com.google.appengine.api.urlfetch.URLFetchService;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import io.github.notapresent.usersampler.common.HTTP.Request;
-import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchCookieManager;
-import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchRequest;
-import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchResponse;
-import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchSession;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -32,8 +28,9 @@ import static org.mockito.Mockito.*;
 
 public class URLFetchSessionTest {
     // Canned requests and responses
+    private static URLFetchRequestFactory requestFactory = new URLFetchRequestFactory();
     private static String url = "http://fake.url";
-    private static URLFetchRequest request = URLFetchRequest.GET(url);
+    private static Request request = new URLFetchRequest(url);
     private static List<HTTPHeader> emptyHeaders = new ArrayList<HTTPHeader>();
     private static List<HTTPHeader> redirectHeaders = Collections.singletonList(
             new HTTPHeader("location", url));

@@ -5,7 +5,7 @@ import com.google.common.base.Charsets;
 import java.nio.charset.Charset;
 import java.util.Map;
 
-public interface Response {
+public interface Response {     // TODO Convert this to abstract class?
     int getStatus();
 
     byte[] getContentBytes();

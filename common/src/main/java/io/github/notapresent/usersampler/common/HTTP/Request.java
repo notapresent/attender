@@ -1,23 +1,53 @@
 package io.github.notapresent.usersampler.common.HTTP;
 
+import java.util.HashMap;
 import java.util.Map;
 
-public interface Request {
-    String getUrl();
+public class Request {
+    protected final String url;
+    protected final Method method;
+    protected RedirectPolicy redirectHandlingPolicy = RedirectPolicy.DEFAULT;
+    protected double timeout = 5.0;
+    protected Map<String, String> headers = new HashMap<>();
 
-    Method getMethod();
+    public Request(String url, Method method) {
+        this.url = url;
+        this.method = method;
+    }
 
-    RedirectPolicy getRedirectHandlingPolicy();
+    public Request(String url) {
+        this(url, Method.GET);
+    }
 
-    void setRedirectHandlingPolicy(RedirectPolicy policy);
+    public String getUrl() {
+        return url;
+    }
 
-    double getTimeout();
+    public Method getMethod() {
+        return method;
+    }
 
-    void setTimeout(double timeout);
+    public double getTimeout() {
+        return timeout;
+    }
 
-    Map<String, String> getHeaders();
+    public void setTimeout(double timeout) {
+        this.timeout = timeout;
+    }
 
-    enum RedirectPolicy {
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    public RedirectPolicy getRedirectHandlingPolicy() {
+        return redirectHandlingPolicy;
+    }
+
+    public void setRedirectHandlingPolicy(RedirectPolicy policy) {
+        this.redirectHandlingPolicy = policy;
+    }
+
+    public enum RedirectPolicy {
         FOLLOW,
         DO_NOT_FOLLOW,
         DEFAULT;    // Default redirect handling policy for underlying implementation

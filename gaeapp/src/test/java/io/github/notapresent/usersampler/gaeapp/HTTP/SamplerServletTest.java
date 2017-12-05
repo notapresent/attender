@@ -66,7 +66,7 @@ public class SamplerServletTest {
 
         javax.servlet.ServletConfig servletConfig = mock(javax.servlet.ServletConfig.class);
 
-        when(mockRequestFactory.GET(any(String.class))).thenReturn(mockSessionRequest);
+        when(mockRequestFactory.create(any(String.class))).thenReturn(mockSessionRequest);
         when(mockSessionResponse.getContentBytes()).thenReturn(FAKE_SESSION_RESPONSE.getBytes());
         when(mockSession.send(any(Request.class))).thenReturn(mockSessionResponse);
 
