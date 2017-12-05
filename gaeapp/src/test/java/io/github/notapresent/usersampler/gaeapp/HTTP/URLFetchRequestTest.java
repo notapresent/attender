@@ -52,19 +52,6 @@ public class URLFetchRequestTest {
     }
 
     @Test
-    public void itShouldBuildGetRequestWithGetMethod() {
-        request = new URLFetchRequest(url);
-        assertEquals(Method.GET, request.getMethod());
-    }
-
-    @Test
-    public void itShouldUseDEFAULTRedirectPolicyByDefault() {
-        request = new URLFetchRequest(url);
-        assertEquals(request.getRedirectHandlingPolicy(),
-                Request.RedirectPolicy.DEFAULT);
-    }
-
-    @Test
     public void itShouldRetainHeadersWhenConvertingToHTTPRequest() {
         request.getHeaders().put("foo", "bar");
         HTTPRequest httpRequest = request.toHTTPRequest();
