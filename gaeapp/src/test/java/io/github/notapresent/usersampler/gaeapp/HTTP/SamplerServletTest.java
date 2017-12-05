@@ -37,15 +37,20 @@ public class SamplerServletTest {
     private final LocalServiceTestHelper helper = new LocalServiceTestHelper();
 
     // Servlet stuff
-    @Mock private HttpServletRequest mockRequest;
-    @Mock private HttpServletResponse mockResponse;
+    @Mock
+    private HttpServletRequest mockRequest;
+    @Mock
+    private HttpServletResponse mockResponse;
 
 
-    @Mock private Session mockSession;
-    @Mock private RequestFactory mockRequestFactory;
-    @Mock private Request mockSessionRequest;
-    @Mock private Response mockSessionResponse;
-
+    @Mock
+    private Session mockSession;
+    @Mock
+    private RequestFactory mockRequestFactory;
+    @Mock
+    private Request mockSessionRequest;
+    @Mock
+    private Response mockSessionResponse;
 
 
     private StringWriter responseWriter;
@@ -71,8 +76,8 @@ public class SamplerServletTest {
         when(mockSession.send(any(Request.class))).thenReturn(mockSessionResponse);
 
         servletUnderTest = new SamplerServlet(
-            mockSession, 
-            mockRequestFactory
+                mockSession,
+                mockRequestFactory
         );
         servletUnderTest.init(servletConfig);
     }

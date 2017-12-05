@@ -4,8 +4,11 @@ import com.google.appengine.api.urlfetch.URLFetchService;
 import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import io.github.notapresent.usersampler.common.HTTP.*;
-import io.github.notapresent.usersampler.gaeapp.HTTP.*;
+import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
+import io.github.notapresent.usersampler.common.HTTP.Session;
+import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchCookieManager;
+import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchRequestFactory;
+import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchSession;
 
 import java.net.CookieHandler;
 

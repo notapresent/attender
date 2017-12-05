@@ -1,6 +1,9 @@
 package io.github.notapresent.usersampler.common;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ServiceConfigurationError;
+import java.util.ServiceLoader;
 
 public class SiteService {
     private static SiteService service;

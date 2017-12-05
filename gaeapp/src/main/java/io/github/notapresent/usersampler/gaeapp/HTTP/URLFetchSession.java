@@ -3,10 +3,9 @@ package io.github.notapresent.usersampler.gaeapp.HTTP;
 
 import com.google.appengine.api.urlfetch.*;
 import com.google.inject.Inject;
-import io.github.notapresent.usersampler.common.HTTP.Request;
 import io.github.notapresent.usersampler.common.HTTP.Error;
+import io.github.notapresent.usersampler.common.HTTP.Request;
 import io.github.notapresent.usersampler.common.HTTP.Session;
-
 
 import java.io.IOException;
 import java.net.CookieHandler;
@@ -64,7 +63,7 @@ public class URLFetchSession implements Session {
 
             String location = URLFetchUtil.getHeaderValue(resp.getHeaders(), "location");
 
-            if(location == null) {
+            if (location == null) {
                 throw new Error("Location header missing from redirect response");
             }
 

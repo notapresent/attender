@@ -30,7 +30,7 @@ public class URLFetchResponse implements Response {
                 response.getResponseCode(),
                 response.getContent(),
                 headersListToMap(response.getHeadersUncombined()),
-                 finalUrl == null ? null : finalUrl.toString());
+                finalUrl == null ? null : finalUrl.toString());
     }
 
     protected static Map<String, String> headersListToMap(List<HTTPHeader> headersList) {

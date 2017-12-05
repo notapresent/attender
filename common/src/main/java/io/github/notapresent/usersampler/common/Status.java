@@ -4,6 +4,7 @@ package io.github.notapresent.usersampler.common;
 public interface Status {
     /* Mimic enum values */
     String name();
+
     int ordinal();
 
     default int toInt() {

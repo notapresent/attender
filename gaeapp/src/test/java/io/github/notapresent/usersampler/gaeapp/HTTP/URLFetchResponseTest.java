@@ -2,7 +2,6 @@ package io.github.notapresent.usersampler.gaeapp.HTTP;
 
 import com.google.appengine.api.urlfetch.HTTPHeader;
 import com.google.appengine.api.urlfetch.HTTPResponse;
-import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchResponse;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

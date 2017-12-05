@@ -47,9 +47,9 @@ public class SamplerServlet extends HttpServlet {
         response.setContentType("text/plain; charset=utf-8");
         String message = "App Engine Standard using %s%n" +
                 "Java %s%n";
-        message += "%n%n== CLASSPATH: %n" + 
+        message += "%n%n== CLASSPATH: %n" +
                 String.join("%n", classPathURLS) + "%n%n";
-        message  += serviceMessages;
+        message += serviceMessages;
 
         response.getWriter().format(
                 message,
