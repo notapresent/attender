@@ -5,6 +5,7 @@ import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
 import io.github.notapresent.usersampler.common.HTTP.Response;
 import io.github.notapresent.usersampler.common.sampling.Status;
 
+import java.util.List;
 import java.util.Map;
 
 public interface SiteAdapter {
@@ -16,7 +17,7 @@ public interface SiteAdapter {
 
     boolean isDone();
 
-    Iterable<Request> produceRequests();
+    List<Request> produceRequests();
 
     void processResponse(Response response);
 

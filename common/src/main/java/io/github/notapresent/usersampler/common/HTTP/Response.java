@@ -3,6 +3,7 @@ package io.github.notapresent.usersampler.common.HTTP;
 import com.google.common.base.Charsets;
 
 import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.Map;
 
 import static java.util.Collections.unmodifiableMap;
@@ -23,9 +24,8 @@ public class Response {
 
     protected Request request;
 
-    public Response(int status, byte[] content) {
-        this.status = status;
-        this.content = content;
+    public Response(int status, byte[] content, String final_url) {
+        this(status, Collections.EMPTY_MAP, content, final_url);
     }
 
     public Response(int status, Map<String, String> headers, byte[] content, String finalUrl) {
