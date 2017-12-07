@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler.common;
+package io.github.notapresent.usersampler.common.sampling;
 
 /* Marker interface to designate user status enums */
 public interface Status {

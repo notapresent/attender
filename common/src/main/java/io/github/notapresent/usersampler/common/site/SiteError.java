@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler.common;
+package io.github.notapresent.usersampler.common.site;
 
 public class SiteError extends RuntimeException {
     public SiteError(String message, Throwable cause) {

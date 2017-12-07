@@ -1,10 +1,10 @@
-package io.github.notapresent.usersampler.common;
+package io.github.notapresent.usersampler.common.site;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 
+// TODO Refactor this to guice singleton
 public class SiteService {
     private static SiteService service;
     private ServiceLoader<SiteAdapter> loader;
@@ -20,16 +20,11 @@ public class SiteService {
         return service;
     }
 
-    public List<String> getMessages(String request) {
-        List<String> messages = new ArrayList<>();
-
-        try {
-            for (SiteAdapter adapter : loader) {
-                messages.add(adapter.getAlias());
-            }
-        } catch (ServiceConfigurationError serviceError) {
-            serviceError.printStackTrace();
+    public List<SiteAdapter> getAdapters() {
+        List<SiteAdapter> adapters = new ArrayList<>();
+        for (SiteAdapter adapter : loader) {
+            adapters.add(adapter);
         }
-        return messages;
+        return adapters;
     }
 }

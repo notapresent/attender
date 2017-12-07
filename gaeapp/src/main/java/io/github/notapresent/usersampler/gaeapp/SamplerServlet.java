@@ -5,18 +5,13 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
 import io.github.notapresent.usersampler.common.HTTP.Session;
-import io.github.notapresent.usersampler.common.SiteService;
+import io.github.notapresent.usersampler.common.site.SiteService;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 @Singleton
 public class SamplerServlet extends HttpServlet {

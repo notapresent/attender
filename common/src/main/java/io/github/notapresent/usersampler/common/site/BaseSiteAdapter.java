@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler.common;
+package io.github.notapresent.usersampler.common.site;
 
 import com.google.inject.Inject;
 import io.github.notapresent.usersampler.common.HTTP.RequestFactory;

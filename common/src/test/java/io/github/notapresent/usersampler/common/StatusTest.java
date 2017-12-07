@@ -1,5 +1,7 @@
 package io.github.notapresent.usersampler.common;
 
+import io.github.notapresent.usersampler.common.sampling.GenericStatus;
+import io.github.notapresent.usersampler.common.sampling.Status;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

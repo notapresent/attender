@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler.common;
+package io.github.notapresent.usersampler.common.sampling;
 
 public enum GenericStatus implements Status {
     OFFLINE,
