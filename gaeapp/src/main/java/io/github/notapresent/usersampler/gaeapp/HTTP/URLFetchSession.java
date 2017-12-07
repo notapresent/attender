@@ -3,9 +3,8 @@ package io.github.notapresent.usersampler.gaeapp.HTTP;
 
 import com.google.appengine.api.urlfetch.*;
 import com.google.inject.Inject;
+import io.github.notapresent.usersampler.common.HTTP.*;
 import io.github.notapresent.usersampler.common.HTTP.Error;
-import io.github.notapresent.usersampler.common.HTTP.Request;
-import io.github.notapresent.usersampler.common.HTTP.Session;
 
 import java.io.IOException;
 import java.net.CookieHandler;
@@ -37,31 +36,38 @@ public class URLFetchSession implements Session {
     }
 
     @Override
-    public URLFetchResponse send(Request request) throws IOException {
+    public Response send(Request request) throws IOException {
         HTTPResponse ufResp;
         HTTPRequest urlFetchRequest = ((URLFetchRequest) request).toHTTPRequest();
+        URLFetchResponse response;
 
         if (request.getRedirectHandlingPolicy() == Request.RedirectPolicy.FOLLOW) {
-            ufResp = handleRedirects(urlFetchRequest);
+            response = handleRedirects(urlFetchRequest);
         } else {
             ufResp = doSend(urlFetchRequest);
+            response = new URLFetchResponse(ufResp);
+
+            if(response.getFinalUrl() == null) {
+                response.setFinalUrl(request.getUrl());
+            }
         }
 
-        return URLFetchResponse.fromHTTPResponse(ufResp);
+        response.setRequest(request);
+        return response;
     }
 
-    protected HTTPResponse handleRedirects(HTTPRequest req) throws IOException {
+    protected URLFetchResponse handleRedirects(HTTPRequest req) throws IOException {
         int timesRedirected = 0;
-        HTTPResponse resp = null;
+        HTTPResponse ufResp = null;
         List<HTTPHeader> originalHeaders = req.getHeaders();
 
         while (timesRedirected++ < maxRedirects) {
-            resp = doSend(req);
-            if (!URLFetchUtil.isRedirect(resp.getResponseCode())) {
+            ufResp = doSend(req);
+            if (!Util.isRedirect(ufResp.getResponseCode())) {
                 break;
             }
 
-            String location = URLFetchUtil.getHeaderValue(resp.getHeaders(), "location");
+            String location = URLFetchUtil.getHeaderValue(ufResp.getHeaders(), "location");
 
             if (location == null) {
                 throw new Error("Location header missing from redirect response");
@@ -74,7 +80,13 @@ public class URLFetchSession implements Session {
             }
         }
 
-        return resp;
+        URLFetchResponse response = new URLFetchResponse(ufResp);
+
+        if(response.getFinalUrl() == null) {
+            response.setFinalUrl(req.getURL().toString());
+        }
+
+        return response;
     }
 
     protected HTTPResponse doSend(HTTPRequest req) throws IOException {

@@ -35,21 +35,15 @@ public class SamplerServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         SiteService siteService = SiteService.getInstance();
-        List<String> classPathURLS = Arrays.stream(
-                ((URLClassLoader) (Thread.currentThread().getContextClassLoader())).getURLs())
-                .map(URL::toString)
-                .collect(Collectors.toList());
-        String serviceMessages = "== SERVICE MESSAGES:%n" + String.join("%n",
-                siteService.getMessages("<REQUEST>"));
+        int numAdapters = siteService.getAdapters().size();
+
 
         Properties properties = System.getProperties();
 
         response.setContentType("text/plain; charset=utf-8");
         String message = "App Engine Standard using %s%n" +
                 "Java %s%n";
-        message += "%n%n== CLASSPATH: %n" +
-                String.join("%n", classPathURLS) + "%n%n";
-        message += serviceMessages;
+        message += numAdapters + " site dapters loaded%n";
 
         response.getWriter().format(
                 message,

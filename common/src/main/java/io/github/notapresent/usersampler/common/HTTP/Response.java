@@ -5,20 +5,62 @@ import com.google.common.base.Charsets;
 import java.nio.charset.Charset;
 import java.util.Map;
 
-public interface Response {     // TODO Convert this to abstract class?
-    int getStatus();
+import static java.util.Collections.unmodifiableMap;
 
-    byte[] getContentBytes();
+public class Response {
+    protected int status;
+    protected byte[] content;
+    protected Map<String, String> headers;
+    protected String finalUrl;
 
-    String getFinalUrl();
+    public Request getRequest() {
+        return request;
+    }
 
-    Map<String, String> getHeaders();
+    public void setRequest(Request request) {
+        this.request = request;
+    }
 
-    default String getContentString() {
+    protected Request request;
+
+    public Response(int status, byte[] content) {
+        this.status = status;
+        this.content = content;
+    }
+
+    public Response(int status, Map<String, String> headers, byte[] content, String finalUrl) {
+        this.status = status;
+        this.headers = headers;
+        this.content = content;
+        this.finalUrl = finalUrl;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public byte[] getContentBytes() {
+        return content;
+    }
+
+    public String getFinalUrl() {
+        return finalUrl;
+    }
+
+    public void setFinalUrl(String url) {
+        finalUrl = url;
+    }
+
+
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    public String getContentString() {
         return new String(getContentBytes(), Charsets.UTF_8);
     }
 
-    default String getContentString(Charset charSet) {
+    public String getContentString(Charset charSet) {
         return new String(getContentBytes(), charSet);
     }
 }

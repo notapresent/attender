@@ -2,6 +2,7 @@ package io.github.notapresent.usersampler.gaeapp.HTTP;
 
 import com.google.appengine.api.urlfetch.HTTPHeader;
 import com.google.appengine.api.urlfetch.HTTPResponse;
+import io.github.notapresent.usersampler.common.HTTP.Response;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -20,7 +21,7 @@ public class URLFetchResponseTest {
             new HTTPHeader("foo", "bar")
     );
     private static HTTPResponse okHTTPResponse;
-    private URLFetchResponse response;
+    private Response response;
 
     @BeforeClass
     public static void setUpClass() throws IOException {
@@ -34,7 +35,7 @@ public class URLFetchResponseTest {
 
     @Test
     public void itShouldBuildFromHTTPResponse() {
-        response = URLFetchResponse.fromHTTPResponse(okHTTPResponse);
+        response = new URLFetchResponse(okHTTPResponse);
         assertEquals(okHTTPResponse.getResponseCode(), response.getStatus());
         assertEquals(okHTTPResponse.getFinalUrl().toString(), response.getFinalUrl());
         assertTrue(response.getHeaders().containsKey(headers.get(0).getName()));

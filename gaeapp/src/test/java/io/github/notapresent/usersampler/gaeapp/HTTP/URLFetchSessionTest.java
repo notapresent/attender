@@ -7,6 +7,7 @@ import com.google.appengine.api.urlfetch.URLFetchService;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import io.github.notapresent.usersampler.common.HTTP.Request;
+import io.github.notapresent.usersampler.common.HTTP.Response;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -81,7 +82,7 @@ public class URLFetchSessionTest {
         when(mockURLFetch.fetch(any(HTTPRequest.class)))
                 .thenReturn(okResponse);
 
-        URLFetchResponse resp = session.send(request);
+        Response resp = session.send(request);
 
         assertEquals(resp.getFinalUrl(), url);
     }
@@ -91,7 +92,7 @@ public class URLFetchSessionTest {
         when(mockURLFetch.fetch(any(HTTPRequest.class)))
                 .thenReturn(redirectResponse, okResponse);
 
-        URLFetchResponse resp = session.send(request);
+        Response resp = session.send(request);
 
         assertEquals(okResponse.getResponseCode(), resp.getStatus());
     }
@@ -101,7 +102,7 @@ public class URLFetchSessionTest {
         when(mockURLFetch.fetch(any(HTTPRequest.class)))
                 .thenReturn(redirectResponse, okResponse);
 
-        URLFetchResponse resp = session.send(request);
+        Response resp = session.send(request);
 
         assertEquals(resp.getFinalUrl(), okResponse.getFinalUrl().toString());
     }
