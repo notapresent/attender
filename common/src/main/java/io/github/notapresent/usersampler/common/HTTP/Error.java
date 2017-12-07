@@ -5,6 +5,10 @@ public class Error extends RuntimeException {
         super(message);
     }
 
+    public Error(Throwable cause) {
+        super(cause);
+    }
+
     public Error(String message, Throwable cause) {
         super(message, cause);
     }

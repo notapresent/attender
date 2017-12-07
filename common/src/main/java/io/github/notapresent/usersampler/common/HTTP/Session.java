@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.CookieHandler;
 
 public interface Session {
-    Response send(Request request) throws IOException;
+    Response send(Request request) throws Error;
 
     CookieHandler getCookieManager();
 

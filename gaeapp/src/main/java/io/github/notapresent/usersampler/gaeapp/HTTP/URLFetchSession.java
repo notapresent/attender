@@ -8,6 +8,7 @@ import io.github.notapresent.usersampler.common.HTTP.Error;
 
 import java.io.IOException;
 import java.net.CookieHandler;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class URLFetchSession implements Session {
     }
 
     @Override
-    public Response send(Request request) throws IOException {
+    public Response send(Request request) throws Error {
         HTTPResponse ufResp;
         HTTPRequest urlFetchRequest = ((URLFetchRequest) request).toHTTPRequest();
         URLFetchResponse response;
@@ -56,10 +57,11 @@ public class URLFetchSession implements Session {
         return response;
     }
 
-    protected URLFetchResponse handleRedirects(HTTPRequest req) throws IOException {
+    protected URLFetchResponse handleRedirects(HTTPRequest req) throws Error {
         int timesRedirected = 0;
         HTTPResponse ufResp = null;
         List<HTTPHeader> originalHeaders = req.getHeaders();
+        URL redirectUrl = null;
 
         while (timesRedirected++ < maxRedirects) {
             ufResp = doSend(req);
@@ -73,7 +75,12 @@ public class URLFetchSession implements Session {
                 throw new Error("Location header missing from redirect response");
             }
 
-            URL redirectUrl = new URL(req.getURL(), location);
+            try {
+                redirectUrl = new URL(req.getURL(), location);
+            } catch (MalformedURLException e) {
+                throw new Error("Failed to parse redirect location " + location, e);
+            }
+
             req = new HTTPRequest(redirectUrl, HTTPMethod.GET, req.getFetchOptions());
             for (HTTPHeader header : originalHeaders) {
                 req.addHeader(header);
@@ -89,18 +96,24 @@ public class URLFetchSession implements Session {
         return response;
     }
 
-    protected HTTPResponse doSend(HTTPRequest req) throws IOException {
-        if (cookieManager == null) {
-            return urlFetch.fetch(req);
+    protected HTTPResponse doSend(HTTPRequest req) throws Error {
+
+        if (cookieManager != null) {
+            cookieManager.loadToRequest(req);
         }
 
-        cookieManager.loadToRequest(req);
+        try {
+            HTTPResponse response = urlFetch.fetch(req);
+            if (cookieManager != null) {
+                cookieManager.saveFromResponse(req.getURL(), response);
+            }
 
-        HTTPResponse response = urlFetch.fetch(req);
+            return response;
+        }
 
-        cookieManager.saveFromResponse(req.getURL(), response);
-
-        return response;
+        catch (IOException e) {
+            throw new Error(e);
+        }
     }
 
     @Override
