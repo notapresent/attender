@@ -2,10 +2,16 @@ package io.github.notapresent.usersampler.common.HTTP;
 
 import java.net.CookieHandler;
 
-public interface Session {
-    Response send(Request request) throws HTTPError;
+abstract public class Session {
+    private CookieHandler cookieManager;
 
-    CookieHandler getCookieManager();
+    public CookieHandler getCookieManager() {
+        return cookieManager;
+    }
 
-    void setCookieManager(CookieHandler cookieManager);
+    public void setCookieManager(CookieHandler cookieManager) {
+        this.cookieManager = cookieManager;
+    }
+
+    abstract public Response send(Request request);
 }

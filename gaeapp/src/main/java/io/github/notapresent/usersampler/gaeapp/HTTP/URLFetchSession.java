@@ -11,7 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-public class URLFetchSession implements Session {
+public class URLFetchSession extends Session {
     public static int DEFAULT_MAX_REDIRECTS = 5;
     private URLFetchService urlFetch;
     private int maxRedirects = DEFAULT_MAX_REDIRECTS;
