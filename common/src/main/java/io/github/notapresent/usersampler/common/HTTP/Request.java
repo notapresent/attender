@@ -55,4 +55,13 @@ public class Request {
         private RedirectPolicy() {
         }
     }
+
+    @Override
+    public String toString() {
+        return String.format("<%s@%s %s %s>",
+                this.getClass().getName(),
+                Integer.toHexString(hashCode()),
+                this.method.name(),
+                this.url);
+    }
 }

@@ -1,5 +1,6 @@
 package io.github.notapresent.usersampler.common.site;
 
+import io.github.notapresent.usersampler.common.HTTP.Error;
 import io.github.notapresent.usersampler.common.HTTP.Request;
 import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
 import io.github.notapresent.usersampler.common.HTTP.Response;
@@ -17,9 +18,10 @@ public interface SiteAdapter {
 
     boolean isDone();
 
-    List<Request> produceRequests();
-
-    void processResponse(Response response);
+    List<Request> getRequests();
+    void registerResponse(Response resp);
+    void reset();
 
     Map<String, Status> getResult();
+
 }

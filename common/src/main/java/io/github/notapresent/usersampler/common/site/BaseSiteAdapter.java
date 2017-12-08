@@ -15,4 +15,8 @@ abstract public class BaseSiteAdapter {
     public boolean isDone() {
         return done;
     }
+
+    protected void reset() {
+        done = false;
+    }
 }
