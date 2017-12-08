@@ -6,8 +6,6 @@ import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Map;
 
-import static java.util.Collections.unmodifiableMap;
-
 public class Response {
     protected int status;
     protected byte[] content;

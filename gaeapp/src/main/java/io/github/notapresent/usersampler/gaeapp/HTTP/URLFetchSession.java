@@ -4,7 +4,6 @@ package io.github.notapresent.usersampler.gaeapp.HTTP;
 import com.google.appengine.api.urlfetch.*;
 import com.google.inject.Inject;
 import io.github.notapresent.usersampler.common.HTTP.*;
-import io.github.notapresent.usersampler.common.HTTP.HTTPError;
 
 import java.io.IOException;
 import java.net.CookieHandler;
