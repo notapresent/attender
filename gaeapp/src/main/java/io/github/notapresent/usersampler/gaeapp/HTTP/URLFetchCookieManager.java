@@ -3,7 +3,7 @@ package io.github.notapresent.usersampler.gaeapp.HTTP;
 import com.google.appengine.api.urlfetch.HTTPHeader;
 import com.google.appengine.api.urlfetch.HTTPRequest;
 import com.google.appengine.api.urlfetch.HTTPResponse;
-import io.github.notapresent.usersampler.common.HTTP.Error;
+import io.github.notapresent.usersampler.common.HTTP.HTTPError;
 
 import java.io.IOException;
 import java.net.CookieManager;
@@ -18,7 +18,7 @@ public class URLFetchCookieManager extends CookieManager {
         try {
             return url.toURI();
         } catch (URISyntaxException e) {
-            throw new Error("Failed to convert URL " + url + " to URI", e);
+            throw new HTTPError("Failed to convert URL " + url + " to URI", e);
         }
     }
 
@@ -32,7 +32,7 @@ public class URLFetchCookieManager extends CookieManager {
             URI uri = URL2URI(url);
             return get(uri, new HashMap<>()).get("Cookie");
         } catch (IOException e) {
-            throw new Error("Failed to load cookies for " + url, e);
+            throw new HTTPError("Failed to load cookies for " + url, e);
         }
     }
 
@@ -70,7 +70,7 @@ public class URLFetchCookieManager extends CookieManager {
         try {
             put(URL2URI(url), setCookieHeaders);
         } catch (IOException e) {
-            throw new Error("Failed to save cookies for " + url, e);
+            throw new HTTPError("Failed to save cookies for " + url, e);
         }
     }
 }

@@ -1,6 +1,5 @@
 package io.github.notapresent.usersampler.common.site;
 
-import io.github.notapresent.usersampler.common.HTTP.Error;
 import io.github.notapresent.usersampler.common.HTTP.Request;
 import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
 import io.github.notapresent.usersampler.common.HTTP.Response;

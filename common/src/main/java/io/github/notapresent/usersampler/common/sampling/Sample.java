@@ -1,40 +1,68 @@
 package io.github.notapresent.usersampler.common.sampling;
 
+import io.github.notapresent.usersampler.common.site.SiteAdapter;
+
+import javax.annotation.Nullable;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
 public class Sample {
-    private String siteAlias;
-    private ZonedDateTime taken;
-    private Map<String, Status> userNameToStatus;
-    private OpStatus opStatus;
+    private final SiteAdapter site;
+    private final ZonedDateTime taken;
+    @Nullable
+    private final Map<String, Status> payload;
+    private final SampleStatus sampleStatus;
 
-    public String getSiteAlias() {
-        return siteAlias;
+    @Nullable
+    public String getMessage() {
+        return message;
+    }
+
+    @Nullable
+    private String message;
+
+
+    public SiteAdapter getSite() {
+        return site;
     }
 
     public ZonedDateTime getTaken() {
         return taken;
     }
 
-    public Map<String, Status> getUserNameToStatus() {
-        return userNameToStatus;
+    public Map<String, Status> getPayload() {
+        return payload;
     }
 
-    public OpStatus getStatus() {
-        return opStatus;
+    public SampleStatus getSampleStatus() {
+        return sampleStatus;
     }
 
-    public Sample(String siteAlias, ZonedDateTime taken, Map<String, Status> userNameToStatus, OpStatus opStatus) {
-        this.siteAlias = siteAlias;
+    public Sample(SiteAdapter site, // OK constructor
+                  ZonedDateTime taken,
+                  Map<String, Status> payload) {
+        this(site, taken, payload, SampleStatus.OK, null);
+    }
+
+    public Sample(SiteAdapter site,     // HTTPError constructor
+                  ZonedDateTime taken,
+                  String message) {
+        this(site, taken, null, SampleStatus.ERROR, message);
+    }
+
+    public Sample(SiteAdapter site,
+                  ZonedDateTime taken,
+                  Map<String, Status> payload,
+                  SampleStatus sampleStatus, String message) {
+        this.site = site;
         this.taken = taken;
-        this.userNameToStatus = userNameToStatus;
-        this.opStatus = opStatus;
+        this.payload = payload;
+        this.sampleStatus = sampleStatus;
+        this.message = message;
     }
 
-    public enum OpStatus {
+    public enum SampleStatus {
         OK,
-        WARNING,
         ERROR,
     }
 }

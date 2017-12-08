@@ -41,7 +41,7 @@ public class URLFetchSessionIntegrationTest {
     }
 
     @Test
-    public void itShouldFetchDocument() throws IOException {
+    public void itShouldFetchDocument() {
         request = new URLFetchRequest(HTTPBIN + "/ip");
         response = session.send(request);
         assertThat(response.getContentString()).contains("origin");
@@ -49,7 +49,7 @@ public class URLFetchSessionIntegrationTest {
 
 
     @Test
-    public void ifShouldNotFollowRedirectsIfPolicySaysSo() throws IOException {
+    public void ifShouldNotFollowRedirectsIfPolicySaysSo() {
         request = new URLFetchRequest(HTTPBIN + "/redirect/2");
         request.setRedirectHandlingPolicy(Request.RedirectPolicy.DO_NOT_FOLLOW);
         response = session.send(request);
@@ -57,7 +57,7 @@ public class URLFetchSessionIntegrationTest {
     }
 
     @Test
-    public void itShouldFollowRedirectsIfPolisySaysSo() throws IOException {
+    public void itShouldFollowRedirectsIfPolisySaysSo() {
         request = new URLFetchRequest(HTTPBIN + "/redirect/2");
         request.setRedirectHandlingPolicy(Request.RedirectPolicy.FOLLOW);
         response = session.send(request);
@@ -65,7 +65,7 @@ public class URLFetchSessionIntegrationTest {
     }
 
     @Test
-    public void itShouldRetainCookiesAfterRedirect() throws IOException {
+    public void itShouldRetainCookiesAfterRedirect() {
         request = new URLFetchRequest(HTTPBIN + "/cookies/set?k2=v2&k1=v1");
         request.setRedirectHandlingPolicy(Request.RedirectPolicy.FOLLOW);
         response = session.send(request);
@@ -75,7 +75,7 @@ public class URLFetchSessionIntegrationTest {
     }
 
     @Test
-    public void itShouldRetainsHeadersOnRedirect() throws IOException {
+    public void itShouldRetainsHeadersOnRedirect() {
         request = new URLFetchRequest(HTTPBIN + "/redirect-to?url=/headers");
         request.getHeaders().put("foo", "bar");
         response = session.send(request);

@@ -71,7 +71,7 @@ public class URLFetchSessionTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
         session = new URLFetchSession(mockURLFetch);
         request.setRedirectHandlingPolicy(Request.RedirectPolicy.FOLLOW);

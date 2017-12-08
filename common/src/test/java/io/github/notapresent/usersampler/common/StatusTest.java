@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 
 public class StatusTest {
     enum CustomStatus implements Status {
-        TEST;
+        TEST
     }
 
     @Test

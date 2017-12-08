@@ -4,7 +4,7 @@ import com.google.appengine.api.urlfetch.FetchOptions;
 import com.google.appengine.api.urlfetch.HTTPHeader;
 import com.google.appengine.api.urlfetch.HTTPMethod;
 import com.google.appengine.api.urlfetch.HTTPRequest;
-import io.github.notapresent.usersampler.common.HTTP.Error;
+import io.github.notapresent.usersampler.common.HTTP.HTTPError;
 import io.github.notapresent.usersampler.common.HTTP.Method;
 import io.github.notapresent.usersampler.common.HTTP.Request;
 
@@ -34,7 +34,7 @@ public class URLFetchRequest extends Request {
             return httpRequest;
 
         } catch (MalformedURLException e) {
-            throw new Error("Malformed URL: " + url, e);
+            throw new HTTPError("Malformed URL: " + url, e);
         }
     }
 

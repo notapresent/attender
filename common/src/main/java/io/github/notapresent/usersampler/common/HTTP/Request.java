@@ -52,7 +52,7 @@ public class Request {
         DO_NOT_FOLLOW,
         DEFAULT;    // Default redirect handling policy for underlying implementation
 
-        private RedirectPolicy() {
+        RedirectPolicy() {
         }
     }
 

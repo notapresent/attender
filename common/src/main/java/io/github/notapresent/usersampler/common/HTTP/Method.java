@@ -8,6 +8,6 @@ public enum Method {
     DELETE,
     PATCH;
 
-    private Method() {
+    Method() {
     }
 }

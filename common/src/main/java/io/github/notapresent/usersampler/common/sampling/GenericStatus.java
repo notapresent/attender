@@ -4,5 +4,5 @@ public enum GenericStatus implements Status {
     OFFLINE,
     ONLINE,
     PAID,
-    PRIVATE;
+    PRIVATE
 }

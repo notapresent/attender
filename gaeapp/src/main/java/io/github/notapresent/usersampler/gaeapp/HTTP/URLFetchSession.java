@@ -4,7 +4,7 @@ package io.github.notapresent.usersampler.gaeapp.HTTP;
 import com.google.appengine.api.urlfetch.*;
 import com.google.inject.Inject;
 import io.github.notapresent.usersampler.common.HTTP.*;
-import io.github.notapresent.usersampler.common.HTTP.Error;
+import io.github.notapresent.usersampler.common.HTTP.HTTPError;
 
 import java.io.IOException;
 import java.net.CookieHandler;
@@ -37,7 +37,7 @@ public class URLFetchSession implements Session {
     }
 
     @Override
-    public Response send(Request request) throws Error {
+    public Response send(Request request) throws HTTPError {
         HTTPResponse ufResp;
         HTTPRequest urlFetchRequest = ((URLFetchRequest) request).toHTTPRequest();
         URLFetchResponse response;
@@ -57,7 +57,7 @@ public class URLFetchSession implements Session {
         return response;
     }
 
-    protected URLFetchResponse handleRedirects(HTTPRequest req) throws Error {
+    protected URLFetchResponse handleRedirects(HTTPRequest req) throws HTTPError {
         int timesRedirected = 0;
         HTTPResponse ufResp = null;
         List<HTTPHeader> originalHeaders = req.getHeaders();
@@ -72,13 +72,13 @@ public class URLFetchSession implements Session {
             String location = URLFetchUtil.getHeaderValue(ufResp.getHeaders(), "location");
 
             if (location == null) {
-                throw new Error("Location header missing from redirect response");
+                throw new HTTPError("Location header missing from redirect response");
             }
 
             try {
                 redirectUrl = new URL(req.getURL(), location);
             } catch (MalformedURLException e) {
-                throw new Error("Failed to parse redirect location " + location, e);
+                throw new HTTPError("Failed to parse redirect location " + location, e);
             }
 
             req = new HTTPRequest(redirectUrl, HTTPMethod.GET, req.getFetchOptions());
@@ -96,7 +96,7 @@ public class URLFetchSession implements Session {
         return response;
     }
 
-    protected HTTPResponse doSend(HTTPRequest req) throws Error {
+    protected HTTPResponse doSend(HTTPRequest req) throws HTTPError {
 
         if (cookieManager != null) {
             cookieManager.loadToRequest(req);
@@ -112,7 +112,7 @@ public class URLFetchSession implements Session {
         }
 
         catch (IOException e) {
-            throw new Error(e);
+            throw new HTTPError(e);
         }
     }
 
