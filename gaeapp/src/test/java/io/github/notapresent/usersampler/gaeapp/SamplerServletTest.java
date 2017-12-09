@@ -1,11 +1,10 @@
-package io.github.notapresent.usersampler.gaeapp.HTTP;
+package io.github.notapresent.usersampler.gaeapp;
 
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import io.github.notapresent.usersampler.common.HTTP.Request;
 import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
 import io.github.notapresent.usersampler.common.HTTP.Response;
 import io.github.notapresent.usersampler.common.HTTP.Session;
-import io.github.notapresent.usersampler.gaeapp.SamplerServlet;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
