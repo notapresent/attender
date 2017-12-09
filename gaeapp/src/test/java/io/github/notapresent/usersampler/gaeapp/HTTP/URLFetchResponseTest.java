@@ -35,7 +35,7 @@ public class URLFetchResponseTest {
 
     @Test
     public void itShouldBuildFromHTTPResponse() {
-        response = new URLFetchResponse(okHTTPResponse);
+        response = new URLFetchResponse(okHTTPResponse, "http://someother.url");
         assertEquals(okHTTPResponse.getResponseCode(), response.getStatus());
         assertEquals(okHTTPResponse.getFinalUrl().toString(), response.getFinalUrl());
         assertTrue(response.getHeaders().containsKey(headers.get(0).getName()));

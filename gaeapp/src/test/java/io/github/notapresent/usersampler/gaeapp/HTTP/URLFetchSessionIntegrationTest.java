@@ -5,7 +5,7 @@ import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalURLFetchServiceTestConfig;
 import io.github.notapresent.usersampler.common.HTTP.Request;
 import io.github.notapresent.usersampler.common.HTTP.Response;
-import io.github.notapresent.usersampler.gaeapp.IntegrationTest;
+import io.github.notapresent.usersampler.common.IntegrationTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

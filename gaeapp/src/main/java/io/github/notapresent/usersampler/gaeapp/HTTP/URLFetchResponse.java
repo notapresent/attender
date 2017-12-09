@@ -13,11 +13,12 @@ public class URLFetchResponse extends Response {
         super(status, headers, content, finalUrl);
     }
 
-    public URLFetchResponse(HTTPResponse httpResponse) {
+    public URLFetchResponse(HTTPResponse httpResponse, String finalUrl) {
         this(httpResponse.getResponseCode(),
                 httpResponse.getContent(),
                 headersListToMap(httpResponse.getHeadersUncombined()),
-                httpResponse.getFinalUrl().toString());
+                httpResponse.getFinalUrl() == null ? finalUrl : httpResponse.getFinalUrl().toString()
+        );
     }
 
     protected static Map<String, String> headersListToMap(List<HTTPHeader> headersList) {

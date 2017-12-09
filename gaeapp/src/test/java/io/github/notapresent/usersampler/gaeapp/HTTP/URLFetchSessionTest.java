@@ -84,7 +84,7 @@ public class URLFetchSessionTest {
 
         Response resp = session.send(request);
 
-        assertEquals(resp.getFinalUrl(), url);
+        assertEquals(okResponse.getContent(), resp.getContentBytes());
     }
 
     @Test
@@ -101,6 +101,16 @@ public class URLFetchSessionTest {
     public void itShouldSetFinalUrlAfterRedirect() throws IOException {
         when(mockURLFetch.fetch(any(HTTPRequest.class)))
                 .thenReturn(redirectResponse, okResponse);
+
+        Response resp = session.send(request);
+
+        assertEquals(resp.getFinalUrl(), okResponse.getFinalUrl().toString());
+    }
+
+    @Test
+    public void itShouldSetFinalUrlAfterNoRedirect() throws IOException {
+        when(mockURLFetch.fetch(any(HTTPRequest.class)))
+                .thenReturn(okResponse);
 
         Response resp = session.send(request);
 

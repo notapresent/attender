@@ -45,11 +45,8 @@ public class URLFetchSession extends Session {
             response = handleRedirects(urlFetchRequest);
         } else {
             ufResp = doSend(urlFetchRequest);
-            response = new URLFetchResponse(ufResp);
+            response = new URLFetchResponse(ufResp, request.getUrl().toString());
 
-            if(response.getFinalUrl() == null) {
-                response.setFinalUrl(request.getUrl());
-            }
         }
 
         response.setRequest(request);
@@ -86,11 +83,7 @@ public class URLFetchSession extends Session {
             }
         }
 
-        URLFetchResponse response = new URLFetchResponse(ufResp);
-
-        if(response.getFinalUrl() == null) {
-            response.setFinalUrl(req.getURL().toString());
-        }
+        URLFetchResponse response = new URLFetchResponse(ufResp, req.getURL().toString());
 
         return response;
     }
