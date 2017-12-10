@@ -1,3 +1,4 @@
 [submodule "adapters"]
 	path = adapters
 	url = git@bitbucket.org:notapresent/usersampler-adapters.git
+	master = master
