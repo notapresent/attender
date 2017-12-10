@@ -3,7 +3,7 @@ package io.github.notapresent.usersampler.common.HTTP;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Request {
+public class Request implements Cloneable {
     protected final String url;
     protected final Method method;
     protected RedirectPolicy redirectHandlingPolicy = RedirectPolicy.DEFAULT;
@@ -63,5 +63,13 @@ public class Request {
                 Integer.toHexString(hashCode()),
                 this.method.name(),
                 this.url);
+    }
+
+    public Request clone() {
+        try {
+            return  (Request) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
