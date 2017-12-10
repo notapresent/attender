@@ -37,14 +37,14 @@ public class URLFetchSession extends Session {
     @Override
     public Response send(Request request) throws HTTPError {
         HTTPResponse ufResp;
-        HTTPRequest urlFetchRequest = ((URLFetchRequest) request).toHTTPRequest();
+        HTTPRequest urlFetchRequest = Helper.createHTTPRequest(request);
         URLFetchResponse response;
 
         if (request.getRedirectHandlingPolicy() == Request.RedirectPolicy.FOLLOW) {
             response = handleRedirects(urlFetchRequest);
         } else {
             ufResp = doSend(urlFetchRequest);
-            response = new URLFetchResponse(ufResp, request.getUrl().toString());
+            response = new URLFetchResponse(ufResp, request.getUrl());
 
         }
 

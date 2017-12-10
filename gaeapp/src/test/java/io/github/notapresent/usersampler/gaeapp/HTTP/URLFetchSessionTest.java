@@ -32,9 +32,8 @@ import static org.mockito.Mockito.*;
 
 public class URLFetchSessionTest {
     // Canned requests and responses
-    private static URLFetchRequestFactory requestFactory = new URLFetchRequestFactory();
     private static String url = "http://fake.url";
-    private static Request request = new URLFetchRequest(url);
+    private static Request request = new Request(url);
     private static List<HTTPHeader> emptyHeaders = new ArrayList<HTTPHeader>();
     private static List<HTTPHeader> redirectHeaders = Collections.singletonList(
             new HTTPHeader("location", url));

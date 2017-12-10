@@ -17,12 +17,11 @@ import static org.junit.Assert.assertEquals;
 @Category(IntegrationTest.class)
 public class URLFetchSessionIntegrationTest {
     private static final String HTTPBIN = "http://httpbin.org";
-    //private static final URLFetchRequestFactory requestFactory = new URLFetchRequestFactory();
     private final LocalServiceTestHelper helper =
             new LocalServiceTestHelper(new LocalURLFetchServiceTestConfig());
     private URLFetchSession session;
     private URLFetchCookieManager cookieManager = new URLFetchCookieManager();
-    private URLFetchRequest request;
+    private Request request;
     private Response response;
 
     @Before
@@ -40,7 +39,7 @@ public class URLFetchSessionIntegrationTest {
 
     @Test
     public void itShouldFetchDocument() {
-        request = new URLFetchRequest(HTTPBIN + "/ip");
+        request = new Request(HTTPBIN + "/ip");
         response = session.send(request);
         assertThat(response.getContentString()).contains("origin");
     }
@@ -48,7 +47,7 @@ public class URLFetchSessionIntegrationTest {
 
     @Test
     public void ifShouldNotFollowRedirectsIfPolicySaysSo() {
-        request = new URLFetchRequest(HTTPBIN + "/redirect/2");
+        request = new Request(HTTPBIN + "/redirect/2");
         request.setRedirectHandlingPolicy(Request.RedirectPolicy.DO_NOT_FOLLOW);
         response = session.send(request);
         assertEquals(302, response.getStatus());
@@ -56,7 +55,7 @@ public class URLFetchSessionIntegrationTest {
 
     @Test
     public void itShouldFollowRedirectsIfPolisySaysSo() {
-        request = new URLFetchRequest(HTTPBIN + "/redirect/2");
+        request = new Request(HTTPBIN + "/redirect/2");
         request.setRedirectHandlingPolicy(Request.RedirectPolicy.FOLLOW);
         response = session.send(request);
         assertEquals(200, response.getStatus());
@@ -64,7 +63,7 @@ public class URLFetchSessionIntegrationTest {
 
     @Test
     public void itShouldRetainCookiesAfterRedirect() {
-        request = new URLFetchRequest(HTTPBIN + "/cookies/set?k2=v2&k1=v1");
+        request = new Request(HTTPBIN + "/cookies/set?k2=v2&k1=v1");
         request.setRedirectHandlingPolicy(Request.RedirectPolicy.FOLLOW);
         response = session.send(request);
         String body = response.getContentString();
@@ -74,7 +73,7 @@ public class URLFetchSessionIntegrationTest {
 
     @Test
     public void itShouldRetainsHeadersOnRedirect() {
-        request = new URLFetchRequest(HTTPBIN + "/redirect-to?url=/headers");
+        request = new Request(HTTPBIN + "/redirect-to?url=/headers");
         request.getHeaders().put("foo", "bar");
         response = session.send(request);
         String body = response.getContentString();
