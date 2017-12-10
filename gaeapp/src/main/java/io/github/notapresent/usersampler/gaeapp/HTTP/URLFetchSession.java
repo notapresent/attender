@@ -38,13 +38,13 @@ public class URLFetchSession extends Session {
     public Response send(Request request) throws HTTPError {
         HTTPResponse ufResp;
         HTTPRequest urlFetchRequest = Helper.createHTTPRequest(request);
-        URLFetchResponse response;
+        Response response;
 
         if (request.getRedirectHandlingPolicy() == Request.RedirectPolicy.FOLLOW) {
             response = handleRedirects(urlFetchRequest);
         } else {
             ufResp = doSend(urlFetchRequest);
-            response = new URLFetchResponse(ufResp, request.getUrl());
+            response = Helper.createResponse(ufResp, request.getUrl());
 
         }
 
@@ -52,7 +52,7 @@ public class URLFetchSession extends Session {
         return response;
     }
 
-    protected URLFetchResponse handleRedirects(HTTPRequest req) throws HTTPError {
+    protected Response handleRedirects(HTTPRequest req) throws HTTPError {
         int timesRedirected = 0;
         HTTPResponse ufResp = null;
         List<HTTPHeader> originalHeaders = req.getHeaders();
@@ -64,7 +64,7 @@ public class URLFetchSession extends Session {
                 break;
             }
 
-            String location = URLFetchUtil.getHeaderValue(ufResp.getHeaders(), "location");
+            String location = Helper.getHeaderValue(ufResp.getHeaders(), "location");
 
             if (location == null) {
                 throw new HTTPError("Location header missing from redirect response");
@@ -82,7 +82,7 @@ public class URLFetchSession extends Session {
             }
         }
 
-        URLFetchResponse response = new URLFetchResponse(ufResp, req.getURL().toString());
+        Response response = Helper.createResponse(ufResp, req.getURL().toString());
 
         return response;
     }

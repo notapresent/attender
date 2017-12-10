@@ -1,14 +1,15 @@
 package io.github.notapresent.usersampler.gaeapp.HTTP;
 
-import com.google.appengine.api.urlfetch.FetchOptions;
-import com.google.appengine.api.urlfetch.HTTPHeader;
-import com.google.appengine.api.urlfetch.HTTPMethod;
-import com.google.appengine.api.urlfetch.HTTPRequest;
+import com.google.appengine.api.urlfetch.*;
 import io.github.notapresent.usersampler.common.HTTP.HTTPError;
 import io.github.notapresent.usersampler.common.HTTP.Request;
+import io.github.notapresent.usersampler.common.HTTP.Response;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Helper {
     public static FetchOptions buildFetchOptions(Request request) {
@@ -38,5 +39,36 @@ public class Helper {
         } catch (MalformedURLException e) {
             throw new HTTPError("Malformed URL: " + request.getUrl(), e);
         }
+    }
+
+    public static String getHeaderValue(List<HTTPHeader> headers, String name) {
+        for (HTTPHeader hdr : headers) {
+            if (hdr.getName().equalsIgnoreCase(name)) {
+                return hdr.getValue();
+            }
+        }
+        return null;
+    }
+
+    protected static Map<String, String> headersListToMap(List<HTTPHeader> headersList) {
+        Map<String, String> headersMap = new HashMap<>();
+        for (HTTPHeader header : headersList) {
+            headersMap.merge(
+                    header.getName(),
+                    header.getValue(),
+                    (oldVal, val) -> oldVal == null ? val : oldVal + ", " + val
+            );
+        }
+        return headersMap;
+    }
+
+    public static Response createResponse(HTTPResponse httpResponse, String finalUrl) {
+
+        return new Response(
+                httpResponse.getResponseCode(),
+                headersListToMap(httpResponse.getHeadersUncombined()),
+                httpResponse.getContent(),
+                httpResponse.getFinalUrl() == null ? finalUrl : httpResponse.getFinalUrl().toString()
+        );
     }
 }
