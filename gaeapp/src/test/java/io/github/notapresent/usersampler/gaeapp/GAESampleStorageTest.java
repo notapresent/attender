@@ -3,23 +3,15 @@ package io.github.notapresent.usersampler.gaeapp;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.googlecode.objectify.ObjectifyService;
-import com.googlecode.objectify.Result;
-import com.googlecode.objectify.VoidWork;
 import com.googlecode.objectify.util.Closeable;
 import io.github.notapresent.usersampler.common.sampling.Sample;
 import io.github.notapresent.usersampler.common.sampling.SampleStorage;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
-
-import java.util.List;
-
 import static com.googlecode.objectify.ObjectifyService.ofy;
-
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class GAESampleStorageTest {
     private SampleStorage storage;
@@ -49,5 +41,4 @@ public class GAESampleStorageTest {
         Sample persisted = ofy().load().type(SampleEntity.class).list().get(0).toSample();
         assertEquals("fakeSite", persisted.getSiteShortName());
     }
-
 }

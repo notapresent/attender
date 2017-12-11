@@ -10,7 +10,6 @@ import io.github.notapresent.usersampler.common.site.SiteAdapter;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;

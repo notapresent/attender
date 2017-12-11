@@ -3,7 +3,6 @@ package io.github.notapresent.usersampler.common.sampling;
 import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 

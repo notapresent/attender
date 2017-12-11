@@ -6,8 +6,6 @@ import com.googlecode.objectify.Objectify;
 import io.github.notapresent.usersampler.common.sampling.AggregateSample;
 import io.github.notapresent.usersampler.common.sampling.Sample;
 import io.github.notapresent.usersampler.common.sampling.SampleStorage;
-import io.github.notapresent.usersampler.gaeapp.SampleEntity;
-
 
 import java.time.ZonedDateTime;
 
