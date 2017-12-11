@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.Futures;
 import io.github.notapresent.usersampler.common.HTTP.HTTPError;
 import io.github.notapresent.usersampler.common.HTTP.Request;
+import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
 import io.github.notapresent.usersampler.common.HTTP.Response;
 import io.github.notapresent.usersampler.common.sampling.RequestMultiplexer;
 import io.github.notapresent.usersampler.common.sampling.Sample;
@@ -49,7 +50,7 @@ public class SamplerTest {
         when(mockSite.getRequests()).thenReturn(Collections.singletonList(mockRequest));
         when(mockSite.isDone()).thenReturn(true);
         when(mockSite.shortName()).thenReturn("blah");
-        sampler = new Sampler(fakeMuxer);
+        sampler = new Sampler(fakeMuxer, new RequestFactory());
         fakeMuxer.response = Futures.immediateFuture(mockResponse);
     }
 

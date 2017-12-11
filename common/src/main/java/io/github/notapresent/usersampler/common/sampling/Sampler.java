@@ -3,6 +3,7 @@ package io.github.notapresent.usersampler.common.sampling;
 import com.google.inject.Inject;
 import io.github.notapresent.usersampler.common.HTTP.HTTPError;
 import io.github.notapresent.usersampler.common.HTTP.Request;
+import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
 import io.github.notapresent.usersampler.common.HTTP.Response;
 import io.github.notapresent.usersampler.common.site.FatalSiteError;
 import io.github.notapresent.usersampler.common.site.RetryableSiteError;
@@ -24,11 +25,12 @@ public class Sampler {
     private Set<SiteAdapter> inProgress = new HashSet<>();
     private List<Sample> results = new ArrayList<>();
     private RequestMultiplexer muxer;
-
+    private RequestFactory requestFactory;
 
     @Inject
-    public Sampler(RequestMultiplexer muxer) {
+    public Sampler(RequestMultiplexer muxer, RequestFactory requestFactory) {
         this.muxer = muxer;
+        this.requestFactory = requestFactory;
     }
 
     public List<Sample> takeSamples(List<SiteAdapter> adapters) {
@@ -36,6 +38,7 @@ public class Sampler {
 
         for (SiteAdapter site : adapters) {
             site.reset();
+            site.setRequestFactory(requestFactory);
             inProgress.add(site);
         }
 
