@@ -8,6 +8,7 @@ import io.github.notapresent.usersampler.common.sampling.SampleStatus;
 import io.github.notapresent.usersampler.common.sampling.UserStatus;
 
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,13 +23,16 @@ public class SampleEntity {
     @Id Long id;
     String sn;  // shortName
     SampleStatus st; // SampleStatus
-    @Stringify(ZonedDateTimeStringifier.class) ZonedDateTime ts;
-    Map<Integer, List<String>> pl = new HashMap<>();    // Payload  TODO Map<Integer, String> ?
+
+    @Stringify(ZonedDateTimeStringifier.class)
+    ZonedDateTime ts;
+
+    Map<String, String> pl = new HashMap<>();    // Payload
 
     private SampleEntity() {
     }
 
-    public SampleEntity(String si, SampleStatus st, ZonedDateTime ts, Map<Integer, List<String>> pl) {
+    public SampleEntity(String si, SampleStatus st, ZonedDateTime ts, Map<String, String> pl) {
         this.sn = si;
         this.st = st;
         this.ts = ts;
@@ -39,8 +43,8 @@ public class SampleEntity {
         return new SampleEntity(
                 sample.getSiteShortName(),
                 sample.getSampleStatus(),
-                sample.getTaken(),
-                payloadFromSample(sample.getPayload())
+                sample.getTaken()
+                ,payloadFromSample(sample.getPayload())
         );
     }
 
@@ -48,44 +52,29 @@ public class SampleEntity {
         return new Sample(
                 this.sn,
                 this.ts,
-                payloadToSample(this.pl),
+                new HashMap<>(), //payloadToSample(this.pl),
                 this.st,
                 null
         );
     }
 
 
-    private static Map<Integer, List<String>> payloadFromSample(Map<String, UserStatus> orig) {
+    private static Map<String, String> payloadFromSample(Map<String, UserStatus> orig) {
         return orig.entrySet().stream().collect(
                 Collectors.groupingBy(
-                        (e) -> e.getValue().getValue(),
-                        mapping(Map.Entry::getKey, toList())
+                        (e) -> Integer.toString(e.getValue().getValue()),
+                        mapping(Map.Entry::getKey, Collectors.joining(","))
                 )
         );
     }
 
-    private static Map<String, UserStatus> payloadToSample(
-            Map<Integer, List<String>> stored)  {
-
+    private static Map<String, UserStatus> payloadToSample(Map<String, String> stored)  {
         Map<String, UserStatus> rv = new HashMap<>();
 
-        for (Map.Entry<Integer, List<String>> e: stored.entrySet()) {
-            UserStatus st = UserStatus.fromValue(e.getKey());
-            e.getValue().forEach((name) -> rv.put(name, st));
+        for (Map.Entry<String, String> e: stored.entrySet()) {
+            UserStatus st = UserStatus.fromValue(Integer.parseInt(e.getKey()));
+            Arrays.stream(e.getValue().split(",")).forEach((name) -> rv.put(name, st));
         }
         return rv;
     }
 }
-
-
-//class StatusStringifier implements Stringifier<Integer> {
-//    @Override
-//    public String toString(Integer value) {
-//        return value.toString();
-//     }
-//
-//    @Override
-//    public Integer fromString(String str) {
-//        return Integer.parseInt(str);
-//    }
-//}
