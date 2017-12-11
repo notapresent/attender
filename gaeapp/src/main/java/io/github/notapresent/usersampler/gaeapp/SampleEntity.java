@@ -7,15 +7,13 @@ import io.github.notapresent.usersampler.common.sampling.Sample;
 import io.github.notapresent.usersampler.common.sampling.SampleStatus;
 import io.github.notapresent.usersampler.common.sampling.UserStatus;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.mapping;
-import static java.util.stream.Collectors.toList;
 
 
 @Entity
@@ -24,18 +22,21 @@ public class SampleEntity {
     String sn;  // shortName
     SampleStatus st; // SampleStatus
 
-    @Stringify(ZonedDateTimeStringifier.class)
-    ZonedDateTime ts;
+    Date ts;
 
     Map<String, String> pl = new HashMap<>();    // Payload
 
     private SampleEntity() {
     }
 
-    public SampleEntity(String si, SampleStatus st, ZonedDateTime ts, Map<String, String> pl) {
+    public Long getId() {
+        return id;
+    }
+
+    public SampleEntity(String si, SampleStatus st, LocalDateTime ldt, Map<String, String> pl) {
         this.sn = si;
         this.st = st;
-        this.ts = ts;
+        this.ts = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());;
         this.pl = pl;
     }
 
@@ -50,10 +51,10 @@ public class SampleEntity {
 
     public Sample toSample() {
         return new Sample(
-                this.sn,
-                this.ts,
+                sn,
+                LocalDateTime.ofInstant(ts.toInstant(), ZoneId.systemDefault()),
                 new HashMap<>(), //payloadToSample(this.pl),
-                this.st,
+                st,
                 null
         );
     }

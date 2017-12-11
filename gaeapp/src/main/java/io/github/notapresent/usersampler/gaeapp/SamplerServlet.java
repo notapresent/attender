@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Properties;
 
@@ -36,6 +37,7 @@ public class SamplerServlet extends HttpServlet {
         response.setContentType("text/plain; charset=utf-8");
         String message = "App Engine Standard using %s%n" +
                 "Java %s%n";
+        message += "System default timezone is: " + ZoneId.systemDefault().toString() + "\n";
         message += numAdapters + " sn dapters loaded%n";
 
         response.getWriter().format(
