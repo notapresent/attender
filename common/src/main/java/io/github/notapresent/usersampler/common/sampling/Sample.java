@@ -3,6 +3,7 @@ package io.github.notapresent.usersampler.common.sampling;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 
 import javax.annotation.Nullable;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
@@ -39,15 +40,23 @@ public class Sample {
     }
 
     public Sample(SiteAdapter site, // OK constructor
-                  ZonedDateTime taken,
                   Map<String, UserStatus> payload) {
-        this(site, taken, payload, SampleStatus.OK, null);
+        this(site, payload, SampleStatus.OK, null);
     }
 
     public Sample(SiteAdapter site,     // HTTPError constructor
-                  ZonedDateTime taken,
                   String message) {
-        this(site, taken, null, SampleStatus.ERROR, message);
+        this(site, null, SampleStatus.ERROR, message);
+    }
+
+    public Sample(SiteAdapter site,
+                  Map<String, UserStatus> payload,
+                  SampleStatus sampleStatus, String message) {
+        this.site = site;
+        this.taken = ZonedDateTime.now(ZoneOffset.UTC);
+        this.payload = payload;
+        this.sampleStatus = sampleStatus;
+        this.message = message;
     }
 
     public Sample(SiteAdapter site,
@@ -60,7 +69,6 @@ public class Sample {
         this.sampleStatus = sampleStatus;
         this.message = message;
     }
-
     public enum SampleStatus {
         OK,
         ERROR,
