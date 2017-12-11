@@ -10,7 +10,7 @@ public class Sample {
     private final SiteAdapter site;
     private final ZonedDateTime taken;
     @Nullable
-    private final Map<String, Status> payload;
+    private final Map<String, UserStatus> payload;
     private final SampleStatus sampleStatus;
 
     @Nullable
@@ -30,7 +30,7 @@ public class Sample {
         return taken;
     }
 
-    public Map<String, Status> getPayload() {
+    public Map<String, UserStatus> getPayload() {
         return payload;
     }
 
@@ -40,7 +40,7 @@ public class Sample {
 
     public Sample(SiteAdapter site, // OK constructor
                   ZonedDateTime taken,
-                  Map<String, Status> payload) {
+                  Map<String, UserStatus> payload) {
         this(site, taken, payload, SampleStatus.OK, null);
     }
 
@@ -52,7 +52,7 @@ public class Sample {
 
     public Sample(SiteAdapter site,
                   ZonedDateTime taken,
-                  Map<String, Status> payload,
+                  Map<String, UserStatus> payload,
                   SampleStatus sampleStatus, String message) {
         this.site = site;
         this.taken = taken;
