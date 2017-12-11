@@ -74,10 +74,7 @@ public class SamplerServletTest {
         when(mockSessionResponse.getContentBytes()).thenReturn(FAKE_SESSION_RESPONSE.getBytes());
         when(mockSession.send(any(Request.class))).thenReturn(mockSessionResponse);
 
-        servletUnderTest = new SamplerServlet(
-                mockSession,
-                mockRequestFactory
-        );
+        servletUnderTest = new SamplerServlet();
         servletUnderTest.init(servletConfig);
     }
 

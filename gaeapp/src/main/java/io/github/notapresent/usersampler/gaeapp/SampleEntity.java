@@ -38,7 +38,7 @@ public class SampleEntity {
 
     public static SampleEntity fromSample(Sample sample) {
         return new SampleEntity(
-                sample.getSite().shortName(),
+                sample.getSiteShortName(),
                 sample.getSampleStatus().ordinal(),
                 sample.getTaken(),
                 payloadFromSample(sample.getPayload())
@@ -47,7 +47,7 @@ public class SampleEntity {
 
     public Sample toSample() {
         return new Sample(
-                SiteRegistry.getInstance().getByShortName(this.sn),
+                this.sn,
                 this.ts,
                 payloadToSample(this.pl),
                 Sample.SampleStatus.values()[this.st],

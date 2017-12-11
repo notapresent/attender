@@ -8,7 +8,7 @@ import java.time.ZonedDateTime;
 import java.util.Map;
 
 public class Sample {
-    private final SiteAdapter site;
+    private final String siteShortName;
     private final ZonedDateTime taken;
     @Nullable
     private final Map<String, UserStatus> payload;
@@ -23,8 +23,8 @@ public class Sample {
     private String message;
 
 
-    public SiteAdapter getSite() {
-        return site;
+    public String getSiteShortName() {
+        return siteShortName;
     }
 
     public ZonedDateTime getTaken() {
@@ -39,31 +39,32 @@ public class Sample {
         return sampleStatus;
     }
 
-    public Sample(SiteAdapter site, // OK constructor
+    public Sample(String siteShortName, // OK constructor
                   Map<String, UserStatus> payload) {
-        this(site, payload, SampleStatus.OK, null);
+        this(siteShortName, payload, SampleStatus.OK, null);
     }
 
-    public Sample(SiteAdapter site,     // HTTPError constructor
+    public Sample(String siteShortName,     // HTTPError constructor
                   String message) {
-        this(site, null, SampleStatus.ERROR, message);
+        this(siteShortName, null, SampleStatus.ERROR, message);
     }
 
-    public Sample(SiteAdapter site,
+    public Sample(String siteShortName,
                   Map<String, UserStatus> payload,
                   SampleStatus sampleStatus, String message) {
-        this.site = site;
-        this.taken = ZonedDateTime.now(ZoneOffset.UTC);
-        this.payload = payload;
-        this.sampleStatus = sampleStatus;
-        this.message = message;
+        this( siteShortName,
+            ZonedDateTime.now(ZoneOffset.UTC),
+            payload,
+            sampleStatus,
+            message
+        );
     }
 
-    public Sample(SiteAdapter site,
+    public Sample(String siteShortName,
                   ZonedDateTime taken,
                   Map<String, UserStatus> payload,
                   SampleStatus sampleStatus, String message) {
-        this.site = site;
+        this.siteShortName = siteShortName;
         this.taken = taken;
         this.payload = payload;
         this.sampleStatus = sampleStatus;

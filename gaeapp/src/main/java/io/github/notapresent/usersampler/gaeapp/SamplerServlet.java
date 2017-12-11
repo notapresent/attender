@@ -21,15 +21,8 @@ import java.util.Properties;
 
 @Singleton
 public class SamplerServlet extends HttpServlet {
-    private final Session session;
-    private final RequestFactory requestFactory;
-
     @Inject
-    public SamplerServlet(
-            Session sess,
-            RequestFactory requestFactory) {
-        this.session = sess;
-        this.requestFactory = requestFactory;
+    public SamplerServlet() {
     }
 
     @Override

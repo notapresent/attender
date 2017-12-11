@@ -1,16 +1,13 @@
 package io.github.notapresent.usersampler.common.site;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.ServiceLoader;
+import java.util.*;
 
 // TODO Refactor this to guice singleton
 public class SiteRegistry {
     private static SiteRegistry service;
     private ServiceLoader<SiteAdapter> loader;
-    private Map<String, SiteAdapter> aliasToAdapter;
-    private Map<String, SiteAdapter> shortNameToAdapter;
+    private static Map<String, SiteAdapter> aliasToAdapter = new HashMap<>();
+    private static Map<String, SiteAdapter> shortNameToAdapter = new HashMap<>();
 
     private SiteRegistry() {
         loader = ServiceLoader.load(SiteAdapter.class);
@@ -19,6 +16,7 @@ public class SiteRegistry {
     public static synchronized SiteRegistry getInstance() {
         if (service == null) {
             service = new SiteRegistry();
+            service.init();
         }
         return service;
     }

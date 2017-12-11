@@ -47,6 +47,7 @@ public class SamplerTest {
         MockitoAnnotations.initMocks(this);
         when(mockSite.getRequests()).thenReturn(Collections.singletonList(mockRequest));
         when(mockSite.isDone()).thenReturn(true);
+        when(mockSite.shortName()).thenReturn("blah");
         sampler = new Sampler(fakeMuxer);
         fakeMuxer.response = Futures.immediateFuture(mockResponse);
     }
@@ -67,7 +68,7 @@ public class SamplerTest {
     @Test
     public void itShouldSetSiteAndTimeOnSamples() {
         Sample sample = sampler.takeSamples(sites()).get(0);
-        assertEquals(mockSite, sample.getSite());
+        assertEquals(mockSite.shortName(), sample.getSiteShortName());
         double now = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond();
         assertEquals(now, sample.getTaken().toEpochSecond(), 1.0);
     }

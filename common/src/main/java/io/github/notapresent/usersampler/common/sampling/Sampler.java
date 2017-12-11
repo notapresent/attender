@@ -115,10 +115,10 @@ public class Sampler {
     }
 
     private Sample makeSample(SiteAdapter site) {
-        return new Sample(site, site.getResult());
+        return new Sample(site.shortName(), site.getResult());
     }
 
     private Sample makeSample(SiteAdapter site, String errorMessage) {
-        return new Sample(site, errorMessage);
+        return new Sample(site.shortName(), errorMessage);
     }
 }
