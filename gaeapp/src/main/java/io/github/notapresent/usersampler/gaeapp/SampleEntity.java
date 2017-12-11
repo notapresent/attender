@@ -4,14 +4,13 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Stringify;
 import io.github.notapresent.usersampler.common.sampling.Sample;
+import io.github.notapresent.usersampler.common.sampling.SampleStatus;
 import io.github.notapresent.usersampler.common.sampling.UserStatus;
-import io.github.notapresent.usersampler.common.site.SiteRegistry;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.mapping;
@@ -22,14 +21,14 @@ import static java.util.stream.Collectors.toList;
 public class SampleEntity {
     @Id Long id;
     String sn;  // shortName
-    Integer st; // SampleStatus
+    SampleStatus st; // SampleStatus
     @Stringify(ZonedDateTimeStringifier.class) ZonedDateTime ts;
     Map<Integer, List<String>> pl = new HashMap<>();    // Payload  TODO Map<Integer, String> ?
 
     private SampleEntity() {
     }
 
-    public SampleEntity(String si, Integer st, ZonedDateTime ts, Map<Integer, List<String>> pl) {
+    public SampleEntity(String si, SampleStatus st, ZonedDateTime ts, Map<Integer, List<String>> pl) {
         this.sn = si;
         this.st = st;
         this.ts = ts;
@@ -39,7 +38,7 @@ public class SampleEntity {
     public static SampleEntity fromSample(Sample sample) {
         return new SampleEntity(
                 sample.getSiteShortName(),
-                sample.getSampleStatus().ordinal(),
+                sample.getSampleStatus(),
                 sample.getTaken(),
                 payloadFromSample(sample.getPayload())
         );
@@ -50,7 +49,7 @@ public class SampleEntity {
                 this.sn,
                 this.ts,
                 payloadToSample(this.pl),
-                Sample.SampleStatus.values()[this.st],
+                this.st,
                 null
         );
     }

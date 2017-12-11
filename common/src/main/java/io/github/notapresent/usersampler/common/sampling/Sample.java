@@ -1,16 +1,14 @@
 package io.github.notapresent.usersampler.common.sampling;
 
-import io.github.notapresent.usersampler.common.site.SiteAdapter;
-
 import javax.annotation.Nullable;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Sample {
     private final String siteShortName;
     private final ZonedDateTime taken;
-    @Nullable
     private final Map<String, UserStatus> payload;
     private final SampleStatus sampleStatus;
 
@@ -46,7 +44,7 @@ public class Sample {
 
     public Sample(String siteShortName,     // HTTPError constructor
                   String message) {
-        this(siteShortName, null, SampleStatus.ERROR, message);
+        this(siteShortName, new HashMap<>(), SampleStatus.ERROR, message);
     }
 
     public Sample(String siteShortName,
@@ -69,9 +67,5 @@ public class Sample {
         this.payload = payload;
         this.sampleStatus = sampleStatus;
         this.message = message;
-    }
-    public enum SampleStatus {
-        OK,
-        ERROR,
     }
 }

@@ -7,6 +7,7 @@ import io.github.notapresent.usersampler.common.HTTP.Request;
 import io.github.notapresent.usersampler.common.HTTP.Response;
 import io.github.notapresent.usersampler.common.sampling.RequestMultiplexer;
 import io.github.notapresent.usersampler.common.sampling.Sample;
+import io.github.notapresent.usersampler.common.sampling.SampleStatus;
 import io.github.notapresent.usersampler.common.sampling.Sampler;
 import io.github.notapresent.usersampler.common.site.FatalSiteError;
 import io.github.notapresent.usersampler.common.site.RetryableSiteError;
@@ -97,7 +98,7 @@ public class SamplerTest {
 
         Sample sample = sampler.takeSamples(sites()).get(0);
 
-        assertEquals(Sample.SampleStatus.ERROR, sample.getSampleStatus());
+        assertEquals(SampleStatus.ERROR, sample.getSampleStatus());
     }
 
     @Test
@@ -106,7 +107,7 @@ public class SamplerTest {
 
         Sample sample = sampler.takeSamples(sites()).get(0);
 
-        assertEquals(Sample.SampleStatus.ERROR, sample.getSampleStatus());
+        assertEquals(SampleStatus.ERROR, sample.getSampleStatus());
     }
 
     @Test
@@ -124,7 +125,7 @@ public class SamplerTest {
 
         Sample sample = sampler.takeSamples(sites()).get(0);
 
-        assertEquals(Sample.SampleStatus.ERROR, sample.getSampleStatus());
+        assertEquals(SampleStatus.ERROR, sample.getSampleStatus());
     }
 
     private List<SiteAdapter> sites() {
