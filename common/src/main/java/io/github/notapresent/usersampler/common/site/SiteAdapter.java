@@ -14,6 +14,7 @@ public interface SiteAdapter {
     default String getAlias() {
         return this.getClass().getCanonicalName();
     }
+    String shortName();
 
     boolean isDone();
 
