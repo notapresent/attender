@@ -1,6 +1,7 @@
 package io.github.notapresent.usersampler.common.sampling;
 
 import javax.annotation.Nullable;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
@@ -8,7 +9,7 @@ import java.util.Map;
 
 public class Sample {
     private final String siteShortName;
-    private final ZonedDateTime taken;
+    private final LocalDateTime taken;
     private final Map<String, UserStatus> payload;
     private final SampleStatus sampleStatus;
 
@@ -25,7 +26,7 @@ public class Sample {
         return siteShortName;
     }
 
-    public ZonedDateTime getTaken() {
+    public LocalDateTime getTaken() {
         return taken;
     }
 
@@ -51,7 +52,7 @@ public class Sample {
                   Map<String, UserStatus> payload,
                   SampleStatus sampleStatus, String message) {
         this( siteShortName,
-            ZonedDateTime.now(ZoneOffset.UTC),
+                LocalDateTime.now(ZoneOffset.UTC),
             payload,
             sampleStatus,
             message
@@ -59,7 +60,7 @@ public class Sample {
     }
 
     public Sample(String siteShortName,
-                  ZonedDateTime taken,
+                  LocalDateTime taken,
                   Map<String, UserStatus> payload,
                   SampleStatus sampleStatus, String message) {
         this.siteShortName = siteShortName;

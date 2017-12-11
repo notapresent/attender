@@ -8,6 +8,7 @@ import io.github.notapresent.usersampler.common.site.FatalSiteError;
 import io.github.notapresent.usersampler.common.site.RetryableSiteError;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 public class Sampler {
     public static final int MAX_BATCH_RETRIES = 2;
 
-    private ZonedDateTime startedAt;
+    private LocalDateTime startedAt;
 
     private Set<SiteAdapter> inProgress = new HashSet<>();
     private List<Sample> results = new ArrayList<>();
@@ -32,7 +33,7 @@ public class Sampler {
     }
 
     public List<Sample> takeSamples(List<SiteAdapter> adapters) {
-        startedAt = ZonedDateTime.now(ZoneOffset.UTC);
+        startedAt = LocalDateTime.now(ZoneOffset.UTC);
 
         for (SiteAdapter site : adapters) {
             site.reset();

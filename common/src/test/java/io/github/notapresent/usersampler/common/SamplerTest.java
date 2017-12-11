@@ -71,7 +71,7 @@ public class SamplerTest {
         Sample sample = sampler.takeSamples(sites()).get(0);
         assertEquals(mockSite.shortName(), sample.getSiteShortName());
         double now = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond();
-        assertEquals(now, sample.getTaken().toEpochSecond(), 1.0);
+        assertEquals(now, sample.getTaken().toEpochSecond(ZoneOffset.UTC), 1.0);
     }
 
     @Test
