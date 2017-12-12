@@ -66,7 +66,7 @@ public class SamplerTest {
     @Test
     public void itShouldSetSiteAndTimeOnSamples() {
         Sample sample = sampler.takeSamples(sites()).get(0);
-        assertEquals(mockSite.shortName(), sample.getSiteShortName());
+        assertEquals(mockSite, sample.getSite());
         double now = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond();
         assertEquals(now, sample.getTaken().toEpochSecond(ZoneOffset.UTC), 1.0);
     }
@@ -130,16 +130,15 @@ public class SamplerTest {
     private List<SiteAdapter> sites() {
         return Collections.singletonList(mockSite);
     }
-}
 
+    class MuxerStub implements RequestMultiplexer {
+        Future<Response> response;
+        List<List<Request>> requestBatches = new ArrayList<>();
 
-class MuxerStub implements RequestMultiplexer {
-    Future<Response> response;
-    List<List<Request>> requestBatches = new ArrayList<>();
-
-    @Override
-    public Map<Request, Future<Response>> multiSend(List<Request> batch) {
-        requestBatches.add(batch);
-        return ImmutableMap.of(batch.get(0), response);
+        @Override
+        public Map<Request, Future<Response>> multiSend(List<Request> batch) {
+            requestBatches.add(batch);
+            return ImmutableMap.of(batch.get(0), response);
+        }
     }
 }
