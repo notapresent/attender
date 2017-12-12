@@ -60,13 +60,14 @@ public class Sampler {
 
     private void processBatch(RequestBatch batch) {
         int batchRetries = 0;
-        RequestBatch retryBatch = new RequestBatch();
 
         while (batchRetries++ < MAX_BATCH_RETRIES && !batch.isEmpty()) {
+            RequestBatch retryBatch = new RequestBatch();
             Map<Request, Future<Response>> responseFutures = muxer.multiSend(batch.requests());
 
             for (Request request : responseFutures.keySet()) {
                 SiteAdapter site = batch.siteFor(request);
+
                 Future<Response> responseFuture = responseFutures.get(request);
 
                 if (processResponseFuture(site, responseFuture)) {
@@ -90,7 +91,6 @@ public class Sampler {
                     batchRetries,
                     failedRequests
             );
-
             results.add(makeSample(site, message));
         }
     }

@@ -5,15 +5,13 @@ import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.servlet.RequestScoped;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFilter;
 import com.googlecode.objectify.ObjectifyService;
 import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
 import io.github.notapresent.usersampler.common.HTTP.Session;
-import io.github.notapresent.usersampler.common.sampling.Orchestrator;
-import io.github.notapresent.usersampler.common.sampling.RequestMultiplexer;
-import io.github.notapresent.usersampler.common.sampling.SampleStorage;
-import io.github.notapresent.usersampler.common.sampling.SinglePlexer;
+import io.github.notapresent.usersampler.common.sampling.*;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
 import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchCookieManager;
 import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchSession;
@@ -27,14 +25,11 @@ public class ServicesModule extends AbstractModule {
         bind(ObjectifyFilter.class).in(Singleton.class);
 
         bind(RequestFactory.class).in(Singleton.class);
+        bind(Sampler.class);
 
+        bind(Session.class).to(URLFetchSession.class);
 
-        bind(Session.class).to(URLFetchSession.class).in(Singleton.class);
-        bind(RequestMultiplexer.class).toInstance(
-                new SinglePlexer(
-                        new URLFetchSession(provideURLFetchService()    )
-                )
-        );
+        bind(RequestMultiplexer.class).to(SinglePlexer.class);
         bind(CookieHandler.class).to(URLFetchCookieManager.class);
         bind(Orchestrator.class);
         bind(SampleStorage.class).to(GAESampleStorage.class);
@@ -50,9 +45,4 @@ public class ServicesModule extends AbstractModule {
     URLFetchService provideURLFetchService() {
         return URLFetchServiceFactory.getURLFetchService();
     }
-
-//    @Provides
-//    SiteRegistry siteRegistryProvider() {
-//        return SiteRegistry.getInstance();
-//    }
 }

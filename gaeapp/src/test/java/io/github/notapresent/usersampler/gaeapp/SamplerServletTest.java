@@ -1,5 +1,6 @@
 package io.github.notapresent.usersampler.gaeapp;
 
+import com.google.inject.Provider;
 import io.github.notapresent.usersampler.common.sampling.Orchestrator;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,12 +45,14 @@ public class SamplerServletTest {
 
         javax.servlet.ServletConfig servletConfig = mock(javax.servlet.ServletConfig.class);
 
-        servletUnderTest = new SamplerServlet(mockOrchestrator);
+        Provider<Orchestrator> orchProvider = () -> mockOrchestrator;
+
+        servletUnderTest = new SamplerServlet(orchProvider );
         servletUnderTest.init(servletConfig);
     }
 
     @Test
-    public void doGetwritesResponse() throws Exception {
+    public void itShouldReportNumberOfSites() throws Exception {
         servletUnderTest.doGet(mockRequest, mockResponse);
 
         String strResponse = responseWriter.toString();

@@ -41,4 +41,12 @@ public class RequestBatch {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
+
+    public String toString() {
+        return String.format("<%s with %d requests for %s>",
+                super.toString(),
+                req2site.size(),
+                req2site.values()
+        );
+    }
 }
