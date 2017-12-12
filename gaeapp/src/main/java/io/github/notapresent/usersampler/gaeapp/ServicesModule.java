@@ -23,7 +23,7 @@ import java.net.CookieHandler;
 public class ServicesModule extends AbstractModule {
     @Override
     protected void configure() {
-        ObjectifyService.register(SampleEntity.class);
+        GAESampleStorage.registerEntities();
         bind(RequestFactory.class);
         bind(ObjectifyFilter.class).in(Singleton.class);
 

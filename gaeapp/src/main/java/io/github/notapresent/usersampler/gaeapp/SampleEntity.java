@@ -1,10 +1,15 @@
 package io.github.notapresent.usersampler.gaeapp;
 
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Parent;
 import io.github.notapresent.usersampler.common.sampling.Sample;
 import io.github.notapresent.usersampler.common.sampling.SampleStatus;
 import io.github.notapresent.usersampler.common.sampling.UserStatus;
+import io.github.notapresent.usersampler.common.site.SiteAdapter;
+
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -20,11 +25,27 @@ import static java.util.stream.Collectors.mapping;
 @Entity
 public class SampleEntity {
     @Id Long id;
-    String sn;  // shortName
-    SampleStatus st; // SampleStatus
 
-    Date ts;
+    public Key<SiteEntity> getParent() {
+        return parent;
+    }
 
+    public SampleStatus getStatus() {
+        return st;
+    }
+
+    public Date getTaken() {
+        return ts;
+    }
+
+    public Map<String, String> getPayload() {
+        return pl;
+    }
+
+    @Parent Key<SiteEntity> parent;
+    SampleStatus st;
+    @Index
+    Date ts;        // Date taken
     Map<String, String> pl = new HashMap<>();    // Payload
 
     private SampleEntity() {
@@ -34,39 +55,21 @@ public class SampleEntity {
         return id;
     }
 
-    public SampleEntity(String si, SampleStatus st, LocalDateTime ldt, Map<String, String> pl) {
-        this.sn = si;
-        this.st = st;
-        this.ts = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());;
-        this.pl = pl;
+    public SampleEntity(Key<SiteEntity> parent, SampleStatus sampleStatus,
+                        LocalDateTime taken, Map<String, String> payload) {
+        this.parent = parent;
+        this.st = sampleStatus;
+        this.ts = Date.from(taken.atZone(ZoneId.systemDefault()).toInstant());
+        this.pl = payload;
     }
 
-    public static SampleEntity fromSample(Sample sample) {
-        return new SampleEntity(
-                sample.getSiteShortName(),
-                sample.getSampleStatus(),
-                sample.getTaken()
-                ,payloadFromSample(sample.getPayload())
-        );
-    }
-
-    public Sample toSample() {
+    public Sample toSample(SiteAdapter site) {
         return new Sample(
-                sn,
+                site,
                 LocalDateTime.ofInstant(ts.toInstant(), ZoneId.systemDefault()),
-                new HashMap<>(), //payloadToSample(this.pl),
+                payloadToSample(pl), // payload
                 st,
                 null
-        );
-    }
-
-
-    private static Map<String, String> payloadFromSample(Map<String, UserStatus> orig) {
-        return orig.entrySet().stream().collect(
-                Collectors.groupingBy(
-                        (e) -> Integer.toString(e.getValue().getValue()),
-                        mapping(Map.Entry::getKey, Collectors.joining(","))
-                )
         );
     }
 
@@ -78,5 +81,23 @@ public class SampleEntity {
             Arrays.stream(e.getValue().split(",")).forEach((name) -> rv.put(name, st));
         }
         return rv;
+    }
+
+    private static Map<String, String> payloadFromSample(Map<String, UserStatus> orig) {
+        return orig.entrySet().stream().collect(
+                Collectors.groupingBy(
+                        (e) -> Integer.toString(e.getValue().getValue()),
+                        mapping(Map.Entry::getKey, Collectors.joining(","))
+                )
+        );
+    }
+
+    public static SampleEntity fromSample(Key<SiteEntity> parent, Sample sample) {
+        return new SampleEntity(
+                parent,
+                sample.getSampleStatus(),
+                sample.getTaken(),
+                payloadFromSample(sample.getPayload())
+        );
     }
 }
