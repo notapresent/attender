@@ -4,7 +4,7 @@ import java.util.*;
 
 // TODO Refactor this to guice singleton
 public class SiteRegistry {
-    private static SiteRegistry service;
+    private static SiteRegistry registry = null;
     private ServiceLoader<SiteAdapter> loader;
     private static Map<String, SiteAdapter> aliasToAdapter = new HashMap<>();
     private static Map<String, SiteAdapter> shortNameToAdapter = new HashMap<>();
@@ -14,11 +14,11 @@ public class SiteRegistry {
     }
 
     public static synchronized SiteRegistry getInstance() {
-        if (service == null) {
-            service = new SiteRegistry();
-            service.init();
+        if (registry == null) {
+            registry = new SiteRegistry();
+            registry.init();
         }
-        return service;
+        return registry;
     }
 
     private void init() {
@@ -37,6 +37,6 @@ public class SiteRegistry {
     }
 
     public List<SiteAdapter> getAdapters() {
-        return new ArrayList<>(aliasToAdapter.values());
+        return Collections.unmodifiableList(new ArrayList<>(aliasToAdapter.values()));
     }
 }
