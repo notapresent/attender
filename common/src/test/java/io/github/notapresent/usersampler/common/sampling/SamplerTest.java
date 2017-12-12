@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler.common;
+package io.github.notapresent.usersampler.common.sampling;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.Futures;
@@ -6,10 +6,6 @@ import io.github.notapresent.usersampler.common.HTTP.HTTPError;
 import io.github.notapresent.usersampler.common.HTTP.Request;
 import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
 import io.github.notapresent.usersampler.common.HTTP.Response;
-import io.github.notapresent.usersampler.common.sampling.RequestMultiplexer;
-import io.github.notapresent.usersampler.common.sampling.Sample;
-import io.github.notapresent.usersampler.common.sampling.SampleStatus;
-import io.github.notapresent.usersampler.common.sampling.Sampler;
 import io.github.notapresent.usersampler.common.site.FatalSiteError;
 import io.github.notapresent.usersampler.common.site.RetryableSiteError;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
@@ -47,7 +43,8 @@ public class SamplerTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        when(mockSite.getRequests()).thenReturn(Collections.singletonList(mockRequest));
+        when(mockSite.getRequests(any()))
+                .thenReturn(Collections.singletonList(mockRequest));
         when(mockSite.isDone()).thenReturn(true);
         when(mockSite.shortName()).thenReturn("blah");
         sampler = new Sampler(fakeMuxer, new RequestFactory());
@@ -59,7 +56,7 @@ public class SamplerTest {
         InOrder inOrder = inOrder(mockSite);
          sampler.takeSamples(sites());
         inOrder.verify(mockSite).reset();
-        inOrder.verify(mockSite).getRequests();
+        inOrder.verify(mockSite).getRequests(any());
         inOrder.verify(mockSite).registerResponse(any());
         inOrder.verify(mockSite).getResult();
         verify(mockSite, times(1)).reset();
@@ -78,7 +75,7 @@ public class SamplerTest {
     @Test
     public void itShouldSendAllGeneratedRequests() {
         Request req1 = mock(Request.class), req2 = mock(Request.class);
-        when(mockSite.getRequests()).thenReturn(
+        when(mockSite.getRequests(any())).thenReturn(
                 Collections.singletonList(req1),
                 Collections.singletonList(req2)
         );
