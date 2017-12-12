@@ -5,7 +5,6 @@ import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.google.inject.servlet.RequestScoped;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFilter;
 import com.googlecode.objectify.ObjectifyService;

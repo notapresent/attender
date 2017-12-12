@@ -1,15 +1,9 @@
 package io.github.notapresent.usersampler.gaeapp;
 
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import io.github.notapresent.usersampler.common.HTTP.Request;
-import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
-import io.github.notapresent.usersampler.common.HTTP.Response;
-import io.github.notapresent.usersampler.common.HTTP.Session;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -19,7 +13,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

@@ -8,16 +8,14 @@ import com.googlecode.objectify.ObjectifyService;
 import io.github.notapresent.usersampler.common.sampling.AggregateSample;
 import io.github.notapresent.usersampler.common.sampling.Sample;
 import io.github.notapresent.usersampler.common.sampling.SampleStorage;
-import io.github.notapresent.usersampler.common.sampling.UserStatus;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 

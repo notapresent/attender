@@ -13,8 +13,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.*;
 
 public class SamplerServletTest {

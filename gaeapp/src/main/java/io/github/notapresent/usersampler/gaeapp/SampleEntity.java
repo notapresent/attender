@@ -10,9 +10,7 @@ import io.github.notapresent.usersampler.common.sampling.SampleStatus;
 import io.github.notapresent.usersampler.common.sampling.UserStatus;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 
-
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Date;
