@@ -24,10 +24,12 @@ public class ServicesModule extends AbstractModule {
     @Override
     protected void configure() {
         GAESampleStorage.registerEntities();
-        bind(RequestFactory.class);
         bind(ObjectifyFilter.class).in(Singleton.class);
 
-        bind(Session.class).to(URLFetchSession.class);
+        bind(RequestFactory.class).in(Singleton.class);
+
+
+        bind(Session.class).to(URLFetchSession.class).in(Singleton.class);
         bind(RequestMultiplexer.class).toInstance(
                 new SinglePlexer(
                         new URLFetchSession(provideURLFetchService()    )

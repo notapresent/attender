@@ -21,7 +21,6 @@ public class SysinfoServlet extends HttpServlet {
         response.setContentType("text/plain; charset=utf-8");
         String message = "App Engine Standard using %s%n" +
                 "Java %s%n";
-        message += "System default timezone is: " + ZoneId.systemDefault().toString() + "\n";
 
         response.getWriter().format(
                 message,

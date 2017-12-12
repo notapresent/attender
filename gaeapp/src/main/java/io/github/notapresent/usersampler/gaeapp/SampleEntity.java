@@ -13,6 +13,7 @@ import io.github.notapresent.usersampler.common.site.SiteAdapter;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -59,14 +60,14 @@ public class SampleEntity {
                         LocalDateTime taken, Map<String, String> payload) {
         this.parent = parent;
         this.st = sampleStatus;
-        this.ts = Date.from(taken.atZone(ZoneId.systemDefault()).toInstant());
+        this.ts = Date.from(taken.atZone(ZoneOffset.UTC).toInstant());
         this.pl = payload;
     }
 
     public Sample toSample(SiteAdapter site) {
         return new Sample(
                 site,
-                LocalDateTime.ofInstant(ts.toInstant(), ZoneId.systemDefault()),
+                LocalDateTime.ofInstant(ts.toInstant(), ZoneOffset.UTC),
                 payloadToSample(pl), // payload
                 st,
                 null

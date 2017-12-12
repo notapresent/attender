@@ -15,6 +15,7 @@ import io.github.notapresent.usersampler.common.site.SiteRegistry;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -51,8 +52,8 @@ public class GAESampleStorage implements SampleStorage {
         LocalDateTime dayStart = day.truncatedTo(ChronoUnit.DAYS);
         LocalDateTime nextDayStart = dayStart.plusDays(1);
 
-        Date from = Date.from(dayStart.atZone(ZoneId.systemDefault()).toInstant());
-        Date to = Date.from(nextDayStart.atZone(ZoneId.systemDefault()).toInstant());
+        Date from = Date.from(dayStart.atZone(ZoneOffset.UTC).toInstant());
+        Date to = Date.from(nextDayStart.atZone(ZoneOffset.UTC).toInstant());
 
         List<SampleEntity> samples = ofy().load()
                 .type(SampleEntity.class)
