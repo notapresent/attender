@@ -1,5 +1,7 @@
 package io.github.notapresent.usersampler.common.sampling;
 
+import io.github.notapresent.usersampler.common.site.SiteAdapter;
+
 import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -7,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Sample {
-    private final String siteShortName;
+    private final SiteAdapter site;
     private final LocalDateTime taken;
     private final Map<String, UserStatus> payload;
     private final SampleStatus sampleStatus;
@@ -21,8 +23,8 @@ public class Sample {
     private String message;
 
 
-    public String getSiteShortName() {
-        return siteShortName;
+    public SiteAdapter getSite() {
+        return site;
     }
 
     public LocalDateTime getTaken() {
@@ -37,32 +39,32 @@ public class Sample {
         return sampleStatus;
     }
 
-    public Sample(String siteShortName, // OK constructor
+    public Sample(SiteAdapter site, // OK constructor
                   Map<String, UserStatus> payload) {
-        this(siteShortName, payload, SampleStatus.OK, null);
+        this(site, payload, SampleStatus.OK, null);
     }
 
-    public Sample(String siteShortName,     // HTTPError constructor
+    public Sample(SiteAdapter site,     // HTTPError constructor
                   String message) {
-        this(siteShortName, new HashMap<>(), SampleStatus.ERROR, message);
+        this(site, new HashMap<>(), SampleStatus.ERROR, message);
     }
 
-    public Sample(String siteShortName,
+    public Sample(SiteAdapter site,
                   Map<String, UserStatus> payload,
                   SampleStatus sampleStatus, String message) {
-        this( siteShortName,
+        this( site,
                 LocalDateTime.now(ZoneOffset.UTC),
-            payload,
-            sampleStatus,
-            message
+                payload,
+                sampleStatus,
+                message
         );
     }
 
-    public Sample(String siteShortName,
+    public Sample(SiteAdapter site,
                   LocalDateTime taken,
                   Map<String, UserStatus> payload,
                   SampleStatus sampleStatus, String message) {
-        this.siteShortName = siteShortName;
+        this.site = site;
         this.taken = taken;
         this.payload = payload;
         this.sampleStatus = sampleStatus;
