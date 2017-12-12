@@ -33,15 +33,15 @@ import static org.mockito.Mockito.*;
 
 
 public class SamplerTest {
-    Sampler sampler;
-    MuxerStub fakeMuxer = new MuxerStub();
+    private Sampler sampler;
+    private MuxerStub fakeMuxer = new MuxerStub();
 
     @Mock
-    SiteAdapter mockSite;
+    private SiteAdapter mockSite;
     @Mock
-    Request mockRequest;
+    private Request mockRequest;
     @Mock
-    Response mockResponse;
+    private Response mockResponse;
 
 
     @Before
@@ -61,7 +61,6 @@ public class SamplerTest {
         inOrder.verify(mockSite).reset();
         inOrder.verify(mockSite).getRequests();
         inOrder.verify(mockSite).registerResponse(any());
-        // TODO add getRequests() here
         inOrder.verify(mockSite).getResult();
         verify(mockSite, times(1)).reset();
     }
@@ -75,6 +74,7 @@ public class SamplerTest {
         assertEquals(now, sample.getTaken().toEpochSecond(ZoneOffset.UTC), 1.0);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void itShouldSendAllGeneratedRequests() {
         Request req1 = mock(Request.class), req2 = mock(Request.class);
@@ -91,6 +91,7 @@ public class SamplerTest {
     @Test
     public void itShouldProcessAllRequestsBeforeAskingForMore() {}  // TODO
 
+    @SuppressWarnings("unchecked")
     @Test
     public void itShouldMarkSampleAsFailedIfAnyRequestFails() throws Exception {
         Future failedFuture = mock(Future.class);
