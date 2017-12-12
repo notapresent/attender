@@ -38,7 +38,6 @@ public class Sampler {
 
         for (SiteAdapter site : adapters) {
             site.reset();
-            site.setRequestFactory(requestFactory);
             inProgress.add(site);
         }
 
@@ -53,7 +52,7 @@ public class Sampler {
         RequestBatch batch = new RequestBatch();
 
         for (SiteAdapter site : sites) {
-            site.getRequests().forEach((req) -> batch.put(req, site));
+            site.getRequests(requestFactory).forEach((req) -> batch.put(req, site));
         }
 
         return batch;

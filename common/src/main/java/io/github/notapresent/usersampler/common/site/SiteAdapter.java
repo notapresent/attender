@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface SiteAdapter {
-    void setRequestFactory(RequestFactory requestFactory);
-
     default String getAlias() {
         return this.getClass().getCanonicalName();
     }
@@ -18,7 +16,7 @@ public interface SiteAdapter {
 
     boolean isDone();
 
-    List<Request> getRequests();
+    List<Request> getRequests(RequestFactory requestFactory);
     void registerResponse(Response resp);
     void reset();
 
