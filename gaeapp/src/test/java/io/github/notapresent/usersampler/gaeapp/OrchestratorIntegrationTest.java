@@ -9,16 +9,20 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.util.Closeable;
 import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
-import io.github.notapresent.usersampler.common.sampling.Orchestrator;
-import io.github.notapresent.usersampler.common.sampling.SampleStorage;
-import io.github.notapresent.usersampler.common.sampling.Sampler;
-import io.github.notapresent.usersampler.common.sampling.SinglePlexer;
+import io.github.notapresent.usersampler.common.sampling.*;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
 import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchSession;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class OrchestratorIntegrationTest {
     private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
@@ -44,23 +48,29 @@ public class OrchestratorIntegrationTest {
     }
 
     @Test
-    public void itShouldDoItsThing() {
+    public void itShouldCreateOneSamplePerAdapter() {
         Provider<Objectify> ofyProvider = ObjectifyService::ofy;
-        SampleStorage storage = new GAESampleStorage(ofyProvider, SiteRegistry.getInstance());
+        SampleStorage storage = new GAESampleStorage(
+                ofyProvider,
+                SiteRegistry.getInstance()
+        );
         SiteRegistry registry = SiteRegistry.getInstance();
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
 
-
-        orchestrator = makeOrchestrator(registry, storage); // TODO Guice.getInjector().getInstance(Orchestrator.class)
+        orchestrator = makeOrchestrator(registry, storage, now);
         orchestrator.run();
         for (SiteAdapter site: registry.getAdapters() ) {
-            // assert storage has 1 sample for site // TODO
+            Sample sample = storage.getForSiteDate(site, now).get(0);
+            assertEquals(SampleStatus.OK, sample.getSampleStatus());
+            //assertNotEquals(0, sample.getPayload().size());   // TODO uncomment when adapters are ready
         }
     }
 
 
     public static Orchestrator makeOrchestrator(
             SiteRegistry registry,
-            SampleStorage storage) {
+            SampleStorage storage,
+            LocalDateTime startTime) {
 
         Sampler sampler = new Sampler(
                 new SinglePlexer(
@@ -68,7 +78,8 @@ public class OrchestratorIntegrationTest {
                                 URLFetchServiceFactory.getURLFetchService()
                         )
                 ),
-                new RequestFactory()
+                new RequestFactory(),
+                startTime
         );
 
         return new Orchestrator(storage, sampler, registry);

@@ -15,6 +15,7 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -47,7 +48,11 @@ public class SamplerTest {
                 .thenReturn(Collections.singletonList(mockRequest));
         when(mockSite.isDone()).thenReturn(true);
         when(mockSite.shortName()).thenReturn("blah");
-        sampler = new Sampler(fakeMuxer, new RequestFactory());
+        sampler = new Sampler(
+                fakeMuxer,
+                new RequestFactory(),
+                LocalDateTime.now(ZoneOffset.UTC)
+        );
         fakeMuxer.response = Futures.immediateFuture(mockResponse);
     }
 

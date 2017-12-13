@@ -5,6 +5,8 @@ import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFilter;
 import com.googlecode.objectify.ObjectifyService;
@@ -16,6 +18,8 @@ import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchCookieManager;
 import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchSession;
 
 import java.net.CookieHandler;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 public class ServicesModule extends AbstractModule {
     @Override
@@ -25,8 +29,9 @@ public class ServicesModule extends AbstractModule {
 
         bind(RequestFactory.class).in(Singleton.class);
         bind(Sampler.class);
-
         bind(Session.class).to(URLFetchSession.class);
+        bind(LocalDateTime.class).annotatedWith(Names.named("utcNow"));
+
 
         bind(RequestMultiplexer.class).to(SinglePlexer.class);
         bind(CookieHandler.class).to(URLFetchCookieManager.class);
@@ -43,5 +48,11 @@ public class ServicesModule extends AbstractModule {
     @Provides
     URLFetchService provideURLFetchService() {
         return URLFetchServiceFactory.getURLFetchService();
+    }
+
+    @Provides
+    @Named("utcNow")
+    LocalDateTime provideUTCNow() {
+        return LocalDateTime.now(ZoneOffset.UTC);
     }
 }

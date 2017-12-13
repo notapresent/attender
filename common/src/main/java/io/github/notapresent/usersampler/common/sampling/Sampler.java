@@ -1,6 +1,7 @@
 package io.github.notapresent.usersampler.common.sampling;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import io.github.notapresent.usersampler.common.HTTP.HTTPError;
 import io.github.notapresent.usersampler.common.HTTP.Request;
 import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
@@ -19,23 +20,21 @@ import java.util.stream.Collectors;
 
 public class Sampler {
     public static final int MAX_BATCH_RETRIES = 2;
-
-    private LocalDateTime startedAt;
-
+    private final LocalDateTime startedAt;
     private Set<SiteAdapter> inProgress = new HashSet<>();
     private List<Sample> results = new ArrayList<>();
-    private RequestMultiplexer muxer;
-    private RequestFactory requestFactory;
+    private final RequestMultiplexer muxer;
+    private final RequestFactory requestFactory;
 
     @Inject
-    public Sampler(RequestMultiplexer muxer, RequestFactory requestFactory) {
+    public Sampler(RequestMultiplexer muxer, RequestFactory requestFactory,
+                   @Named("utcNow") LocalDateTime startedAt) {
         this.muxer = muxer;
         this.requestFactory = requestFactory;
+        this.startedAt = startedAt;
     }
 
     public List<Sample> takeSamples(List<SiteAdapter> adapters) {
-        startedAt = LocalDateTime.now(ZoneOffset.UTC);
-
         for (SiteAdapter site : adapters) {
             site.reset();
             inProgress.add(site);
