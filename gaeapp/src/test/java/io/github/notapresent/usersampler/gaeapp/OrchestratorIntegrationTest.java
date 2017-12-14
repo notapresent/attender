@@ -47,7 +47,7 @@ public class OrchestratorIntegrationTest {
         helper.tearDown();
     }
 
-    // @Test    // TODO uncomment when adapters are ready
+    @Test    // TODO uncomment when adapters are ready
     public void itShouldCreateOneSamplePerAdapter() {
         Provider<Objectify> ofyProvider = ObjectifyService::ofy;
         SampleStorage storage = new GAESampleStorage(
