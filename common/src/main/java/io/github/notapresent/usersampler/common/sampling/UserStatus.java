@@ -4,7 +4,7 @@ public interface UserStatus {
     BaseStatus OFFLINE = BaseStatus.OFFLINE;
     BaseStatus ONLINE = BaseStatus.ONLINE;
     BaseStatus PRIVATE = BaseStatus.PRIVATE;
-    BaseStatus PAID = BaseStatus.PAID;
+    BaseStatus INVALID = BaseStatus.INVALID;
 
     static String SEPARATOR = ":";
 

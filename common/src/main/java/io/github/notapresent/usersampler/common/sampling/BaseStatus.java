@@ -4,5 +4,5 @@ public enum BaseStatus implements UserStatus {
     OFFLINE,
     ONLINE,
     PRIVATE,
-    PAID
+    INVALID
 }
