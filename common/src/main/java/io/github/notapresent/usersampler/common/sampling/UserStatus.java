@@ -1,44 +1,41 @@
 package io.github.notapresent.usersampler.common.sampling;
 
-import java.util.HashMap;
-import java.util.Map;
+public interface UserStatus {
+    BaseStatus OFFLINE = BaseStatus.OFFLINE;
+    BaseStatus ONLINE = BaseStatus.ONLINE;
+    BaseStatus PRIVATE = BaseStatus.PRIVATE;
+    BaseStatus PAID = BaseStatus.PAID;
 
-public class UserStatus {
-    private static final Map<Integer, UserStatus> value2status = new HashMap<>();
-    private static final Map<String, UserStatus> name2status = new HashMap<>();
+    int ordinal();
+    String name();
 
-    public static final UserStatus OFFLINE = new UserStatus(0, "OFFLINE");
-    public static final UserStatus ONLINE = new UserStatus(1, "ONLINE");
-    public static final UserStatus PAID = new UserStatus(2, "PAID");
-    public static final UserStatus PRIVATE = new UserStatus(3, "PRIVATE");
-
-    private final int value;
-    private final String name;
-
-
-    protected UserStatus(int value, String name) {
-        this.name = name;
-        this.value = value;
-        if(value2status.containsKey(value)) {
-            throw new IllegalArgumentException("UserStatus with value " + value + "already registered");
+    default int intValue() {
+        if(this instanceof BaseStatus) {
+            return ordinal();
+        } else {
+            return BaseStatus.values().length + ordinal();
         }
-        value2status.put(value, this);
-        name2status.put(name, this);
     }
 
-    public static UserStatus fromName(String name) {
-        return name2status.get(name);
+    default String strValue() {
+        if(this instanceof BaseStatus) {
+            return name();
+        } else {
+            return this.getClass().getSimpleName() + "." + name();
+        }
     }
 
-    public static UserStatus fromValue(int value) {
-        return value2status.get(value);
+    default String fullName() {
+        return this.getClass().getCanonicalName()  + "." + name();
     }
 
-    public int getValue() {
-        return value;
-    }
-
-    public String getName() {
-        return name;
+    static UserStatus fromFullName(String fullName) {
+        try {
+            Class clazz = Class.forName(fullName.split("\\.")[0]);
+            String name = fullName.split("\\.")[0];
+            return (UserStatus) Enum.valueOf(clazz, name);
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
     }
 }

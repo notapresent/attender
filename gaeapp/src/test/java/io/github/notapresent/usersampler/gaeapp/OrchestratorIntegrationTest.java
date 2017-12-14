@@ -47,7 +47,7 @@ public class OrchestratorIntegrationTest {
         helper.tearDown();
     }
 
-    @Test
+    // @Test    // TODO uncomment when adapters are ready
     public void itShouldCreateOneSamplePerAdapter() {
         Provider<Objectify> ofyProvider = ObjectifyService::ofy;
         SampleStorage storage = new GAESampleStorage(
@@ -62,7 +62,7 @@ public class OrchestratorIntegrationTest {
         for (SiteAdapter site: registry.getAdapters() ) {
             Sample sample = storage.getForSiteDate(site, now).get(0);
             assertEquals(SampleStatus.OK, sample.getSampleStatus());
-            //assertNotEquals(0, sample.getPayload().size());   // TODO uncomment when adapters are ready
+            assertNotEquals(0, sample.getPayload().size());
         }
     }
 
