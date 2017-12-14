@@ -6,7 +6,7 @@ class ServletModule extends com.google.inject.servlet.ServletModule {
     @Override
     protected void configureServlets() {
         filter("/*").through(ObjectifyFilter.class);
-        serve("/sampler").with(SamplerServlet.class);
+        serve("/cron/sampler").with(SamplerServlet.class);
         serve("/info").with(SysinfoServlet.class);
     }
 }

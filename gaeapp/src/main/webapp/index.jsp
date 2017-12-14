@@ -10,7 +10,7 @@
 
 <h2>Available Servlets:</h2>
 <ul>
-<li><a href='/sampler'>SamplerServlet</a></li>
+<li><a href='/cron/sampler'>SamplerServlet</a></li>
 <li><a href='/info'>SysinfoServlet</a></li>
 </ul>
 
