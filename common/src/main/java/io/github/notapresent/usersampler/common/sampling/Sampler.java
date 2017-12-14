@@ -1,15 +1,17 @@
 package io.github.notapresent.usersampler.common.sampling;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import io.github.notapresent.usersampler.common.HTTP.HTTPError;
 import io.github.notapresent.usersampler.common.HTTP.Request;
+import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
 import io.github.notapresent.usersampler.common.HTTP.Response;
 import io.github.notapresent.usersampler.common.site.FatalSiteError;
 import io.github.notapresent.usersampler.common.site.RetryableSiteError;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -18,22 +20,21 @@ import java.util.stream.Collectors;
 
 public class Sampler {
     public static final int MAX_BATCH_RETRIES = 2;
-
-    private ZonedDateTime startedAt;
-
+    private final LocalDateTime startedAt;
     private Set<SiteAdapter> inProgress = new HashSet<>();
     private List<Sample> results = new ArrayList<>();
-    private RequestMultiplexer muxer;
-
+    private final RequestMultiplexer muxer;
+    private final RequestFactory requestFactory;
 
     @Inject
-    public Sampler(RequestMultiplexer muxer) {
+    public Sampler(RequestMultiplexer muxer, RequestFactory requestFactory,
+                   @Named("utcNow") LocalDateTime startedAt) {
         this.muxer = muxer;
+        this.requestFactory = requestFactory;
+        this.startedAt = startedAt;
     }
 
     public List<Sample> takeSamples(List<SiteAdapter> adapters) {
-        startedAt = ZonedDateTime.now(ZoneOffset.UTC);
-
         for (SiteAdapter site : adapters) {
             site.reset();
             inProgress.add(site);
@@ -50,7 +51,7 @@ public class Sampler {
         RequestBatch batch = new RequestBatch();
 
         for (SiteAdapter site : sites) {
-            site.getRequests().forEach((req) -> batch.put(req, site));
+            site.getRequests(requestFactory).forEach((req) -> batch.put(req, site));
         }
 
         return batch;
@@ -58,13 +59,14 @@ public class Sampler {
 
     private void processBatch(RequestBatch batch) {
         int batchRetries = 0;
-        RequestBatch retryBatch = new RequestBatch();
 
         while (batchRetries++ < MAX_BATCH_RETRIES && !batch.isEmpty()) {
+            RequestBatch retryBatch = new RequestBatch();
             Map<Request, Future<Response>> responseFutures = muxer.multiSend(batch.requests());
 
             for (Request request : responseFutures.keySet()) {
                 SiteAdapter site = batch.siteFor(request);
+
                 Future<Response> responseFuture = responseFutures.get(request);
 
                 if (processResponseFuture(site, responseFuture)) {
@@ -88,7 +90,6 @@ public class Sampler {
                     batchRetries,
                     failedRequests
             );
-
             results.add(makeSample(site, message));
         }
     }
@@ -115,10 +116,10 @@ public class Sampler {
     }
 
     private Sample makeSample(SiteAdapter site) {
-        return new Sample(site, startedAt, site.getResult());
+        return new Sample(site, site.getResult());
     }
 
     private Sample makeSample(SiteAdapter site, String errorMessage) {
-        return new Sample(site, startedAt, errorMessage);
+        return new Sample(site, errorMessage);
     }
 }

@@ -1,13 +1,11 @@
-package io.github.notapresent.usersampler.common;
+package io.github.notapresent.usersampler.common.sampling;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.Futures;
 import io.github.notapresent.usersampler.common.HTTP.HTTPError;
 import io.github.notapresent.usersampler.common.HTTP.Request;
+import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
 import io.github.notapresent.usersampler.common.HTTP.Response;
-import io.github.notapresent.usersampler.common.sampling.RequestMultiplexer;
-import io.github.notapresent.usersampler.common.sampling.Sample;
-import io.github.notapresent.usersampler.common.sampling.Sampler;
 import io.github.notapresent.usersampler.common.site.FatalSiteError;
 import io.github.notapresent.usersampler.common.site.RetryableSiteError;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
@@ -17,6 +15,7 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -31,23 +30,29 @@ import static org.mockito.Mockito.*;
 
 
 public class SamplerTest {
-    Sampler sampler;
-    MuxerStub fakeMuxer = new MuxerStub();
+    private Sampler sampler;
+    private MuxerStub fakeMuxer = new MuxerStub();
 
     @Mock
-    SiteAdapter mockSite;
+    private SiteAdapter mockSite;
     @Mock
-    Request mockRequest;
+    private Request mockRequest;
     @Mock
-    Response mockResponse;
+    private Response mockResponse;
 
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        when(mockSite.getRequests()).thenReturn(Collections.singletonList(mockRequest));
+        when(mockSite.getRequests(any()))
+                .thenReturn(Collections.singletonList(mockRequest));
         when(mockSite.isDone()).thenReturn(true);
-        sampler = new Sampler(fakeMuxer);
+        when(mockSite.shortName()).thenReturn("blah");
+        sampler = new Sampler(
+                fakeMuxer,
+                new RequestFactory(),
+                LocalDateTime.now(ZoneOffset.UTC)
+        );
         fakeMuxer.response = Futures.immediateFuture(mockResponse);
     }
 
@@ -56,9 +61,8 @@ public class SamplerTest {
         InOrder inOrder = inOrder(mockSite);
          sampler.takeSamples(sites());
         inOrder.verify(mockSite).reset();
-        inOrder.verify(mockSite).getRequests();
+        inOrder.verify(mockSite).getRequests(any());
         inOrder.verify(mockSite).registerResponse(any());
-        // TODO add getRequests() here
         inOrder.verify(mockSite).getResult();
         verify(mockSite, times(1)).reset();
     }
@@ -69,13 +73,14 @@ public class SamplerTest {
         Sample sample = sampler.takeSamples(sites()).get(0);
         assertEquals(mockSite, sample.getSite());
         double now = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond();
-        assertEquals(now, sample.getTaken().toEpochSecond(), 1.0);
+        assertEquals(now, sample.getTaken().toEpochSecond(ZoneOffset.UTC), 1.0);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void itShouldSendAllGeneratedRequests() {
         Request req1 = mock(Request.class), req2 = mock(Request.class);
-        when(mockSite.getRequests()).thenReturn(
+        when(mockSite.getRequests(any())).thenReturn(
                 Collections.singletonList(req1),
                 Collections.singletonList(req2)
         );
@@ -88,6 +93,7 @@ public class SamplerTest {
     @Test
     public void itShouldProcessAllRequestsBeforeAskingForMore() {}  // TODO
 
+    @SuppressWarnings("unchecked")
     @Test
     public void itShouldMarkSampleAsFailedIfAnyRequestFails() throws Exception {
         Future failedFuture = mock(Future.class);
@@ -96,7 +102,7 @@ public class SamplerTest {
 
         Sample sample = sampler.takeSamples(sites()).get(0);
 
-        assertEquals(Sample.SampleStatus.ERROR, sample.getSampleStatus());
+        assertEquals(SampleStatus.ERROR, sample.getSampleStatus());
     }
 
     @Test
@@ -105,7 +111,7 @@ public class SamplerTest {
 
         Sample sample = sampler.takeSamples(sites()).get(0);
 
-        assertEquals(Sample.SampleStatus.ERROR, sample.getSampleStatus());
+        assertEquals(SampleStatus.ERROR, sample.getSampleStatus());
     }
 
     @Test
@@ -123,22 +129,21 @@ public class SamplerTest {
 
         Sample sample = sampler.takeSamples(sites()).get(0);
 
-        assertEquals(Sample.SampleStatus.ERROR, sample.getSampleStatus());
+        assertEquals(SampleStatus.ERROR, sample.getSampleStatus());
     }
 
     private List<SiteAdapter> sites() {
         return Collections.singletonList(mockSite);
     }
-}
 
+    class MuxerStub implements RequestMultiplexer {
+        Future<Response> response;
+        List<List<Request>> requestBatches = new ArrayList<>();
 
-class MuxerStub implements RequestMultiplexer {
-    Future<Response> response;
-    List<List<Request>> requestBatches = new ArrayList<>();
-
-    @Override
-    public Map<Request, Future<Response>> multiSend(List<Request> batch) {
-        requestBatches.add(batch);
-        return ImmutableMap.of(batch.get(0), response);
+        @Override
+        public Map<Request, Future<Response>> multiSend(List<Request> batch) {
+            requestBatches.add(batch);
+            return ImmutableMap.of(batch.get(0), response);
+        }
     }
 }

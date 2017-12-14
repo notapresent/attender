@@ -5,7 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import java.net.*;
+import java.net.CookieManager;
+import java.net.HttpCookie;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;

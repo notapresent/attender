@@ -1,7 +1,7 @@
 package io.github.notapresent.usersampler.gaeapp;
 
-import com.google.inject.Provider;
-import io.github.notapresent.usersampler.common.sampling.Orchestrator;
+import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -13,9 +13,14 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-public class SamplerServletTest {
+public class SysinfoServletTest {
+    private static final String FAKE_URL = "http://fake.fk/hello";
+
+    // Set up a helper so that the ApiProxy returns a valid environment for local testing.
+    private final LocalServiceTestHelper helper = new LocalServiceTestHelper();
 
     // Servlet stuff
     @Mock
@@ -24,18 +29,14 @@ public class SamplerServletTest {
     private HttpServletResponse mockResponse;
 
 
-    @Mock
-    private Orchestrator mockOrchestrator;
-
     private StringWriter responseWriter;
 
-    private SamplerServlet servletUnderTest;
+    private SysinfoServlet servletUnderTest;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-
-        when(mockOrchestrator.run()).thenReturn(42);
+        helper.setUp();
 
         // Set up a fake HTTP response.
         responseWriter = new StringWriter();
@@ -43,18 +44,23 @@ public class SamplerServletTest {
 
         javax.servlet.ServletConfig servletConfig = mock(javax.servlet.ServletConfig.class);
 
-        Provider<Orchestrator> orchProvider = () -> mockOrchestrator;
-
-        servletUnderTest = new SamplerServlet(orchProvider );
+        servletUnderTest = new SysinfoServlet();
         servletUnderTest.init(servletConfig);
     }
 
+    @After
+    public void tearDown() {
+        helper.tearDown();
+    }
+
     @Test
-    public void itShouldReportNumberOfSites() throws Exception {
+    public void doGetwritesResponse() throws Exception {
         servletUnderTest.doGet(mockRequest, mockResponse);
 
         String strResponse = responseWriter.toString();
-        assertThat(strResponse) .contains("42 sites processed");
-        verify(mockOrchestrator, times(1)).run();
+
+        assertThat(strResponse)
+                .named("SamplerServlet response")
+                .contains("App Engine Standard");
     }
 }

@@ -8,14 +8,11 @@
 <body>
     <h1>Hello App Engine -- Java 8!</h1>
 
-  <table>
-    <tr>
-      <td colspan="2" style="font-weight:bold;">Available Servlets:</td>
-    </tr>
-    <tr>
-      <td><a href='/sampler'>SamplerServlet</a></td>
-    </tr>
-  </table>
+<h2>Available Servlets:</h2>
+<ul>
+<li><a href='/sampler'>SamplerServlet</a></li>
+<li><a href='/info'>SysinfoServlet</a></li>
+</ul>
 
 </body>
 </html>

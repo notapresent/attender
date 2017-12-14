@@ -1,6 +1,7 @@
 package io.github.notapresent.usersampler.common.sampling;
 
 import com.google.common.util.concurrent.Futures;
+import com.google.inject.Inject;
 import io.github.notapresent.usersampler.common.HTTP.Request;
 import io.github.notapresent.usersampler.common.HTTP.Response;
 import io.github.notapresent.usersampler.common.HTTP.Session;
@@ -12,6 +13,8 @@ import java.util.concurrent.Future;
 
 public class SinglePlexer implements RequestMultiplexer {
     private Session session;
+
+    @Inject
     public SinglePlexer(Session session) {
         this.session = session;
     }

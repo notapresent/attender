@@ -3,14 +3,15 @@ package io.github.notapresent.usersampler.common.sampling;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 
 import javax.annotation.Nullable;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Sample {
     private final SiteAdapter site;
-    private final ZonedDateTime taken;
-    @Nullable
-    private final Map<String, Status> payload;
+    private final LocalDateTime taken;
+    private final Map<String, UserStatus> payload;
     private final SampleStatus sampleStatus;
 
     @Nullable
@@ -26,11 +27,11 @@ public class Sample {
         return site;
     }
 
-    public ZonedDateTime getTaken() {
+    public LocalDateTime getTaken() {
         return taken;
     }
 
-    public Map<String, Status> getPayload() {
+    public Map<String, UserStatus> getPayload() {
         return payload;
     }
 
@@ -39,30 +40,34 @@ public class Sample {
     }
 
     public Sample(SiteAdapter site, // OK constructor
-                  ZonedDateTime taken,
-                  Map<String, Status> payload) {
-        this(site, taken, payload, SampleStatus.OK, null);
+                  Map<String, UserStatus> payload) {
+        this(site, payload, SampleStatus.OK, null);
     }
 
     public Sample(SiteAdapter site,     // HTTPError constructor
-                  ZonedDateTime taken,
                   String message) {
-        this(site, taken, null, SampleStatus.ERROR, message);
+        this(site, new HashMap<>(), SampleStatus.ERROR, message);
     }
 
     public Sample(SiteAdapter site,
-                  ZonedDateTime taken,
-                  Map<String, Status> payload,
+                  Map<String, UserStatus> payload,
+                  SampleStatus sampleStatus, String message) {
+        this( site,
+                LocalDateTime.now(ZoneOffset.UTC),
+                payload,
+                sampleStatus,
+                message
+        );
+    }
+
+    public Sample(SiteAdapter site,
+                  LocalDateTime taken,
+                  Map<String, UserStatus> payload,
                   SampleStatus sampleStatus, String message) {
         this.site = site;
         this.taken = taken;
         this.payload = payload;
         this.sampleStatus = sampleStatus;
         this.message = message;
-    }
-
-    public enum SampleStatus {
-        OK,
-        ERROR,
     }
 }
