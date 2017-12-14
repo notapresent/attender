@@ -9,6 +9,7 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.util.Closeable;
 import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
+import io.github.notapresent.usersampler.common.IntegrationTest;
 import io.github.notapresent.usersampler.common.sampling.*;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
@@ -16,6 +17,7 @@ import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchSession;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -24,6 +26,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+@Category(IntegrationTest.class)
 public class OrchestratorIntegrationTest {
     private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
             new LocalDatastoreServiceTestConfig(),
