@@ -6,6 +6,8 @@ public interface UserStatus {
     BaseStatus PRIVATE = BaseStatus.PRIVATE;
     BaseStatus PAID = BaseStatus.PAID;
 
+    static String SEPARATOR = ":";
+
     int ordinal();
     String name();
 
@@ -17,25 +19,26 @@ public interface UserStatus {
         }
     }
 
-    default String strValue() {
+    default String getName() {
         if(this instanceof BaseStatus) {
             return name();
         } else {
-            return this.getClass().getSimpleName() + "." + name();
+            return this.getClass().getCanonicalName() + SEPARATOR + name();
         }
     }
 
-    default String fullName() {
-        return this.getClass().getCanonicalName()  + "." + name();
-    }
-
-    static UserStatus fromFullName(String fullName) {
-        try {
-            Class clazz = Class.forName(fullName.split("\\.")[0]);
-            String name = fullName.split("\\.")[0];
-            return (UserStatus) Enum.valueOf(clazz, name);
-        } catch (ClassNotFoundException e) {
-            return null;
+    @SuppressWarnings("unchecked")
+    static UserStatus fromName(String name) {
+        if(name.contains(".")) {
+            try {
+                Class clazz = Class.forName(name.split(SEPARATOR)[0]);
+                String strName = name.split(SEPARATOR)[1];
+                return (UserStatus) Enum.valueOf(clazz, strName);
+            } catch (ClassNotFoundException e) {
+                return null;
+            }
+         } else {
+            return BaseStatus.valueOf(name);
         }
     }
 }

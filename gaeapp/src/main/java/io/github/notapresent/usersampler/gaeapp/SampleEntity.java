@@ -76,7 +76,7 @@ public class SampleEntity {
         Map<String, UserStatus> rv = new HashMap<>();
 
         for (Map.Entry<String, String> e: stored.entrySet()) {
-            UserStatus st = UserStatus.fromFullName(e.getKey());
+            UserStatus st = UserStatus.fromName(e.getKey());
             Arrays.stream(e.getValue().split(",")).forEach((name) -> rv.put(name, st));
         }
         return rv;
@@ -85,7 +85,7 @@ public class SampleEntity {
     private static Map<String, String> payloadFromSample(Map<String, UserStatus> orig) {
         return orig.entrySet().stream().collect(
                 Collectors.groupingBy(
-                        (e) -> e.getValue().fullName(),
+                        (e) -> e.getValue().getName(),
                         mapping(Map.Entry::getKey, Collectors.joining(","))
                 )
         );
