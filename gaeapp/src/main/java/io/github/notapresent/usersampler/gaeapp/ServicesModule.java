@@ -37,7 +37,7 @@ public class ServicesModule extends AbstractModule {
         bind(CookieHandler.class).to(URLFetchCookieManager.class);
         bind(Orchestrator.class);
         bind(SampleStorage.class).to(GAESampleStorage.class);
-        bind(SiteRegistry.class);
+        bind(SiteRegistry.class).in(Singleton.class);
     }
 
     @Provides
