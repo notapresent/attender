@@ -17,14 +17,10 @@ import io.github.notapresent.usersampler.common.site.SiteAdapter;
 public class AggregatorTest {
     Aggregator aggr = new Aggregator();
 
-    @Mock
-    SiteAdapter mockSite;
-
 
     @Before
     public void setUp() {
         initMocks(this);
-        when(mockSite.shortName()).thenReturn("MS");
     }
 
     @Test
