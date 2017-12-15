@@ -45,7 +45,7 @@ public class GAESampleStorage implements SampleStorage {
     }
 
     @Override
-    public List<Sample> getForSiteDate(SiteAdapter site, LocalDateTime day) {
+    public Iterable<Sample> getForSiteDate(SiteAdapter site, LocalDateTime day) {
         Key<SiteEntity> siteKey = siteKey(site);
         LocalDateTime dayStart = day.truncatedTo(ChronoUnit.DAYS);
         LocalDateTime nextDayStart = dayStart.plusDays(1);

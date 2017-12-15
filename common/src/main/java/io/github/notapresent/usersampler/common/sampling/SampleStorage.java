@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface SampleStorage {
     void put(Sample sample);
-    List<Sample> getForSiteDate(SiteAdapter site, LocalDateTime date);  // TODO iterable?
+    Iterable<Sample> getForSiteDate(SiteAdapter site, LocalDateTime date);
     void deleteByIds(Iterable<Long> ids);
     void putAggregateSample(AggregateSample sample);
 }
