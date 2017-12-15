@@ -61,6 +61,6 @@ public class SysinfoServletTest {
 
         assertThat(strResponse)
                 .named("SamplerServlet response")
-                .contains("App Engine Standard");
+                .contains("Java System");
     }
 }

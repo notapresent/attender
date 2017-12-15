@@ -21,10 +21,23 @@ public class SysinfoServlet extends HttpServlet {
         String message = "App Engine Standard using %s%n" +
                 "Java %s%n";
 
-        response.getWriter().format(
-                message,
-                SystemProperty.version.get(),
-                properties.get("java.specification.version")
-        );
+        StringBuilder sb = new StringBuilder();
+        sb.append("Java System properties\n-------------------------\n");
+        for(String key : properties.stringPropertyNames()) {
+            sb.append(key)
+                    .append(": ")
+                    .append(properties.getProperty(key))
+                    .append("\n");
+        }
+
+        sb.append("\n\nAppengine SystemProperties\n---------------------------\n");
+        sb
+                .append("SystemProperty.Environment: ")
+                .append(SystemProperty.environment.value())
+                .append("\napplicationId: ").append(SystemProperty.applicationId.get())
+                .append("\napplicationVersion: ").append(SystemProperty.applicationVersion.get())
+                .append("\nversion: ").append(SystemProperty.version.get());
+
+        response.getWriter().format(sb.toString());
     }
 }
