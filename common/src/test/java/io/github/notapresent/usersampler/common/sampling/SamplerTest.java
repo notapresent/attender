@@ -2,10 +2,7 @@ package io.github.notapresent.usersampler.common.sampling;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.Futures;
-import io.github.notapresent.usersampler.common.HTTP.HTTPError;
-import io.github.notapresent.usersampler.common.HTTP.Request;
-import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
-import io.github.notapresent.usersampler.common.HTTP.Response;
+import io.github.notapresent.usersampler.common.HTTP.*;
 import io.github.notapresent.usersampler.common.site.FatalSiteError;
 import io.github.notapresent.usersampler.common.site.RetryableSiteError;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
@@ -140,5 +137,9 @@ public class SamplerTest {
             requestBatches.add(batch);
             return ImmutableMap.of(batch.get(0), response);
         }
+
+        // Not used in this test
+        @Override
+        public Future<Response> send(Request request) {return null;}
     }
 }

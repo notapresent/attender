@@ -9,6 +9,7 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.util.Closeable;
 import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
+import io.github.notapresent.usersampler.common.HTTP.RetryingSinglePlexer;
 import io.github.notapresent.usersampler.common.IntegrationTest;
 import io.github.notapresent.usersampler.common.sampling.*;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
@@ -21,7 +22,6 @@ import org.junit.experimental.categories.Category;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -76,7 +76,7 @@ public class OrchestratorIntegrationTest {
             LocalDateTime startTime) {
 
         Sampler sampler = new Sampler(
-                new SinglePlexer(
+                new RetryingSinglePlexer(
                         new URLFetchSession(
                                 URLFetchServiceFactory.getURLFetchService()
                         )

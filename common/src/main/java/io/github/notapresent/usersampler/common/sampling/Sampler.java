@@ -2,16 +2,12 @@ package io.github.notapresent.usersampler.common.sampling;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import io.github.notapresent.usersampler.common.HTTP.HTTPError;
-import io.github.notapresent.usersampler.common.HTTP.Request;
-import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
-import io.github.notapresent.usersampler.common.HTTP.Response;
+import io.github.notapresent.usersampler.common.HTTP.*;
 import io.github.notapresent.usersampler.common.site.FatalSiteError;
 import io.github.notapresent.usersampler.common.site.RetryableSiteError;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;

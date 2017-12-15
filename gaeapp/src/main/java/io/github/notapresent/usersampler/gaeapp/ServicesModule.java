@@ -5,13 +5,14 @@ import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFilter;
 import com.googlecode.objectify.ObjectifyService;
 import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
+import io.github.notapresent.usersampler.common.HTTP.RequestMultiplexer;
 import io.github.notapresent.usersampler.common.HTTP.Session;
+import io.github.notapresent.usersampler.common.HTTP.RetryingSinglePlexer;
 import io.github.notapresent.usersampler.common.sampling.*;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
 import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchCookieManager;
@@ -33,7 +34,7 @@ public class ServicesModule extends AbstractModule {
         bind(LocalDateTime.class).annotatedWith(Names.named("utcNow")).toProvider(this::provideUTCNow);
 
 
-        bind(RequestMultiplexer.class).to(SinglePlexer.class);
+        bind(RequestMultiplexer.class).to(RetryingSinglePlexer.class);
         bind(CookieHandler.class).to(URLFetchCookieManager.class);
         bind(Orchestrator.class);
         bind(SampleStorage.class).to(GAESampleStorage.class);
