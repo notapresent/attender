@@ -12,9 +12,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import static io.github.notapresent.usersampler.gaeapp.HTTP.Helper.createHTTPRequest;
+import static io.github.notapresent.usersampler.gaeapp.HTTP.Helper.createResponse;
+
 public class URLFetchSession extends Session {
     private URLFetchService urlFetch;
-    private int maxRedirects = DEFAULT_MAX_REDIRECTS;
+
     private URLFetchCookieManager cookieManager = null;
 
     public URLFetchSession(URLFetchService urlFetch) {
@@ -27,90 +30,25 @@ public class URLFetchSession extends Session {
         this.cookieManager = (URLFetchCookieManager) cookieManager;
     }
 
-    public int getMaxRedirects() {
-        return maxRedirects;
-    }
-
-    public void setMaxRedirects(int maxRedirects) {
-        this.maxRedirects = maxRedirects;
-    }
-
-    @Override
-    public Response send(Request request) throws HTTPError {
-        HTTPResponse ufResp;
-        HTTPRequest urlFetchRequest = Helper.createHTTPRequest(request);
-        Response response;
-
-        if (request.getRedirectHandlingPolicy() == Request.RedirectPolicy.FOLLOW) {
-            response = handleRedirects(urlFetchRequest);
-        } else {
-            ufResp = doSend(urlFetchRequest);
-            response = Helper.createResponse(ufResp, request.getUrl());
-
-        }
-
-        response.setRequest(request);
-        return response;
-    }
-
-    protected Response handleRedirects(HTTPRequest req) throws HTTPError {
-        int timesRedirected = 0;
-        HTTPResponse ufResp = null;
-        List<HTTPHeader> originalHeaders = req.getHeaders();
-        URL redirectUrl = null;
-
-        while (timesRedirected++ < maxRedirects) {
-            ufResp = doSend(req);
-            if (!Util.isRedirect(ufResp.getResponseCode())) {
-                break;
-            }
-
-            String location = Helper.getHeaderValue(ufResp.getHeaders(), "location");
-
-            if (location == null) {
-                throw new HTTPError("Location header missing from redirect response");
-            }
-
-            try {
-                redirectUrl = new URL(req.getURL(), location);
-            } catch (MalformedURLException e) {
-                throw new HTTPError("Failed to parse redirect location " + location, e);
-            }
-
-            req = new HTTPRequest(redirectUrl, HTTPMethod.GET, req.getFetchOptions());
-            for (HTTPHeader header : originalHeaders) {
-                req.addHeader(header);
-            }
-        }
-
-        Response response = Helper.createResponse(ufResp, req.getURL().toString());
-
-        return response;
-    }
-
-    protected HTTPResponse doSend(HTTPRequest req) throws HTTPError {
+    protected Response doSend(Request request) throws HTTPError {
+        HTTPRequest req = createHTTPRequest(request);
 
         if (cookieManager != null) {
             cookieManager.loadToRequest(req);
         }
 
         try {
-            HTTPResponse response = urlFetch.fetch(req);
+            HTTPResponse httpResponse = urlFetch.fetch(req);
             if (cookieManager != null) {
-                cookieManager.saveFromResponse(req.getURL(), response);
+                cookieManager.saveFromResponse(req.getURL(), httpResponse);
             }
 
-            return response;
+            return createResponse(httpResponse, request.getUrl());
         }
 
         catch (IOException|ApiProxy.ApiProxyException e) {
             throw new HTTPError(e);
         }
-    }
-
-    @Override
-    public CookieHandler getCookieManager() {
-        return cookieManager;
     }
 
     @Override

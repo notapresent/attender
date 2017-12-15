@@ -6,7 +6,8 @@ import java.net.MalformedURLException;
 
 abstract public class Session {
     public static int DEFAULT_MAX_REDIRECTS = 5;
-    private CookieHandler cookieManager;
+    protected int maxRedirects = DEFAULT_MAX_REDIRECTS;
+    protected CookieHandler cookieManager;
 
     public CookieHandler getCookieManager() {
         return cookieManager;
@@ -16,6 +17,13 @@ abstract public class Session {
         this.cookieManager = cookieManager;
     }
 
+    public int getMaxRedirects() {
+        return maxRedirects;
+    }
+
+    public void setMaxRedirects(int maxRedirects) {
+        this.maxRedirects = maxRedirects;
+    }
 
     public Response send(Request request) throws HTTPError {
         Response response;
@@ -36,10 +44,10 @@ abstract public class Session {
 
     protected Response sendWithRedirects(Request request) throws IOException {
         Request origRequest = request.clone();
-        Response resp;
+        Response resp = null;
         int tries = 0;
 
-        while(tries++ < DEFAULT_MAX_REDIRECTS) {
+        while(tries++ < maxRedirects) {
             resp = doSend(request);
 
             if(resp.isRedirect()) {
@@ -52,7 +60,7 @@ abstract public class Session {
             }
         }
 
-        throw new HTTPError("Maxinum of " + tries + " redirects exceeded");
+        return resp;
     }
 
     abstract protected Response doSend(Request request) throws IOException;
