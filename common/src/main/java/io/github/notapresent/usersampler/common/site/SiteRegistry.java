@@ -1,36 +1,32 @@
 package io.github.notapresent.usersampler.common.site;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
 import java.util.*;
 
-// TODO Refactor this to guice singleton
 public class SiteRegistry {
-    private static SiteRegistry registry = null;
-    private ServiceLoader<SiteAdapter> loader;
-    private static Map<String, SiteAdapter> shortNameToAdapter = new HashMap<>();
+    private static final Map<String, SiteAdapter> sites = new HashMap<>();
 
-    private SiteRegistry() {
-        loader = ServiceLoader.load(SiteAdapter.class);
-    }
-
-    public static synchronized SiteRegistry getInstance() {
-        if (registry == null) {
-            registry = new SiteRegistry();
-            registry.init();
+    public Map<String, SiteAdapter> getSites() {
+        if(sites.isEmpty()) {
+            loadSites();
         }
-        return registry;
+        return ImmutableMap.copyOf(sites);
     }
 
-    private void init() {
+    public static synchronized void loadSites() {
+        ServiceLoader<SiteAdapter> loader = ServiceLoader.load(SiteAdapter.class);
         for (SiteAdapter adapter : loader) {
-            shortNameToAdapter.put(adapter.shortName(), adapter);
+            sites.put(adapter.shortName(), adapter);
         }
     }
 
     public SiteAdapter getByShortName(String shortName) {
-        return shortNameToAdapter.get(shortName);
+        return getSites().get(shortName);
     }
 
     public List<SiteAdapter> getAdapters() {
-        return Collections.unmodifiableList(new ArrayList<>(shortNameToAdapter.values()));
+        return ImmutableList.copyOf(getSites().values());
     }
 }

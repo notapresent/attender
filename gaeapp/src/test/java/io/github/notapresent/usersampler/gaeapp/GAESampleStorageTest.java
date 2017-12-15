@@ -41,7 +41,7 @@ public class GAESampleStorageTest {
         initMocks(this);
         GAESampleStorage.registerEntities();
         when(site.shortName()).thenReturn("T");
-        storage = new GAESampleStorage(ObjectifyService::ofy, SiteRegistry.getInstance());
+        storage = new GAESampleStorage(ObjectifyService::ofy, new SiteRegistry());
         sample = new Sample(site, now, new HashMap<>(), SampleStatus.OK, "msg");
     }
 

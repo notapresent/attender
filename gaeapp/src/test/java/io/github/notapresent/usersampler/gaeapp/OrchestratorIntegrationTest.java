@@ -53,11 +53,11 @@ public class OrchestratorIntegrationTest {
     @Test
     public void itShouldCreateOneSamplePerAdapter() {
         Provider<Objectify> ofyProvider = ObjectifyService::ofy;
+        SiteRegistry registry = new SiteRegistry();
         SampleStorage storage = new GAESampleStorage(
                 ofyProvider,
-                SiteRegistry.getInstance()
+                registry
         );
-        SiteRegistry registry = SiteRegistry.getInstance();
         LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
 
         orchestrator = makeOrchestrator(registry, storage, now);
