@@ -20,7 +20,7 @@ public class Sample {
     }
 
     @Nullable
-    private String message;
+    private final String message;
 
 
     public SiteAdapter getSite() {
@@ -49,9 +49,9 @@ public class Sample {
         this(site, new HashMap<>(), SampleStatus.ERROR, message);
     }
 
-    public Sample(SiteAdapter site,
-                  Map<String, UserStatus> payload,
-                  SampleStatus sampleStatus, String message) {
+    private Sample(SiteAdapter site,
+                   Map<String, UserStatus> payload,
+                   SampleStatus sampleStatus, String message) {
         this( site,
                 LocalDateTime.now(ZoneOffset.UTC),
                 payload,
@@ -63,7 +63,7 @@ public class Sample {
     public Sample(SiteAdapter site,
                   LocalDateTime taken,
                   Map<String, UserStatus> payload,
-                  SampleStatus sampleStatus, String message) {
+                  SampleStatus sampleStatus, @Nullable String message) {
         this.site = site;
         this.taken = taken;
         this.payload = payload;

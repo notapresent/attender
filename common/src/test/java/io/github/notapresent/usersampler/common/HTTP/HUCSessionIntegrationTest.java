@@ -1,31 +1,26 @@
 package io.github.notapresent.usersampler.common.HTTP;
 
 import io.github.notapresent.usersampler.common.IntegrationTest;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import java.net.CookieManager;
 import java.net.HttpCookie;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
 
 @Category(IntegrationTest.class)
 public class HUCSessionIntegrationTest {
-    private static String HTTPBIN = "http://httpbin.org";
-    private HUCSession session = new HUCSession();
+    private static final String HTTPBIN = "http://httpbin.org";
+    private final HUCSession session = new HUCSession();
     private Response response;
     private Request request;
     private HttpCookie cookie = new HttpCookie("cookieName", "blah");
-    private CookieManager cookieMan = new CookieManager();;
-
-    @Before
-    public void setUp() throws URISyntaxException {}
+    private final CookieManager cookieMan = new CookieManager();
 
     @Test
-    public void itShouldRertieveContent() throws Exception {
+    public void itShouldRertieveContent() {
         request = new Request(HTTPBIN);
 
         response = session.send(request);
@@ -35,7 +30,7 @@ public class HUCSessionIntegrationTest {
     }
 
     @Test
-    public void itShouldSendHeaders() throws Exception {
+    public void itShouldSendHeaders() {
         request = new Request(HTTPBIN + "/headers");
         request.getHeaders().put("custom-header", "custom-value");
 
@@ -87,7 +82,7 @@ public class HUCSessionIntegrationTest {
     }
 
     @Test
-    public void itShouldSendStoredCookies() throws URISyntaxException {
+    public void itShouldSendStoredCookies() {
         session.setCookieManager(cookieMan);
         session.send(new Request(HTTPBIN + "/cookies/set?mycookie=myvalue"));
         request = new Request(HTTPBIN + "/cookies");

@@ -1,6 +1,6 @@
 package io.github.notapresent.usersampler.common.sampling;
 
-public class Segment {
+class Segment {
     private final UserStatus status;
     private short length;
 

@@ -5,9 +5,9 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
-import io.github.notapresent.usersampler.common.sampling.UserStatus;
 import io.github.notapresent.usersampler.common.sampling.Sample;
 import io.github.notapresent.usersampler.common.sampling.SampleStatus;
+import io.github.notapresent.usersampler.common.sampling.UserStatus;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 
 import java.time.LocalDateTime;
@@ -23,7 +23,8 @@ import static java.util.stream.Collectors.mapping;
 
 @Entity
 public class SampleEntity {
-    @Id Long id;
+    @Id
+    private Long id;
 
     public Key<SiteEntity> getParent() {
         return parent;
@@ -41,11 +42,13 @@ public class SampleEntity {
         return pl;
     }
 
-    @Parent Key<SiteEntity> parent;
-    SampleStatus st;
+    @Parent
+    private Key<SiteEntity> parent;
+    private SampleStatus st;
     @Index
+    private
     Date ts;        // Date taken
-    Map<String, String> pl = new HashMap<>();    // Payload
+    private Map<String, String> pl = new HashMap<>();    // Payload
 
     private SampleEntity() {
     }

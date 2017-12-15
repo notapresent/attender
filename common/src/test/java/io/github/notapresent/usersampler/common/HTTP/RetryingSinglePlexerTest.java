@@ -4,12 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class RetryingSinglePlexerTest {
@@ -17,8 +13,8 @@ public class RetryingSinglePlexerTest {
 
     @Mock
     private Session mockSession;
-    private Request request = new Request("http://fake.url");
-    private Response okResponse = new Response(200, "OK".getBytes(), "http://fake.url");
+    private final Request request = new Request("http://fake.url");
+    private final Response okResponse = new Response(200, "OK".getBytes(), "http://fake.url");
 
     @Before
     public void setUp() {

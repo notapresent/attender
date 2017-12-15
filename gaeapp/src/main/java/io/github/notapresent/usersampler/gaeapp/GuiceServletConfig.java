@@ -8,11 +8,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
 public class GuiceServletConfig extends GuiceServletContextListener {
-    private ServletContext servletContext;
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        servletContext = servletContextEvent.getServletContext();
+        ServletContext servletContext = servletContextEvent.getServletContext();
         super.contextInitialized(servletContextEvent);
     }
 

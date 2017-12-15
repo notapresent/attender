@@ -11,8 +11,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class RequestBatch {
-    private Map<Request, SiteAdapter> req2site = new HashMap<>();
+class RequestBatch {
+    private final Map<Request, SiteAdapter> req2site = new HashMap<>();
 
     public void put(Request request, SiteAdapter site) {
         req2site.put(request, site);

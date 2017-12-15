@@ -26,18 +26,17 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 
 public class URLFetchSessionTest {
     // Canned requests and responses
-    private static String url = "http://fake.url";
-    private static Request request = new Request(url);
-    private static List<HTTPHeader> emptyHeaders = new ArrayList<HTTPHeader>();
-    private static List<HTTPHeader> redirectHeaders = Collections.singletonList(
+    private static final String url = "http://fake.url";
+    private static final Request request = new Request(url);
+    private static final List<HTTPHeader> emptyHeaders = new ArrayList<>();
+    private static final List<HTTPHeader> redirectHeaders = Collections.singletonList(
             new HTTPHeader("location", url));
-    private static List<HTTPHeader> setCookieHeaders = Collections.singletonList(
+    private static final List<HTTPHeader> setCookieHeaders = Collections.singletonList(
             new HTTPHeader("set-cookie", "foo=bar"));
     private static HTTPResponse okResponse, redirectResponse,
             redirectResponseWithCookie;

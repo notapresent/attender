@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Helper {
-    public static FetchOptions buildFetchOptions(Request request) {
+class Helper {
+    private static FetchOptions buildFetchOptions(Request request) {
         FetchOptions opts = FetchOptions.Builder.withDeadline(request.getTimeout());
 
         if (request.getRedirectHandlingPolicy() == Request.RedirectPolicy.DEFAULT) {
@@ -52,7 +52,7 @@ public class Helper {
         return null;
     }
 
-    protected static Map<String, String> headersListToMap(List<HTTPHeader> headersList) {
+    private static Map<String, String> headersListToMap(List<HTTPHeader> headersList) {
         Map<String, String> headersMap = new HashMap<>();
         for (HTTPHeader header : headersList) {
             headersMap.merge(
@@ -74,7 +74,7 @@ public class Helper {
         );
     }
 
-    protected static URI URL2URI(URL url) {
+    static URI URL2URI(URL url) {
         try {
             return url.toURI();
         } catch (URISyntaxException e) {

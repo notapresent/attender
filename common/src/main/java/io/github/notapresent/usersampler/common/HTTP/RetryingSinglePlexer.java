@@ -6,8 +6,8 @@ import com.google.inject.Inject;
 import java.util.concurrent.Future;
 
 public class RetryingSinglePlexer implements RequestMultiplexer {
-    public static int MAX_RETRIES = 3;
-    private Session session;
+    private static final int MAX_RETRIES = 3;
+    private final Session session;
 
     @Inject
     public RetryingSinglePlexer(Session session) {

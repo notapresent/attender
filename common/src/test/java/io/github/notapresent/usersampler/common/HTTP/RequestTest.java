@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 
 public class RequestTest {
     private final String url = "http://fake.url";
-    Request request;
+    private Request request;
     @Test
     public void itShouldSetDefaultTimeout() {
         request = new Request(url);

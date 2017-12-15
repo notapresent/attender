@@ -35,8 +35,6 @@ public class OrchestratorIntegrationTest {
 
     private Closeable closeable;
 
-    private Orchestrator orchestrator;
-
     @Before
     public void setUp() {
         helper.setUp();
@@ -60,7 +58,7 @@ public class OrchestratorIntegrationTest {
         );
         LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
 
-        orchestrator = makeOrchestrator(registry, storage, now);
+        Orchestrator orchestrator = makeOrchestrator(registry, storage, now);
         orchestrator.run();
         for (SiteAdapter site: registry.getAdapters() ) {
             Sample sample = storage.getForSiteDate(site, now).iterator().next();
@@ -70,7 +68,7 @@ public class OrchestratorIntegrationTest {
     }
 
 
-    public static Orchestrator makeOrchestrator(
+    private static Orchestrator makeOrchestrator(
             SiteRegistry registry,
             SampleStorage storage,
             LocalDateTime startTime) {

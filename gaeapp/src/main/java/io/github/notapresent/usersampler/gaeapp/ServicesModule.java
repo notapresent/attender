@@ -11,9 +11,11 @@ import com.googlecode.objectify.ObjectifyFilter;
 import com.googlecode.objectify.ObjectifyService;
 import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
 import io.github.notapresent.usersampler.common.HTTP.RequestMultiplexer;
-import io.github.notapresent.usersampler.common.HTTP.Session;
 import io.github.notapresent.usersampler.common.HTTP.RetryingSinglePlexer;
-import io.github.notapresent.usersampler.common.sampling.*;
+import io.github.notapresent.usersampler.common.HTTP.Session;
+import io.github.notapresent.usersampler.common.sampling.Orchestrator;
+import io.github.notapresent.usersampler.common.sampling.SampleStorage;
+import io.github.notapresent.usersampler.common.sampling.Sampler;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
 import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchCookieManager;
 import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchSession;
@@ -22,7 +24,7 @@ import java.net.CookieHandler;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-public class ServicesModule extends AbstractModule {
+class ServicesModule extends AbstractModule {
     @Override
     protected void configure() {
         GAESampleStorage.registerEntities();
@@ -52,7 +54,7 @@ public class ServicesModule extends AbstractModule {
     }
 
     @Provides
-    LocalDateTime provideUTCNow() {
+    private LocalDateTime provideUTCNow() {
         return LocalDateTime.now(ZoneOffset.UTC);
     }
 }

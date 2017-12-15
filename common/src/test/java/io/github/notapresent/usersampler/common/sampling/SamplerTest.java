@@ -15,17 +15,19 @@ import org.mockito.MockitoAnnotations;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Future;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 
 public class SamplerTest {
     private Sampler sampler;
-    private MuxerStub fakeMuxer = new MuxerStub();
+    private final MuxerStub fakeMuxer = new MuxerStub();
 
     @Mock
     private SiteAdapter mockSite;
@@ -130,7 +132,7 @@ public class SamplerTest {
 
     class MuxerStub implements RequestMultiplexer {
         Future<Response> response;
-        List<List<Request>> requestBatches = new ArrayList<>();
+        final List<List<Request>> requestBatches = new ArrayList<>();
 
         @Override
         public Map<Request, Future<Response>> multiSend(List<Request> batch) {

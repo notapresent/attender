@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Matchers.any;
@@ -15,7 +15,6 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class OrchestratorTest {
-    private Orchestrator orchestrator;
     @Mock private SampleStorage sampleStorage;
     @Mock private Sampler sampler;
     @Mock private SiteRegistry registry;
@@ -29,13 +28,13 @@ public class OrchestratorTest {
 
     @Test
     public void itShouldCallRightMethods() {
-        List<SiteAdapter> sites =  Arrays.asList(site);
-        List<Sample> samples = Arrays.asList(sample);
+        List<SiteAdapter> sites = Collections.singletonList(site);
+        List<Sample> samples = Collections.singletonList(sample);
 
         when(registry.getAdapters()).thenReturn(sites);
         when(sampler.takeSamples(any())).thenReturn(samples);
 
-        orchestrator = new Orchestrator(sampleStorage, sampler, registry);
+        Orchestrator orchestrator = new Orchestrator(sampleStorage, sampler, registry);
         orchestrator.run();
 
         verify(registry).getAdapters();

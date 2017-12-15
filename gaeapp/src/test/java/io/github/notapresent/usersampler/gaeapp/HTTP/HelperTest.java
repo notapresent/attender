@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static io.github.notapresent.usersampler.gaeapp.HTTP.Helper.URL2URI;
@@ -17,11 +17,10 @@ import static io.github.notapresent.usersampler.gaeapp.HTTP.Helper.isCookieHeade
 import static org.junit.Assert.*;
 
 public class HelperTest {
-    private String urlStr = "http://fake.url/";
-    private Request request = new Request(urlStr);
-    private Response response;
+    private final String urlStr = "http://fake.url/";
+    private final Request request = new Request(urlStr);
 
-    private static List<HTTPHeader> headers = Arrays.asList(
+    private static final List<HTTPHeader> headers = Collections.singletonList(
             new HTTPHeader("foo", "bar")
     );
 
@@ -34,7 +33,7 @@ public class HelperTest {
                 headers
         );
 
-        response = Helper.createResponse(okHTTPResponse, "http://someother.url");
+        Response response = Helper.createResponse(okHTTPResponse, "http://someother.url");
         assertEquals(okHTTPResponse.getResponseCode(), response.getStatus());
         assertEquals(okHTTPResponse.getFinalUrl().toString(), response.getFinalUrl());
         assertTrue(response.getHeaders().containsKey(headers.get(0).getName()));

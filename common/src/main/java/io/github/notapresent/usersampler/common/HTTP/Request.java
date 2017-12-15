@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Request implements Cloneable {
-    protected final String url;
-    protected final Method method;
-    protected RedirectPolicy redirectHandlingPolicy = RedirectPolicy.DEFAULT;
-    protected double timeout = 5.0;
-    protected Map<String, String> headers = new HashMap<>();
+    private final String url;
+    private final Method method;
+    private RedirectPolicy redirectHandlingPolicy = RedirectPolicy.DEFAULT;
+    private double timeout = 5.0;
+    private final Map<String, String> headers = new HashMap<>();
 
     public Request(String url, Method method) {
         this.url = url;

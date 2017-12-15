@@ -1,22 +1,19 @@
 package io.github.notapresent.usersampler.common.sampling;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
-
-import java.util.*;
-
 import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 
-import io.github.notapresent.usersampler.common.site.SiteAdapter;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 
 public class AggregatorTest {
-    Aggregator aggr = new Aggregator();
+    private final Aggregator aggr = new Aggregator();
 
 
     @Before

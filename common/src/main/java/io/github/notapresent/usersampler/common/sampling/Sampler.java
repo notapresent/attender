@@ -16,9 +16,8 @@ import java.util.stream.Collectors;
 
 public class Sampler {
     public static final int MAX_BATCH_RETRIES = 2;
-    private final LocalDateTime startedAt;
-    private Set<SiteAdapter> inProgress = new HashSet<>();
-    private List<Sample> results = new ArrayList<>();
+    private final Set<SiteAdapter> inProgress = new HashSet<>();
+    private final List<Sample> results = new ArrayList<>();
     private final RequestMultiplexer muxer;
     private final RequestFactory requestFactory;
 
@@ -27,7 +26,6 @@ public class Sampler {
                    @Named("utcNow") LocalDateTime startedAt) {
         this.muxer = muxer;
         this.requestFactory = requestFactory;
-        this.startedAt = startedAt;
     }
 
     public List<Sample> takeSamples(List<SiteAdapter> adapters) {

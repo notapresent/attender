@@ -20,7 +20,7 @@ public class URLFetchSessionIntegrationTest {
     private final LocalServiceTestHelper helper =
             new LocalServiceTestHelper(new LocalURLFetchServiceTestConfig());
     private URLFetchSession session;
-    private URLFetchCookieManager cookieManager = new URLFetchCookieManager();
+    private final URLFetchCookieManager cookieManager = new URLFetchCookieManager();
     private Request request;
     private Response response;
 

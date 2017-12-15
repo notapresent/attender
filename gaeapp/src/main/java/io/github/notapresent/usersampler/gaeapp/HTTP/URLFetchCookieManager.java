@@ -14,7 +14,7 @@ import java.util.*;
 // TODO move this class functionalito to helpers
 public class URLFetchCookieManager extends CookieManager {
 
-    protected List<String> cookiesForURL(URL url) {
+    private List<String> cookiesForURL(URL url) {
         try {
             URI uri = Helper.URL2URI(url);
             return get(uri, new HashMap<>()).get("Cookie");
@@ -42,7 +42,7 @@ public class URLFetchCookieManager extends CookieManager {
                 .filter((h) -> !h.getValue().equals(""))
                 .forEach((h) -> setCookieHeaders.merge(
                         h.getName(),
-                        new ArrayList<>(Arrays.asList(h.getValue())),
+                        new ArrayList<>(Collections.singletonList(h.getValue())),
                         (oldVal, newVal) -> {
                             oldVal.add(newVal.get(0));
                             return oldVal;

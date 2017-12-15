@@ -20,13 +20,11 @@ import java.util.stream.Collectors;
 
 
 public class GAESampleStorage implements SampleStorage {
-    private Provider<Objectify> ofyProvider;
-    private SiteRegistry registry;
+    private final Provider<Objectify> ofyProvider;
 
     @Inject
     public GAESampleStorage(Provider<Objectify> ofyProvider, SiteRegistry registry) {
         this.ofyProvider = ofyProvider;
-        this.registry = registry;
     }
 
     public static void registerEntities() {
@@ -70,11 +68,11 @@ public class GAESampleStorage implements SampleStorage {
 
     @Override
     public void deleteByIds(Iterable<Long> ids) {
-
+        // TODO
     }
 
     @Override
     public void putAggregateSample(AggregateSample sample) {
-
+        // TODO
     }
 }

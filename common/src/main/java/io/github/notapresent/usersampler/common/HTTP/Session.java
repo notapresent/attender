@@ -5,15 +5,15 @@ import java.net.CookieHandler;
 import java.net.MalformedURLException;
 
 abstract public class Session {
-    public static int DEFAULT_MAX_REDIRECTS = 5;
-    protected int maxRedirects = DEFAULT_MAX_REDIRECTS;
-    protected CookieHandler cookieManager;
+    private static final int DEFAULT_MAX_REDIRECTS = 5;
+    private int maxRedirects = DEFAULT_MAX_REDIRECTS;
+    private CookieHandler cookieManager;
 
     public CookieHandler getCookieManager() {
         return cookieManager;
     }
 
-    public void setCookieManager(CookieHandler cookieManager) {
+    protected void setCookieManager(CookieHandler cookieManager) {
         this.cookieManager = cookieManager;
     }
 
@@ -42,7 +42,7 @@ abstract public class Session {
         return response;
     }
 
-    protected Response sendWithRedirects(Request request) throws IOException {
+    private Response sendWithRedirects(Request request) throws IOException {
         Request origRequest = request.clone();
         Response resp = null;
         int tries = 0;

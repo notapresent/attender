@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @Singleton
 public class SamplerServlet extends HttpServlet {
-    private Provider<Orchestrator> orchestratorProvider;
+    private final Provider<Orchestrator> orchestratorProvider;
 
     @Inject
     public SamplerServlet(Provider<Orchestrator> orchestratorProvider) {

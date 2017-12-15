@@ -2,7 +2,7 @@ package io.github.notapresent.usersampler.common.sampling;
 
 import java.util.*;
 
-public class Aggregator {
+class Aggregator {
     public Map<String, List<Segment>> aggregate(
             Iterable<Map<String, UserStatus>> sampleMaps
             ) {

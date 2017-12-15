@@ -7,9 +7,9 @@ import io.github.notapresent.usersampler.common.site.SiteRegistry;
 import java.util.List;
 
 public class Orchestrator {
-    private SampleStorage storage;
-    private Sampler sampler;
-    private SiteRegistry siteRegistry;
+    private final SampleStorage storage;
+    private final Sampler sampler;
+    private final SiteRegistry siteRegistry;
 
     @Inject
     public Orchestrator(SampleStorage storage, Sampler sampler, SiteRegistry registry) {

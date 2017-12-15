@@ -9,7 +9,7 @@ public class RequestFactory {
             "User-agent","Mozilla/5.0 (Windows NT 6.1; Win64; x64) usersampler/1.0"
     );
 
-    public Request create(String url, Method method) {
+    private Request create(String url, Method method) {
         Request request =  new Request(url, method);
         request.getHeaders().putAll(defaultHeaders);
         return request;

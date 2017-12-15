@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Response {
-    protected int status;
-    protected byte[] content;
-    protected Map<String, String> headers;
-    protected String finalUrl;
+    private final int status;
+    private final byte[] content;
+    final Map<String, String> headers;
+    private String finalUrl;
 
     public Request getRequest() {
         return request;
@@ -21,11 +21,11 @@ public class Response {
         this.request = request;
     }
 
-    protected Request request;
+    private Request request;
 
     public Response(int status, byte[] content, String final_url) {
         this(status,
-            new TreeMap<String, String>(String::compareToIgnoreCase),
+                new TreeMap<>(String::compareToIgnoreCase),
             content,
             final_url
         );
@@ -33,7 +33,7 @@ public class Response {
 
     public Response(int status, Map<String, String> headers, byte[] content, String finalUrl) {
         this.status = status;
-        this.headers = new TreeMap<String, String>(String::compareToIgnoreCase);
+        this.headers = new TreeMap<>(String::compareToIgnoreCase);
         this.headers.putAll(headers);
         this.content = content;
         this.finalUrl = finalUrl;
@@ -68,7 +68,7 @@ public class Response {
         return new String(getContentBytes(), charSet);
     }
 
-    public void setHeader(String name, String value) {
+    private void setHeader(String name, String value) {
         headers.put(name, value);
     }
 

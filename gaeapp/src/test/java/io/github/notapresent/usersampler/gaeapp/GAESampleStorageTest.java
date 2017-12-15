@@ -31,7 +31,7 @@ public class GAESampleStorageTest {
 
     @Mock
     private SiteAdapter site;
-    private LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+    private final LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
     private Sample sample;
 
     @Before
@@ -62,6 +62,6 @@ public class GAESampleStorageTest {
 
     @Test
     public void itShouldReturnPersistedEntitiesForSiteAndDate() {
-
+        // TODO
     }
 }
