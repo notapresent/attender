@@ -1,6 +1,7 @@
 package io.github.notapresent.usersampler.common.sampling;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -26,24 +27,24 @@ public class AggregatorTest {
     @Test
     public void itShouldRunLengthEncodeSamples() {
         List<Map<String, UserStatus>> payloads = Arrays.asList(
-                ImmutableMap.of("u1", UserStatus.ONLINE),
-                ImmutableMap.of("u1", UserStatus.ONLINE)
+                ImmutableMap.of("u1", BaseStatus.ONLINE),
+                ImmutableMap.of("u1", BaseStatus.ONLINE)
         );
 
         Map<String, List<Segment>> result = aggr.aggregate(payloads);
         List<Segment> segments = result.get("u1");
         assertEquals(1, segments.size());
-        assertEquals(UserStatus.ONLINE, segments.get(0).getStatus());
+        assertEquals(BaseStatus.ONLINE, segments.get(0).getStatus());
         assertEquals(2, segments.get(0).getLength());
     }
 
     @Test
     public void itShouldLeftPadSequencesWithOFFLINE() {
         List<Map<String, UserStatus>> payloads = Arrays.asList(
-                ImmutableMap.of("u1", UserStatus.ONLINE),
+                ImmutableMap.of("u1", BaseStatus.ONLINE),
                 ImmutableMap.of(
-                        "u1", UserStatus.ONLINE,
-                        "u2", UserStatus.ONLINE)
+                        "u1", BaseStatus.ONLINE,
+                        "u2", BaseStatus.ONLINE)
         );
 
         Map<String, List<Segment>> result = aggr.aggregate(payloads);
@@ -52,8 +53,7 @@ public class AggregatorTest {
         Segment segment1 = u2segments.get(0),
                 segment2 = u2segments.get(1);
 
-        assertEquals(UserStatus.OFFLINE, segment1.getStatus());
+        assertEquals(BaseStatus.OFFLINE, segment1.getStatus());
         assertEquals(1, segment1.getLength());
     }
-
 }

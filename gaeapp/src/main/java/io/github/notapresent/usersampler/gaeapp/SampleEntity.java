@@ -85,7 +85,7 @@ public class SampleEntity {
     private static Map<String, String> payloadFromSample(Map<String, UserStatus> orig) {
         return orig.entrySet().stream().collect(
                 Collectors.groupingBy(
-                        (e) -> e.getValue().getName(),
+                        (e) -> e.getValue().getQualifiedName(),
                         mapping(Map.Entry::getKey, Collectors.joining(","))
                 )
         );

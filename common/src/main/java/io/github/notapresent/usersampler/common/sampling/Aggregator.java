@@ -25,7 +25,7 @@ public class Aggregator {
         Segment currSegment;
 
         if(currentSeq.isEmpty()) {
-            currSegment = new Segment(UserStatus.OFFLINE, position);
+            currSegment = new Segment(BaseStatus.OFFLINE, position);
 
             if(position > 0) {
                 currentSeq.add(currSegment);

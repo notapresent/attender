@@ -1,12 +1,7 @@
 package io.github.notapresent.usersampler.common.sampling;
 
 public interface UserStatus {
-    BaseStatus OFFLINE = BaseStatus.OFFLINE;
-    BaseStatus ONLINE = BaseStatus.ONLINE;
-    BaseStatus PRIVATE = BaseStatus.PRIVATE;
-    BaseStatus INVALID = BaseStatus.INVALID;
-
-    static String SEPARATOR = ":";
+    String SEPARATOR = ":";
 
     int ordinal();
     String name();
@@ -19,7 +14,7 @@ public interface UserStatus {
         }
     }
 
-    default String getName() {
+    default String getQualifiedName() {
         if(this instanceof BaseStatus) {
             return name();
         } else {
