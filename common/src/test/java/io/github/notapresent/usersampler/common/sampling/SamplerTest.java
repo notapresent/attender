@@ -18,10 +18,7 @@ import org.mockito.MockitoAnnotations;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Future;
 
 import static org.junit.Assert.assertEquals;
@@ -79,7 +76,8 @@ public class SamplerTest {
     @SuppressWarnings("unchecked")
     @Test
     public void itShouldSendAllGeneratedRequests() {
-        Request req1 = mock(Request.class), req2 = mock(Request.class);
+        Request req1 = mock(Request.class),
+                req2 = mock(Request.class);
         when(mockSite.getRequests(any())).thenReturn(
                 Collections.singletonList(req1),
                 Collections.singletonList(req2)
@@ -91,10 +89,7 @@ public class SamplerTest {
     }
 
     @Test
-    public void itShouldProcessAllRequestsBeforeAskingForMore() {}  // TODO
-
     @SuppressWarnings("unchecked")
-    @Test
     public void itShouldMarkSampleAsFailedIfAnyRequestFails() throws Exception {
         Future failedFuture = mock(Future.class);
         when(failedFuture.get()).thenThrow(new HTTPError("Fake"));
