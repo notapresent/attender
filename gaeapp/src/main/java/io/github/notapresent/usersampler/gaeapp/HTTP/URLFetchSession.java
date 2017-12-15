@@ -2,6 +2,7 @@ package io.github.notapresent.usersampler.gaeapp.HTTP;
 
 
 import com.google.appengine.api.urlfetch.*;
+import com.google.apphosting.api.ApiProxy;
 import com.google.inject.Inject;
 import io.github.notapresent.usersampler.common.HTTP.*;
 
@@ -102,7 +103,7 @@ public class URLFetchSession extends Session {
             return response;
         }
 
-        catch (IOException e) {
+        catch (IOException|ApiProxy.ApiProxyException e) {
             throw new HTTPError(e);
         }
     }
