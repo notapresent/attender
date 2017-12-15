@@ -12,6 +12,8 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+import static io.github.notapresent.usersampler.gaeapp.HTTP.Helper.URL2URI;
+import static io.github.notapresent.usersampler.gaeapp.HTTP.Helper.isCookieHeader;
 import static org.junit.Assert.*;
 
 public class HelperTest {
@@ -84,5 +86,23 @@ public class HelperTest {
         HTTPHeader header = httpRequest.getHeaders().get(0);
         assertEquals(header.getName(), "foo");
         assertEquals(header.getValue(), "bar");
+    }
+
+    @Test
+    public void URL2URIShouldConvertURLToURI() throws Exception {
+        String urlStr = "https://host.com/..path/file?q=e&q1=e1#frag";
+        URL url = new URL(urlStr);
+        assertEquals(urlStr, URL2URI(url).toString());
+    }
+
+    @Test
+    public void isCookieHeaderShouldReturnTrueOnSetCookie() {
+        assertTrue(isCookieHeader("Set-Cookie"));
+        assertTrue(isCookieHeader("Set-Cookie2"));
+    }
+
+    @Test
+    public void isCookieHeaderShouldIgnoreCase() {
+        assertTrue(isCookieHeader("SeT-CoOkiE"));
     }
 }

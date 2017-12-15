@@ -8,28 +8,15 @@ import io.github.notapresent.usersampler.common.HTTP.HTTPError;
 import java.io.IOException;
 import java.net.CookieManager;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 
+// TODO move this class functionalito to helpers
 public class URLFetchCookieManager extends CookieManager {
-
-    protected static URI URL2URI(URL url) {
-        try {
-            return url.toURI();
-        } catch (URISyntaxException e) {
-            throw new HTTPError("Failed to convert URL " + url + " to URI", e);
-        }
-    }
-
-    public static boolean isCookieHeader(String name) {
-        return (name.equalsIgnoreCase("set-cookie") ||
-                name.equalsIgnoreCase("set-cookie2"));
-    }
 
     protected List<String> cookiesForURL(URL url) {
         try {
-            URI uri = URL2URI(url);
+            URI uri = Helper.URL2URI(url);
             return get(uri, new HashMap<>()).get("Cookie");
         } catch (IOException e) {
             throw new HTTPError("Failed to load cookies for " + url, e);
@@ -50,7 +37,7 @@ public class URLFetchCookieManager extends CookieManager {
         Map<String, List<String>> setCookieHeaders = new HashMap<>();
         response.getHeadersUncombined()
                 .stream()
-                .filter((h) -> isCookieHeader(h.getName()))
+                .filter((h) -> Helper.isCookieHeader(h.getName()))
                 .filter((h) -> h.getValue() != null)
                 .filter((h) -> !h.getValue().equals(""))
                 .forEach((h) -> setCookieHeaders.merge(
@@ -68,7 +55,7 @@ public class URLFetchCookieManager extends CookieManager {
         }
 
         try {
-            put(URL2URI(url), setCookieHeaders);
+            put(Helper.URL2URI(url), setCookieHeaders);
         } catch (IOException e) {
             throw new HTTPError("Failed to save cookies for " + url, e);
         }

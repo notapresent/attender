@@ -6,6 +6,8 @@ import io.github.notapresent.usersampler.common.HTTP.Request;
 import io.github.notapresent.usersampler.common.HTTP.Response;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -70,5 +72,18 @@ public class Helper {
                 httpResponse.getContent(),
                 httpResponse.getFinalUrl() == null ? finalUrl : httpResponse.getFinalUrl().toString()
         );
+    }
+
+    protected static URI URL2URI(URL url) {
+        try {
+            return url.toURI();
+        } catch (URISyntaxException e) {
+            throw new HTTPError("Failed to convert URL " + url + " to URI", e);
+        }
+    }
+
+    public static boolean isCookieHeader(String name) {
+        return (name.equalsIgnoreCase("set-cookie") ||
+                name.equalsIgnoreCase("set-cookie2"));
     }
 }
