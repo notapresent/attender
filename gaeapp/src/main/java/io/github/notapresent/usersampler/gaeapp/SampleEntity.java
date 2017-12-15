@@ -5,9 +5,9 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
+import io.github.notapresent.usersampler.common.sampling.UserStatus;
 import io.github.notapresent.usersampler.common.sampling.Sample;
 import io.github.notapresent.usersampler.common.sampling.SampleStatus;
-import io.github.notapresent.usersampler.common.sampling.UserStatus;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 
 import java.time.LocalDateTime;
@@ -76,7 +76,7 @@ public class SampleEntity {
         Map<String, UserStatus> rv = new HashMap<>();
 
         for (Map.Entry<String, String> e: stored.entrySet()) {
-            UserStatus st = UserStatus.fromValue(Integer.parseInt(e.getKey()));
+            UserStatus st = UserStatus.fromName(e.getKey());
             Arrays.stream(e.getValue().split(",")).forEach((name) -> rv.put(name, st));
         }
         return rv;
@@ -85,7 +85,7 @@ public class SampleEntity {
     private static Map<String, String> payloadFromSample(Map<String, UserStatus> orig) {
         return orig.entrySet().stream().collect(
                 Collectors.groupingBy(
-                        (e) -> Integer.toString(e.getValue().getValue()),
+                        (e) -> e.getValue().getName(),
                         mapping(Map.Entry::getKey, Collectors.joining(","))
                 )
         );

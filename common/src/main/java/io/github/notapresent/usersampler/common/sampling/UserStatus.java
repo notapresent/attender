@@ -1,44 +1,44 @@
 package io.github.notapresent.usersampler.common.sampling;
 
-import java.util.HashMap;
-import java.util.Map;
+public interface UserStatus {
+    BaseStatus OFFLINE = BaseStatus.OFFLINE;
+    BaseStatus ONLINE = BaseStatus.ONLINE;
+    BaseStatus PRIVATE = BaseStatus.PRIVATE;
+    BaseStatus INVALID = BaseStatus.INVALID;
 
-public class UserStatus {
-    private static final Map<Integer, UserStatus> value2status = new HashMap<>();
-    private static final Map<String, UserStatus> name2status = new HashMap<>();
+    static String SEPARATOR = ":";
 
-    public static final UserStatus OFFLINE = new UserStatus(0, "OFFLINE");
-    public static final UserStatus ONLINE = new UserStatus(1, "ONLINE");
-    public static final UserStatus PAID = new UserStatus(2, "PAID");
-    public static final UserStatus PRIVATE = new UserStatus(3, "PRIVATE");
+    int ordinal();
+    String name();
 
-    private final int value;
-    private final String name;
-
-
-    protected UserStatus(int value, String name) {
-        this.name = name;
-        this.value = value;
-        if(value2status.containsKey(value)) {
-            throw new IllegalArgumentException("UserStatus with value " + value + "already registered");
+    default int intValue() {
+        if(this instanceof BaseStatus) {
+            return ordinal();
+        } else {
+            return BaseStatus.values().length + ordinal();
         }
-        value2status.put(value, this);
-        name2status.put(name, this);
     }
 
-    public static UserStatus fromName(String name) {
-        return name2status.get(name);
+    default String getName() {
+        if(this instanceof BaseStatus) {
+            return name();
+        } else {
+            return this.getClass().getCanonicalName() + SEPARATOR + name();
+        }
     }
 
-    public static UserStatus fromValue(int value) {
-        return value2status.get(value);
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public String getName() {
-        return name;
+    @SuppressWarnings("unchecked")
+    static UserStatus fromName(String name) {
+        if(name.contains(".")) {
+            try {
+                Class clazz = Class.forName(name.split(SEPARATOR)[0]);
+                String strName = name.split(SEPARATOR)[1];
+                return (UserStatus) Enum.valueOf(clazz, strName);
+            } catch (ClassNotFoundException e) {
+                return null;
+            }
+         } else {
+            return BaseStatus.valueOf(name);
+        }
     }
 }

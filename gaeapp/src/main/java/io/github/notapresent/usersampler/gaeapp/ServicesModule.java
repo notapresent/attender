@@ -30,7 +30,7 @@ public class ServicesModule extends AbstractModule {
         bind(RequestFactory.class).in(Singleton.class);
         bind(Sampler.class);
         bind(Session.class).to(URLFetchSession.class);
-        bind(LocalDateTime.class).annotatedWith(Names.named("utcNow"));
+        bind(LocalDateTime.class).annotatedWith(Names.named("utcNow")).toProvider(this::provideUTCNow);
 
 
         bind(RequestMultiplexer.class).to(SinglePlexer.class);
@@ -51,7 +51,6 @@ public class ServicesModule extends AbstractModule {
     }
 
     @Provides
-    @Named("utcNow")
     LocalDateTime provideUTCNow() {
         return LocalDateTime.now(ZoneOffset.UTC);
     }
