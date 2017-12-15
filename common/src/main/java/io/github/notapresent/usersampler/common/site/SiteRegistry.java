@@ -6,7 +6,6 @@ import java.util.*;
 public class SiteRegistry {
     private static SiteRegistry registry = null;
     private ServiceLoader<SiteAdapter> loader;
-    private static Map<String, SiteAdapter> aliasToAdapter = new HashMap<>();
     private static Map<String, SiteAdapter> shortNameToAdapter = new HashMap<>();
 
     private SiteRegistry() {
@@ -23,13 +22,8 @@ public class SiteRegistry {
 
     private void init() {
         for (SiteAdapter adapter : loader) {
-            aliasToAdapter.put(adapter.getAlias(), adapter);
             shortNameToAdapter.put(adapter.shortName(), adapter);
         }
-    }
-
-    public SiteAdapter getByAlias(String alias) {
-        return aliasToAdapter.get(alias);
     }
 
     public SiteAdapter getByShortName(String shortName) {
@@ -37,6 +31,6 @@ public class SiteRegistry {
     }
 
     public List<SiteAdapter> getAdapters() {
-        return Collections.unmodifiableList(new ArrayList<>(aliasToAdapter.values()));
+        return Collections.unmodifiableList(new ArrayList<>(shortNameToAdapter.values()));
     }
 }

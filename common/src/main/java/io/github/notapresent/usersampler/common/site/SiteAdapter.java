@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface SiteAdapter {
-    default String getAlias() {
-        return this.getClass().getCanonicalName();
-    }
     String shortName();
 
     boolean isDone();
