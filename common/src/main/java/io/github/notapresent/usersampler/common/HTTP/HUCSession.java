@@ -18,45 +18,7 @@ public class HUCSession extends Session  {
     }
 
     @Override
-    public Response send(Request request) throws HTTPError {
-        Response response;
-        try {
-            if(request.getRedirectHandlingPolicy() == Request.RedirectPolicy.DO_NOT_FOLLOW) {
-                response = doSend(request);
-            } else  {
-                response = handleRedirects(request);
-            }
-        } catch (MalformedURLException e) {
-            throw new HTTPError("Malformed URL: " + request.getUrl(), e);
-        } catch (IOException e) {
-            throw new HTTPError(e);
-        }
-
-        return response;
-    }
-
-    private Response handleRedirects(Request request) throws IOException {
-        Request origRequest = request.clone();
-        Response resp;
-        int tries = 0;
-
-        while(tries++ < DEFAULT_MAX_REDIRECTS) {
-            resp = doSend(request);
-
-            if(resp.isRedirect()) {
-                String location = resp.headers.get("location");
-                request = new Request(Util.absoluteUrl(request.getUrl(), location));
-                request.getHeaders().putAll(origRequest.getHeaders());
-            }
-            else {
-                return resp;
-            }
-        }
-
-        throw new HTTPError("Maxinum number of redirects (" + DEFAULT_MAX_REDIRECTS + ") exceeded");
-    }
-
-    private Response doSend(Request request) throws IOException {
+    protected Response doSend(Request request) throws IOException {
         HttpURLConnection conn;
 
         URL url = new URL(request.getUrl());

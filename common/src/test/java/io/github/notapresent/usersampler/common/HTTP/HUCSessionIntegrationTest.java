@@ -109,7 +109,17 @@ public class HUCSessionIntegrationTest {
 
     @Test
     public void itShouldSetFinalUrl() {
+        request = new Request(HTTPBIN + "/get");
+
+        response = session.send(request);
+
+        assertThat(response.getFinalUrl()).isEqualTo(HTTPBIN + "/get");
+    }
+
+    @Test
+    public void itShouldSetFinalUrlOnRedirects() {
         request = new Request(HTTPBIN + "/redirect/1");
+        request.setRedirectHandlingPolicy(Request.RedirectPolicy.FOLLOW);
 
         response = session.send(request);
 
