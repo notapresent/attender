@@ -44,11 +44,6 @@ class ServicesModule extends AbstractModule {
     }
 
     @Provides
-    Objectify ofyProvider() {
-        return ObjectifyService.ofy();
-    }
-
-    @Provides
     URLFetchService provideURLFetchService() {
         return URLFetchServiceFactory.getURLFetchService();
     }
