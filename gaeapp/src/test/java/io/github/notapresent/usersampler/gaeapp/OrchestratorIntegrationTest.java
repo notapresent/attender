@@ -53,7 +53,6 @@ public class OrchestratorIntegrationTest {
         Provider<Objectify> ofyProvider = ObjectifyService::ofy;
         SiteRegistry registry = new SiteRegistry();
         SampleStorage storage = new GAESampleStorage(
-                ofyProvider,
                 registry
         );
         LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
@@ -61,7 +60,7 @@ public class OrchestratorIntegrationTest {
         Orchestrator orchestrator = makeOrchestrator(registry, storage, now);
         orchestrator.run();
         for (SiteAdapter site: registry.getAdapters() ) {
-            Sample sample = storage.getForSiteDate(site, now).iterator().next();
+            Sample sample = storage.getForSiteByDate(site, now).iterator().next();
             assertEquals(SampleStatus.OK, sample.getSampleStatus());
             assertNotEquals(0, sample.getPayload().size());
         }

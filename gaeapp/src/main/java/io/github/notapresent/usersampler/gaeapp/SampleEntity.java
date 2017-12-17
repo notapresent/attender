@@ -1,6 +1,7 @@
 package io.github.notapresent.usersampler.gaeapp;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
@@ -26,7 +27,7 @@ public class SampleEntity {
     @Id
     private Long id;
 
-    public Key<SiteEntity> getParent() {
+    public Ref<SiteEntity> getParent() {
         return parent;
     }
 
@@ -43,7 +44,7 @@ public class SampleEntity {
     }
 
     @Parent
-    private Key<SiteEntity> parent;
+    private Ref<SiteEntity> parent;
     private SampleStatus st;
     @Index
     private
@@ -57,7 +58,7 @@ public class SampleEntity {
         return id;
     }
 
-    public SampleEntity(Key<SiteEntity> parent, SampleStatus sampleStatus,
+    public SampleEntity(Ref<SiteEntity> parent, SampleStatus sampleStatus,
                         LocalDateTime taken, Map<String, String> payload) {
         this.parent = parent;
         this.st = sampleStatus;
@@ -94,7 +95,7 @@ public class SampleEntity {
         );
     }
 
-    public static SampleEntity fromSample(Key<SiteEntity> parent, Sample sample) {
+    public static SampleEntity fromSample(Ref<SiteEntity> parent, Sample sample) {
         return new SampleEntity(
                 parent,
                 sample.getSampleStatus(),

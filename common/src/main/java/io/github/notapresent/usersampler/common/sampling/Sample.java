@@ -20,7 +20,7 @@ public class Sample {
     }
 
     @Nullable
-    private final String message;
+    private final String message; // TODO remove
 
 
     public SiteAdapter getSite() {
