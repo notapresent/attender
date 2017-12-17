@@ -18,6 +18,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.HashMap;
@@ -44,6 +45,7 @@ public class OfySampleStorageTest {
 
 
     private final LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+    private final LocalDate today = now.toLocalDate();
     private Sample sample;
 
     @BeforeClass
@@ -78,7 +80,7 @@ public class OfySampleStorageTest {
     @Test
     public void itShouldPersistSampleEntry() {
         storage.put(sample);
-        List<Sample> persisted = Lists.newArrayList(storage.getForSiteByDate(site, now));
+        List<Sample> persisted = Lists.newArrayList(storage.getForSiteByDate(site, today));
         assertEquals(1, persisted.size());
         assertEquals(now, persisted.iterator().next().getTaken());
     }
@@ -89,7 +91,7 @@ public class OfySampleStorageTest {
         storage.put(sample);
         storage.put(otherSample);
 
-        List<Sample> persisted = Lists.newArrayList(storage.getForSiteByDate(site, now));
+        List<Sample> persisted = Lists.newArrayList(storage.getForSiteByDate(site, today));
 
         assertEquals(1, persisted.size());
         Sample persistedSample = persisted.get(0);
@@ -103,7 +105,7 @@ public class OfySampleStorageTest {
         storage.put(sample);
         storage.put(oldSample);
 
-        List<Sample> persisted = Lists.newArrayList(storage.getForSiteByDate(site, now));
+        List<Sample> persisted = Lists.newArrayList(storage.getForSiteByDate(site, today));
         assertEquals(1, persisted.size());
         Sample persistedSample = persisted.get(0);
         assertEquals(now, persistedSample.getTaken());

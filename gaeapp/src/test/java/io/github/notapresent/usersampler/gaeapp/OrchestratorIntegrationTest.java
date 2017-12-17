@@ -60,7 +60,7 @@ public class OrchestratorIntegrationTest {
         Orchestrator orchestrator = makeOrchestrator(registry, storage, now);
         orchestrator.run();
         for (SiteAdapter site: registry.getAdapters() ) {
-            Sample sample = storage.getForSiteByDate(site, now).iterator().next();
+            Sample sample = storage.getForSiteByDate(site, now.toLocalDate()).iterator().next();
             assertEquals(SampleStatus.OK, sample.getSampleStatus());
             assertNotEquals(0, sample.getPayload().size());
         }
