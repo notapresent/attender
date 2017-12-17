@@ -39,7 +39,7 @@ public class OrchestratorIntegrationTest {
     public void setUp() {
         helper.setUp();
         closeable = ObjectifyService.begin();
-        GAESampleStorage.registerEntities();
+        OfySampleStorage.registerEntities();
     }
 
     @After
@@ -52,7 +52,7 @@ public class OrchestratorIntegrationTest {
     public void itShouldCreateOneSamplePerAdapter() {
         Provider<Objectify> ofyProvider = ObjectifyService::ofy;
         SiteRegistry registry = new SiteRegistry();
-        SampleStorage storage = new GAESampleStorage(
+        SampleStorage storage = new OfySampleStorage(
                 registry
         );
         LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);

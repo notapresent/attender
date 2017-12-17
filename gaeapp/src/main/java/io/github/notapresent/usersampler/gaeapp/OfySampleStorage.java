@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 
-public class GAESampleStorage implements SampleStorage {
+public class OfySampleStorage implements SampleStorage {
     @Inject
-    public GAESampleStorage(SiteRegistry registry) {
+    public OfySampleStorage(SiteRegistry registry) {
 
     }
 
@@ -35,7 +35,7 @@ public class GAESampleStorage implements SampleStorage {
     public void put(Sample sample) {
         Ref<SiteEntity> parentKey = siteKey(sample.getSite());
         SampleEntity se  = SampleEntity.fromSample(parentKey, sample);
-        Result r = ofy().save().entity(se); //.now();  // TODO .now() is for tests, gotta fix this
+        ofy().save().entity(se).now();  // TODO .now() is for tests, gotta fix this
     }
 
     @Override

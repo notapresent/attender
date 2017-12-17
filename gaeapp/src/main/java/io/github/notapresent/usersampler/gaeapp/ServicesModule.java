@@ -27,7 +27,7 @@ import java.time.ZoneOffset;
 class ServicesModule extends AbstractModule {
     @Override
     protected void configure() {
-        GAESampleStorage.registerEntities();
+        OfySampleStorage.registerEntities();
         bind(ObjectifyFilter.class).in(Singleton.class);
 
         bind(RequestFactory.class).in(Singleton.class);
@@ -39,7 +39,7 @@ class ServicesModule extends AbstractModule {
         bind(RequestMultiplexer.class).to(RetryingSinglePlexer.class);
         bind(CookieHandler.class).to(URLFetchCookieManager.class);
         bind(Orchestrator.class);
-        bind(SampleStorage.class).to(GAESampleStorage.class);
+        bind(SampleStorage.class).to(OfySampleStorage.class);
         bind(SiteRegistry.class).in(Singleton.class);
     }
 

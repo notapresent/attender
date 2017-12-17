@@ -5,8 +5,6 @@ import com.google.appengine.tools.development.testing.LocalMemcacheServiceTestCo
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.common.collect.Lists;
 import com.googlecode.objectify.ObjectifyService;
-import com.googlecode.objectify.VoidWork;
-import com.googlecode.objectify.Work;
 import com.googlecode.objectify.util.Closeable;
 import io.github.notapresent.usersampler.common.sampling.Sample;
 import io.github.notapresent.usersampler.common.sampling.SampleStatus;
@@ -22,6 +20,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -29,7 +29,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
-public class GAESampleStorageTest {
+public class OfySampleStorageTest {
     private SampleStorage storage;
     private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
             new LocalDatastoreServiceTestConfig().setApplyAllHighRepJobPolicy(),
@@ -48,15 +48,17 @@ public class GAESampleStorageTest {
 
     @Before
     public void setUp() {
+        Logger.getLogger("com.google.appengine.api.datastore.dev.LocalDatastoreService")
+                .setLevel(Level.WARNING);
         helper.setUp();
-        GAESampleStorage.registerEntities();
+        OfySampleStorage.registerEntities();
         ofySession = ObjectifyService.begin();
         initMocks(this);
 
         when(site.shortName()).thenReturn("T");
         when(otherSite.shortName()).thenReturn("O");
 
-        storage = new GAESampleStorage(new SiteRegistry());
+        storage = new OfySampleStorage(new SiteRegistry());
         sample = new Sample(site, now, new HashMap<>(), SampleStatus.OK, "");
     }
 
