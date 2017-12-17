@@ -1,10 +1,11 @@
 package io.github.notapresent.usersampler.gaeapp;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
-import com.google.appengine.tools.development.testing.LocalMemcacheServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.common.collect.Lists;
+import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.cache.AsyncCacheFilter;
 import com.googlecode.objectify.util.Closeable;
 import io.github.notapresent.usersampler.common.sampling.Sample;
 import io.github.notapresent.usersampler.common.sampling.SampleStatus;
@@ -13,6 +14,7 @@ import io.github.notapresent.usersampler.common.site.SiteAdapter;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mock;
 
@@ -27,13 +29,11 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import static com.googlecode.objectify.ObjectifyService.ofy;
-
 public class OfySampleStorageTest {
     private SampleStorage storage;
     private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
-            new LocalDatastoreServiceTestConfig().setApplyAllHighRepJobPolicy(),
-            new LocalMemcacheServiceTestConfig()
+            new LocalDatastoreServiceTestConfig()
+                    .setApplyAllHighRepJobPolicy()
     );
     private Closeable ofySession;
 
@@ -46,13 +46,19 @@ public class OfySampleStorageTest {
     private final LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
     private Sample sample;
 
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void setUpClass() {
         Logger.getLogger("com.google.appengine.api.datastore.dev.LocalDatastoreService")
                 .setLevel(Level.WARNING);
-        helper.setUp();
+        ObjectifyService.setFactory(new ObjectifyFactory());
         OfySampleStorage.registerEntities();
+    }
+
+    @Before
+    public void setUp() {
         ofySession = ObjectifyService.begin();
+        helper.setUp();
+
         initMocks(this);
 
         when(site.shortName()).thenReturn("T");
@@ -64,6 +70,7 @@ public class OfySampleStorageTest {
 
     @After
     public void tearDown() {
+        AsyncCacheFilter.complete();
         ofySession.close();
         helper.tearDown();
     }
@@ -71,19 +78,16 @@ public class OfySampleStorageTest {
     @Test
     public void itShouldPersistSampleEntry() {
         storage.put(sample);
-
-        Sample persisted = storage.getForSiteByDate(site, now).iterator().next();
-        //assertEquals(sample, persisted);
-        assertEquals(now, persisted.getTaken());
+        List<Sample> persisted = Lists.newArrayList(storage.getForSiteByDate(site, now));
+        assertEquals(1, persisted.size());
+        assertEquals(now, persisted.iterator().next().getTaken());
     }
 
     @Test
-    public void gfsdShouldFilterByDate() {
-        LocalDateTime yesterday = LocalDateTime.now(ZoneOffset.UTC).minusDays(1);
-        Sample oldSample = new Sample(site, yesterday, new HashMap<>(), SampleStatus.OK, "");
-
+    public void gfsdShouldFilterBySite() {
+        Sample otherSample = new Sample(otherSite, now, new HashMap<>(), SampleStatus.OK, "");
         storage.put(sample);
-        storage.put(oldSample);
+        storage.put(otherSample);
 
         List<Sample> persisted = Lists.newArrayList(storage.getForSiteByDate(site, now));
 
@@ -93,14 +97,13 @@ public class OfySampleStorageTest {
     }
 
     @Test
-    public void gfsdShouldFilterBySite() {
-        Sample otherSample = new Sample(otherSite, now, new HashMap<>(), SampleStatus.OK, "");
+    public void gfsdShouldFilterByDate() {
+        LocalDateTime yesterday = LocalDateTime.now(ZoneOffset.UTC).minusDays(1);
+        Sample oldSample = new Sample(site, yesterday, new HashMap<>(), SampleStatus.OK, "");
         storage.put(sample);
-        storage.put(otherSample);
+        storage.put(oldSample);
 
-        ofy().clear();
         List<Sample> persisted = Lists.newArrayList(storage.getForSiteByDate(site, now));
-
         assertEquals(1, persisted.size());
         Sample persistedSample = persisted.get(0);
         assertEquals(now, persistedSample.getTaken());
