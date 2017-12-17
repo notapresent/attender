@@ -68,8 +68,7 @@ public class SampleEntity {
                 site,
                 LocalDateTime.ofInstant(ts.toInstant(), ZoneOffset.UTC),
                 payloadToSample(pl), // payload
-                st,
-                null
+                st
         );
     }
 

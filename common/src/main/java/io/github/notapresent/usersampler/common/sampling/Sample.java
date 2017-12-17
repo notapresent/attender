@@ -2,7 +2,6 @@ package io.github.notapresent.usersampler.common.sampling;
 
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 
-import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.HashMap;
@@ -13,15 +12,6 @@ public class Sample {
     private final LocalDateTime taken;
     private final Map<String, UserStatus> payload;
     private final SampleStatus sampleStatus;
-
-    @Nullable
-    public String getMessage() {
-        return message;
-    }
-
-    @Nullable
-    private final String message; // TODO remove
-
 
     public SiteAdapter getSite() {
         return site;
@@ -41,33 +31,26 @@ public class Sample {
 
     public Sample(SiteAdapter site, // OK constructor
                   Map<String, UserStatus> payload) {
-        this(site, payload, SampleStatus.OK, null);
-    }
-
-    public Sample(SiteAdapter site,     // HTTPError constructor
-                  String message) {
-        this(site, new HashMap<>(), SampleStatus.ERROR, message);
+        this(site, payload, SampleStatus.OK);
     }
 
     private Sample(SiteAdapter site,
                    Map<String, UserStatus> payload,
-                   SampleStatus sampleStatus, String message) {
+                   SampleStatus sampleStatus) {
         this( site,
                 LocalDateTime.now(ZoneOffset.UTC),
                 payload,
-                sampleStatus,
-                message
+                sampleStatus
         );
     }
 
     public Sample(SiteAdapter site,
                   LocalDateTime taken,
                   Map<String, UserStatus> payload,
-                  SampleStatus sampleStatus, @Nullable String message) {
+                  SampleStatus sampleStatus) {
         this.site = site;
         this.taken = taken;
         this.payload = payload;
         this.sampleStatus = sampleStatus;
-        this.message = message;
     }
 }

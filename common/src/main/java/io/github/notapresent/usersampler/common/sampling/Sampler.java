@@ -20,12 +20,14 @@ public class Sampler {
     private final List<Sample> results = new ArrayList<>();
     private final RequestMultiplexer muxer;
     private final RequestFactory requestFactory;
+    private final LocalDateTime startedAt;
 
     @Inject
     public Sampler(RequestMultiplexer muxer, RequestFactory requestFactory,
                    @Named("utcNow") LocalDateTime startedAt) {
         this.muxer = muxer;
         this.requestFactory = requestFactory;
+        this.startedAt = startedAt;
     }
 
     public List<Sample> takeSamples(List<SiteAdapter> adapters) {
@@ -73,18 +75,7 @@ public class Sampler {
 
         for (SiteAdapter site : batch.sites()) {
             inProgress.remove(site);
-            String failedRequests = String.join("\n",
-                    batch.requestsForSite(site)
-                            .stream()
-                            .map(Request::toString)
-                            .collect(Collectors.toList()));
-
-            String message = String.format(
-                    "Failed to fetch after %d retries:%n%n%s",
-                    batchRetries,
-                    failedRequests
-            );
-            results.add(makeSample(site, message));
+            results.add(errorSample(site));
         }
     }
 
@@ -95,12 +86,12 @@ public class Sampler {
 
             if (site.isDone()) {
                 inProgress.remove(site);
-                results.add(makeSample(site));
+                results.add(okSample(site));
             }
             return false;
         } catch (HTTPError | FatalSiteError e) {    // Failed request considered a fatal error
             inProgress.remove(site);
-            results.add(makeSample(site, e.getMessage()));
+            results.add(errorSample(site));
             return false;
         } catch (RetryableSiteError e) {
             return true;
@@ -109,11 +100,11 @@ public class Sampler {
         }
     }
 
-    private Sample makeSample(SiteAdapter site) {
-        return new Sample(site, site.getResult());
+    private Sample okSample(SiteAdapter site) {
+        return new Sample(site, startedAt, site.getResult(), SampleStatus.OK);
     }
 
-    private Sample makeSample(SiteAdapter site, String errorMessage) {
-        return new Sample(site, errorMessage);
+    private Sample errorSample(SiteAdapter site) {
+        return new Sample(site, startedAt, new HashMap<>(), SampleStatus.ERROR);
     }
 }

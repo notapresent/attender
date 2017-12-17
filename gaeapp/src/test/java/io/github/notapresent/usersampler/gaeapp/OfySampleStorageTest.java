@@ -65,7 +65,7 @@ public class OfySampleStorageTest {
         when(otherSite.shortName()).thenReturn("O");
 
         storage = new OfySampleStorage(new SiteRegistry());
-        sample = new Sample(site, now, new HashMap<>(), SampleStatus.OK, "");
+        sample = new Sample(site, now, new HashMap<>(), SampleStatus.OK);
     }
 
     @After
@@ -85,7 +85,7 @@ public class OfySampleStorageTest {
 
     @Test
     public void gfsdShouldFilterBySite() {
-        Sample otherSample = new Sample(otherSite, now, new HashMap<>(), SampleStatus.OK, "");
+        Sample otherSample = new Sample(otherSite, now, new HashMap<>(), SampleStatus.OK);
         storage.put(sample);
         storage.put(otherSample);
 
@@ -99,7 +99,7 @@ public class OfySampleStorageTest {
     @Test
     public void gfsdShouldFilterByDate() {
         LocalDateTime yesterday = LocalDateTime.now(ZoneOffset.UTC).minusDays(1);
-        Sample oldSample = new Sample(site, yesterday, new HashMap<>(), SampleStatus.OK, "");
+        Sample oldSample = new Sample(site, yesterday, new HashMap<>(), SampleStatus.OK);
         storage.put(sample);
         storage.put(oldSample);
 
