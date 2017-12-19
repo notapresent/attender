@@ -15,6 +15,7 @@ import io.github.notapresent.usersampler.common.sampling.*;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
 import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchSession;
+import io.github.notapresent.usersampler.gaeapp.storage.OfySampleStorage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

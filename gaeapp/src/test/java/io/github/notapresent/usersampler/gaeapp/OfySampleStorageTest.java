@@ -12,6 +12,7 @@ import io.github.notapresent.usersampler.common.sampling.SampleStatus;
 import io.github.notapresent.usersampler.common.sampling.SampleStorage;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
+import io.github.notapresent.usersampler.gaeapp.storage.OfySampleStorage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;

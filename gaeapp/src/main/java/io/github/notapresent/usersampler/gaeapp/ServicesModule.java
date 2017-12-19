@@ -17,8 +17,10 @@ import io.github.notapresent.usersampler.common.sampling.Sampler;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
 import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchCookieManager;
 import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchSession;
+import io.github.notapresent.usersampler.gaeapp.storage.OfySampleStorage;
 
 import java.net.CookieHandler;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
@@ -50,4 +52,9 @@ class ServicesModule extends AbstractModule {
     private LocalDateTime provideUTCNow() {
         return LocalDateTime.now(ZoneOffset.UTC);
     }
+
+    @Provides
+    private Instant provideNow() {
+        return Instant.now();
+    }   // TODO migrate to this
 }

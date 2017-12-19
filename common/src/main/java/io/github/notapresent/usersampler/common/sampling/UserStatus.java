@@ -14,7 +14,7 @@ public interface UserStatus {
         }
     }
 
-    default String getQualifiedName() {
+    default String qualifiedName() {
         if(this instanceof BaseStatus) {
             return name();
         } else {
