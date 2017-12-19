@@ -66,7 +66,7 @@ public class SamplerTest {
 
     @Test
     public void itShouldSetSiteAndTimeOnSamples() {
-        Sample sample = sampler.takeSamples(sites()).get(0);
+        Sample sample = sampler.takeSamples(sites()).get(mockSite);
         assertEquals(mockSite, sample.getSite());
         double now = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond();
         assertEquals(now, sample.getTaken().toEpochSecond(ZoneOffset.UTC), 1.0);
@@ -94,7 +94,7 @@ public class SamplerTest {
         when(failedFuture.get()).thenThrow(new HTTPError("Fake"));
         fakeMuxer.response = failedFuture;
 
-        Sample sample = sampler.takeSamples(sites()).get(0);
+        Sample sample = sampler.takeSamples(sites()).get(mockSite);
 
         assertEquals(SampleStatus.ERROR, sample.getSampleStatus());
     }
@@ -103,7 +103,7 @@ public class SamplerTest {
     public void itShouldMarkSampleAsFailedIfAdapterThrowsFatal() {
         doThrow(new FatalSiteError("fake")).when(mockSite).registerResponse(any());
 
-        Sample sample = sampler.takeSamples(sites()).get(0);
+        Sample sample = sampler.takeSamples(sites()).get(mockSite);
 
         assertEquals(SampleStatus.ERROR, sample.getSampleStatus());
     }
@@ -121,7 +121,7 @@ public class SamplerTest {
     public void itShouldMarkSampleAsFailedAfterAllRetriesFailed() {
         doThrow(new RetryableSiteError("fake")).when(mockSite).registerResponse(any());
 
-        Sample sample = sampler.takeSamples(sites()).get(0);
+        Sample sample = sampler.takeSamples(sites()).get(mockSite);
 
         assertEquals(SampleStatus.ERROR, sample.getSampleStatus());
     }

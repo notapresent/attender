@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class Sampler {
     public static final int MAX_BATCH_RETRIES = 2;
     private final Set<SiteAdapter> inProgress = new HashSet<>();
-    private final List<Sample> results = new ArrayList<>();
+    private final Map<SiteAdapter, Sample> results = new HashMap<>();
     private final RequestMultiplexer muxer;
     private final RequestFactory requestFactory;
     private final LocalDateTime startedAt;
@@ -30,7 +30,7 @@ public class Sampler {
         this.startedAt = startedAt;
     }
 
-    public List<Sample> takeSamples(List<SiteAdapter> adapters) {
+    public Map<SiteAdapter, Sample> takeSamples(List<SiteAdapter> adapters) {
         for (SiteAdapter site : adapters) {
             site.reset();
             inProgress.add(site);
@@ -75,7 +75,7 @@ public class Sampler {
 
         for (SiteAdapter site : batch.sites()) {
             inProgress.remove(site);
-            results.add(errorSample(site));
+            results.put(site, errorSample(site));
         }
     }
 
@@ -86,12 +86,12 @@ public class Sampler {
 
             if (site.isDone()) {
                 inProgress.remove(site);
-                results.add(okSample(site));
+                results.put(site, okSample(site));
             }
             return false;
         } catch (HTTPError | FatalSiteError e) {    // Failed request considered a fatal error
             inProgress.remove(site);
-            results.add(errorSample(site));
+            results.put(site, errorSample(site));
             return false;
         } catch (RetryableSiteError e) {
             return true;

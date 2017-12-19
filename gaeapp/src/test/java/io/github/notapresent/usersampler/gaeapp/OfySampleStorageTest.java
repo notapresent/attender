@@ -80,7 +80,7 @@ public class OfySampleStorageTest {
 
     @Test
     public void itShouldPersistSampleEntry() {
-        storage.put(sample);
+        storage.put(sample, now);
         List<Sample> persisted = Lists.newArrayList(storage.getForSiteByDate(site, today));
         assertEquals(1, persisted.size());
         assertEquals(now, persisted.iterator().next().getTaken());
@@ -89,8 +89,8 @@ public class OfySampleStorageTest {
     @Test
     public void gfsdShouldFilterBySite() {
         Sample otherSample = new Sample(otherSite, now, new HashMap<>(), SampleStatus.OK);
-        storage.put(sample);
-        storage.put(otherSample);
+        storage.put(sample, now);
+        storage.put(otherSample, now);
 
         List<Sample> persisted = Lists.newArrayList(storage.getForSiteByDate(site, today));
 
@@ -103,8 +103,8 @@ public class OfySampleStorageTest {
     public void gfsdShouldFilterByDate() {
         LocalDateTime yesterday = LocalDateTime.now(ZoneOffset.UTC).minusDays(1);
         Sample oldSample = new Sample(site, yesterday, new HashMap<>(), SampleStatus.OK);
-        storage.put(sample);
-        storage.put(oldSample);
+        storage.put(sample, now);
+        storage.put(oldSample, yesterday);
 
         List<Sample> persisted = Lists.newArrayList(storage.getForSiteByDate(site, today));
         assertEquals(1, persisted.size());

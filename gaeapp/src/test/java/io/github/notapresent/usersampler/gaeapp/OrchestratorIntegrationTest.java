@@ -34,6 +34,8 @@ public class OrchestratorIntegrationTest {
             new LocalURLFetchServiceTestConfig()
     );
 
+    private final LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+
     private Closeable closeable;
 
     @Before
@@ -83,7 +85,6 @@ public class OrchestratorIntegrationTest {
                 startTime
         );
 
-        return new Orchestrator(storage, sampler, registry);
+        return new Orchestrator(storage, sampler, registry, () -> LocalDateTime.now(ZoneOffset.UTC));
     }
 }
-
