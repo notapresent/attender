@@ -32,7 +32,6 @@ class ServicesModule extends AbstractModule {
     bind(RequestFactory.class).in(Singleton.class);
     bind(Sampler.class);
     bind(Session.class).to(UrlFetchSession.class);
-    bind(Instant.class).toProvider(this::provideNow);
     bind(TubeFactory.class).to(OfyTubeFactory.class);
 
     bind(RequestMultiplexer.class).to(RetryingSinglePlexer.class);
@@ -47,8 +46,7 @@ class ServicesModule extends AbstractModule {
     return URLFetchServiceFactory.getURLFetchService();
   }
 
-  @Provides
-  private Instant provideNow() {
+  @Provides private Instant provideNow() {
     return Instant.now();
   }
 }
