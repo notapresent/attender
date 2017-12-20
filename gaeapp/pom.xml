@@ -90,6 +90,11 @@
       <artifactId>guice-servlet</artifactId>
       <version>4.1.0</version>
     </dependency>
+    <dependency>
+      <groupId>com.google.appengine.tools</groupId>
+      <artifactId>appengine-gcs-client</artifactId>
+      <version>0.7</version>
+    </dependency>
 
     <!-- Test Dependencies -->
     <dependency>
