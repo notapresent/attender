@@ -20,14 +20,12 @@ public class Sampler {
     private final Map<SiteAdapter, Sample> results = new HashMap<>();
     private final RequestMultiplexer muxer;
     private final RequestFactory requestFactory;
-    private final LocalDateTime startedAt;
+
 
     @Inject
-    public Sampler(RequestMultiplexer muxer, RequestFactory requestFactory,
-                   @Named("utcNow") LocalDateTime startedAt) {
+    public Sampler(RequestMultiplexer muxer, RequestFactory requestFactory) {
         this.muxer = muxer;
         this.requestFactory = requestFactory;
-        this.startedAt = startedAt;
     }
 
     public Map<SiteAdapter, Sample> takeSamples(List<SiteAdapter> adapters) {
@@ -101,10 +99,9 @@ public class Sampler {
     }
 
     private Sample okSample(SiteAdapter site) {
-        return new Sample(site, startedAt, site.getResult(), SampleStatus.OK);
+        return new Sample(site.getResult(), SampleStatus.OK);
     }
 
-    private Sample errorSample(SiteAdapter site) {
-        return new Sample(site, startedAt, new HashMap<>(), SampleStatus.ERROR);
+    private Sample errorSample(SiteAdapter site) { return new Sample(new HashMap<>(), SampleStatus.ERROR);
     }
 }

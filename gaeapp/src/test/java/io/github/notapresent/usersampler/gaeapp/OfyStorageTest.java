@@ -9,16 +9,19 @@ import com.googlecode.objectify.cache.AsyncCacheFilter;
 import com.googlecode.objectify.util.Closeable;
 import io.github.notapresent.usersampler.common.sampling.Sample;
 import io.github.notapresent.usersampler.common.sampling.SampleStatus;
-import io.github.notapresent.usersampler.common.sampling.SampleStorage;
+import io.github.notapresent.usersampler.common.storage.SampleStorage;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
-import io.github.notapresent.usersampler.gaeapp.storage.OfySampleStorage;
+import io.github.notapresent.usersampler.common.storage.Tube;
+import io.github.notapresent.usersampler.gaeapp.storage.OfyStorage;
+import io.github.notapresent.usersampler.gaeapp.storage.OfyTube;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -27,11 +30,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.time.ZoneOffset.UTC;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class OfySampleStorageTest {
+public class OfyStorageTest {
     private SampleStorage storage;
     private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
             new LocalDatastoreServiceTestConfig()
@@ -41,20 +45,21 @@ public class OfySampleStorageTest {
 
     @Mock
     private SiteAdapter site;
+
     @Mock
     private SiteAdapter otherSite;
 
-
-    private final LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
-    private final LocalDate today = now.toLocalDate();
+    private final Instant now = Instant.now();
+    private final LocalDate today = LocalDateTime.ofInstant(now, UTC).toLocalDate();
     private Sample sample;
+    private OfyTube tube;
 
     @BeforeClass
     public static void setUpClass() {
         Logger.getLogger("com.google.appengine.api.datastore.dev.LocalDatastoreService")
                 .setLevel(Level.WARNING);
         ObjectifyService.setFactory(new ObjectifyFactory());
-        OfySampleStorage.registerEntities();
+        OfyStorage.registerEntities();
     }
 
     @Before
@@ -67,8 +72,14 @@ public class OfySampleStorageTest {
         when(site.shortName()).thenReturn("T");
         when(otherSite.shortName()).thenReturn("O");
 
-        storage = new OfySampleStorage(new SiteRegistry());
-        sample = new Sample(site, now, new HashMap<>(), SampleStatus.OK);
+        storage = new OfyStorage();
+        sample = new Sample(new HashMap<>(), SampleStatus.OK);
+        tube = new OfyTube(
+                site.shortName(),
+                now,
+                sample,
+                SampleStatus.OK
+        );
     }
 
     @After
@@ -79,36 +90,49 @@ public class OfySampleStorageTest {
     }
 
     @Test
-    public void itShouldPersistSampleEntry() {
-        storage.put(sample, now);
-        List<Sample> persisted = Lists.newArrayList(storage.getForSiteByDate(site, today));
+    public void itShoukdPersistTube() {
+        storage.put(tube);
+        List<Tube> persisted = Lists.newArrayList(storage.getForSiteByDate(site, today));
         assertEquals(1, persisted.size());
         assertEquals(now, persisted.iterator().next().getTaken());
     }
 
     @Test
     public void gfsdShouldFilterBySite() {
-        Sample otherSample = new Sample(otherSite, now, new HashMap<>(), SampleStatus.OK);
-        storage.put(sample, now);
-        storage.put(otherSample, now);
+        Sample otherSample = new Sample(new HashMap<>(), SampleStatus.OK);
+        Tube otherTube = new OfyTube(
+                        otherSite.shortName(),
+                        now,
+                        otherSample,
+                        SampleStatus.OK
+                );
 
-        List<Sample> persisted = Lists.newArrayList(storage.getForSiteByDate(site, today));
+        storage.put(tube);
+        storage.put(otherTube);
+
+        List<Tube> persisted = Lists.newArrayList(storage.getForSiteByDate(site, today));
 
         assertEquals(1, persisted.size());
-        Sample persistedSample = persisted.get(0);
-        assertEquals(now, persistedSample.getTaken());
+        Tube persistedTube = persisted.get(0);
+        assertEquals(now, persistedTube.getTaken());
     }
 
     @Test
     public void gfsdShouldFilterByDate() {
-        LocalDateTime yesterday = LocalDateTime.now(ZoneOffset.UTC).minusDays(1);
-        Sample oldSample = new Sample(site, yesterday, new HashMap<>(), SampleStatus.OK);
-        storage.put(sample, now);
-        storage.put(oldSample, yesterday);
+        Instant yesterday = Instant.now().minusSeconds(60 * 60 * 24);
 
-        List<Sample> persisted = Lists.newArrayList(storage.getForSiteByDate(site, today));
+        Tube oldTube = new OfyTube(
+                site.shortName(),
+                yesterday,
+                sample,
+                SampleStatus.OK
+        );
+        storage.put(tube);
+        storage.put(oldTube);
+
+        List<Tube> persisted = Lists.newArrayList(storage.getForSiteByDate(site, today));
         assertEquals(1, persisted.size());
-        Sample persistedSample = persisted.get(0);
-        assertEquals(now, persistedSample.getTaken());
+        Tube persistedTube = persisted.get(0);
+        assertEquals(now, persistedTube.getTaken());
     }
 }

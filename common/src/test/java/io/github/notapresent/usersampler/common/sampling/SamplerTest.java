@@ -46,9 +46,7 @@ public class SamplerTest {
         when(mockSite.shortName()).thenReturn("blah");
         sampler = new Sampler(
                 fakeMuxer,
-                new RequestFactory(),
-                LocalDateTime.now(ZoneOffset.UTC)
-        );
+                new RequestFactory());
         fakeMuxer.response = Futures.immediateFuture(mockResponse);
     }
 
@@ -63,14 +61,6 @@ public class SamplerTest {
         verify(mockSite, times(1)).reset();
     }
 
-
-    @Test
-    public void itShouldSetSiteAndTimeOnSamples() {
-        Sample sample = sampler.takeSamples(sites()).get(mockSite);
-        assertEquals(mockSite, sample.getSite());
-        double now = ZonedDateTime.now(ZoneOffset.UTC).toEpochSecond();
-        assertEquals(now, sample.getTaken().toEpochSecond(ZoneOffset.UTC), 1.0);
-    }
 
     @SuppressWarnings("unchecked")
     @Test

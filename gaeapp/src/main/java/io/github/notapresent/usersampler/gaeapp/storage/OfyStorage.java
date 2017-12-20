@@ -6,11 +6,12 @@ import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.cmd.Query;
 import io.github.notapresent.usersampler.common.sampling.AggregateSample;
 import io.github.notapresent.usersampler.common.sampling.Sample;
-import io.github.notapresent.usersampler.common.sampling.SampleStorage;
-import io.github.notapresent.usersampler.common.sampling.SampleTube;
+import io.github.notapresent.usersampler.common.storage.SampleStorage;
+import io.github.notapresent.usersampler.common.storage.Tube;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -19,12 +20,7 @@ import java.util.stream.StreamSupport;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 
-public class OfySampleStorage implements SampleStorage {
-    @Inject
-    public OfySampleStorage(SiteRegistry registry) {
-
-    }
-
+public class OfyStorage implements SampleStorage {
     public static void registerEntities() {
         ObjectifyService.factory().getTranslators().add(new InstantTranslatorFactory());
         ObjectifyService.register(OfyTube.class);
@@ -32,31 +28,17 @@ public class OfySampleStorage implements SampleStorage {
     }
 
     @Override
-    public void put(Sample sample, LocalDateTime taken) {
-        OfyTube se = new OfyTube(
-                sample.getSite().shortName(),
-                sample.getSampleStatus(),
-                taken,
-                sample
-        );
-
-        ofy().save().entity(se).now();  // TODO .now() is for tests, gotta fix this
+    public Long put(Tube tube) {
+        Key<Tube> tubeKey = ofy().save().entity(tube).now();
+        return tubeKey.getId();
     }
 
     @Override
-    public void put(SampleTube tube) {
-        // TODO
-    }
-
-    @Override
-    public Iterable<Sample> getForSiteByDate(SiteAdapter site, LocalDate day) {
-        Iterable<OfyTube> entitites = querySamplesForSiteByDay(site, day)
+    public Iterable<? extends Tube> getForSiteByDate(SiteAdapter site, LocalDate day) {
+        return queryTubesFor(site, day)
                 .order("ts")
-                //.limit(100)
+                //.limit(100)   // TODO batching
                 .iterable();
-
-        return StreamSupport.stream(entitites.spliterator(), false)
-                .map(OfyTube::getSample)::iterator;
     }
 
     private Key<Site> siteKey(SiteAdapter site) {
@@ -66,7 +48,7 @@ public class OfySampleStorage implements SampleStorage {
 
     @Override
     public void deleteFromSiteByDate(SiteAdapter site, LocalDate day) {
-        Iterable<Key<OfyTube>> keys = querySamplesForSiteByDay(site, day)
+        Iterable<Key<OfyTube>> keys = queryTubesFor(site, day)
                 .keys();
         ofy().delete().keys(keys).now();
     }
@@ -76,7 +58,7 @@ public class OfySampleStorage implements SampleStorage {
         // TODO
     }
 
-    private Query<OfyTube> querySamplesForSiteByDay(SiteAdapter site, LocalDate day) {
+    private Query<OfyTube> queryTubesFor(SiteAdapter site, LocalDate day) {
         Key<Site> ancestor = siteKey(site);
         LocalDateTime dayStart = day.atStartOfDay();
         LocalDateTime nextDayStart = dayStart.plusDays(1);

@@ -4,65 +4,54 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.*;
 import io.github.notapresent.usersampler.common.sampling.Sample;
 import io.github.notapresent.usersampler.common.sampling.SampleStatus;
-import io.github.notapresent.usersampler.common.sampling.SampleTube;
 import io.github.notapresent.usersampler.common.sampling.UserStatus;
-import io.github.notapresent.usersampler.common.site.SiteAdapter;
+import io.github.notapresent.usersampler.common.storage.Tube;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 
-@Entity(name="Sample")
-public class OfyTube implements SampleTube {
+@Entity(name="Tube")
+public class OfyTube implements Tube {
     @Id private Long id;
-    @Parent
-    private Key<Site> parent;
-
+    @Parent private Key<Site> parent;
     private SampleStatus st;
-
-    @Index private Instant ts;        // Date taken
-
+    @Index private Instant ts;        // taken
     @Stringify(UserStatusStringifier.class)
     private Map<UserStatus, List<String>> pl;     // Payload
 
     @Ignore
-    private Sample sample;  // Converted to/from payload
+    private String siteId;   // Converted to/from parent
 
     @Ignore
-    private String siteId;  // Used to generate parent
+    private Sample sample;  // Converted to/from payload
 
     private OfyTube() {} // Required by ofy
 
-    public OfyTube(String siteId, SampleStatus status, LocalDateTime taken,
-                   Sample sample) {
+    public OfyTube(String siteId, Instant taken, Sample sample, SampleStatus status) {
         this.siteId = siteId;
         parent = Key.create(Site.class, siteId);
         st = status;
-        ts = taken.toInstant(ZoneOffset.UTC);
+        ts = taken;
         this.sample = sample;
-    }
-
-    public String getSiteId() {
-        return siteId;
-    }
-
-    public void setSiteId(String siteId) {
-        this.siteId = siteId;
     }
 
     public Long getId() { return id; }
 
-    public Key<Site> getParent() { return parent; }
+    @Override
+    public String getSiteId() {
+        return siteId;
+    }
 
-    public SampleStatus getStatus() { return st; }
-
-    public LocalDateTime getTaken() { return LocalDateTime.ofInstant(ts, ZoneOffset.UTC); }
+    @Override
+    public Instant getTaken() { return ts; }
 
     public Sample getSample() {
         return sample;
     }
+
+    @Override
+    public SampleStatus getStatus() { return st; }
 
     @OnSave
     void onSave() {
@@ -71,8 +60,8 @@ public class OfyTube implements SampleTube {
 
     @OnLoad
     void onLoad() {
-        sample = new Sample(null, SamplePayloadCompactor.inflate(pl));
-        this.siteId = this.parent.getName();
+        sample = new Sample(SamplePayloadCompactor.inflate(pl), st);
+        this.siteId = parent.getName();
     }
 }
 
