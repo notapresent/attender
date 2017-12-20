@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler.common.HTTP;
+package io.github.notapresent.usersampler.common.http;
 
 import com.google.common.base.Charsets;
 import java.nio.charset.Charset;
@@ -14,11 +14,11 @@ public class Response {
   private String finalUrl;
   private Request request;
 
-  public Response(int status, byte[] content, String final_url) {
+  public Response(int status, byte[] content, String finalUrl) {
     this(status,
         new TreeMap<>(String::compareToIgnoreCase),
         content,
-        final_url
+        finalUrl
     );
   }
 

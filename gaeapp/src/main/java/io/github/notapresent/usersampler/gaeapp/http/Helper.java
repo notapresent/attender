@@ -1,13 +1,13 @@
-package io.github.notapresent.usersampler.gaeapp.HTTP;
+package io.github.notapresent.usersampler.gaeapp.http;
 
 import com.google.appengine.api.urlfetch.FetchOptions;
 import com.google.appengine.api.urlfetch.HTTPHeader;
 import com.google.appengine.api.urlfetch.HTTPMethod;
 import com.google.appengine.api.urlfetch.HTTPRequest;
 import com.google.appengine.api.urlfetch.HTTPResponse;
-import io.github.notapresent.usersampler.common.HTTP.HTTPError;
-import io.github.notapresent.usersampler.common.HTTP.Request;
-import io.github.notapresent.usersampler.common.HTTP.Response;
+import io.github.notapresent.usersampler.common.http.HttpError;
+import io.github.notapresent.usersampler.common.http.Request;
+import io.github.notapresent.usersampler.common.http.Response;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -29,7 +29,7 @@ class Helper {
     return opts;
   }
 
-  public static HTTPRequest createHTTPRequest(Request request) {
+  public static HTTPRequest createUrlFetchRequest(Request request) {
     try {
       HTTPRequest httpRequest = new HTTPRequest(
           new URL(request.getUrl()),
@@ -43,7 +43,7 @@ class Helper {
       return httpRequest;
 
     } catch (MalformedURLException e) {
-      throw new HTTPError("Malformed URL: " + request.getUrl(), e);
+      throw new HttpError("Malformed URL: " + request.getUrl(), e);
     }
   }
 
@@ -78,16 +78,16 @@ class Helper {
     );
   }
 
-  static URI URL2URI(URL url) {
+  static URI UrlToUri(URL url) {
     try {
       return url.toURI();
     } catch (URISyntaxException e) {
-      throw new HTTPError("Failed to convert URL " + url + " to URI", e);
+      throw new HttpError("Failed to convert URL " + url + " to URI", e);
     }
   }
 
   public static boolean isCookieHeader(String name) {
-    return (name.equalsIgnoreCase("set-cookie") ||
-        name.equalsIgnoreCase("set-cookie2"));
+    return (name.equalsIgnoreCase("set-cookie")
+        || name.equalsIgnoreCase("set-cookie2"));
   }
 }

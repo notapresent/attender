@@ -1,7 +1,7 @@
-package io.github.notapresent.usersampler.gaeapp.HTTP;
+package io.github.notapresent.usersampler.gaeapp.http;
 
-import static io.github.notapresent.usersampler.gaeapp.HTTP.Helper.URL2URI;
-import static io.github.notapresent.usersampler.gaeapp.HTTP.Helper.isCookieHeader;
+import static io.github.notapresent.usersampler.gaeapp.http.Helper.UrlToUri;
+import static io.github.notapresent.usersampler.gaeapp.http.Helper.isCookieHeader;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -9,8 +9,8 @@ import static org.junit.Assert.assertTrue;
 import com.google.appengine.api.urlfetch.HTTPHeader;
 import com.google.appengine.api.urlfetch.HTTPRequest;
 import com.google.appengine.api.urlfetch.HTTPResponse;
-import io.github.notapresent.usersampler.common.HTTP.Request;
-import io.github.notapresent.usersampler.common.HTTP.Response;
+import io.github.notapresent.usersampler.common.http.Request;
+import io.github.notapresent.usersampler.common.http.Response;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
@@ -43,7 +43,7 @@ public class HelperTest {
 
   @Test
   public void itShouldConvertToHTTPRequest() {
-    HTTPRequest httpRequest = Helper.createHTTPRequest(request);
+    HTTPRequest httpRequest = Helper.createUrlFetchRequest(request);
 
     assertEquals(request.getMethod().toString(),
         httpRequest.getMethod().toString());
@@ -54,7 +54,7 @@ public class HelperTest {
   public void itShouldSetFollowRedirectsIfDEFAULTPolicy() {
     request.setRedirectHandlingPolicy(Request.RedirectPolicy.DEFAULT);
 
-    HTTPRequest httpRequest = Helper.createHTTPRequest(request);
+    HTTPRequest httpRequest = Helper.createUrlFetchRequest(request);
 
     assertTrue(httpRequest.getFetchOptions().getFollowRedirects());
   }
@@ -62,17 +62,17 @@ public class HelperTest {
   @Test
   public void itShouldSetDontFollowRedirectsIfNotDEFAULTPolicy() {
     request.setRedirectHandlingPolicy(Request.RedirectPolicy.FOLLOW);
-    assertFalse(Helper.createHTTPRequest(request).getFetchOptions().getFollowRedirects());
+    assertFalse(Helper.createUrlFetchRequest(request).getFetchOptions().getFollowRedirects());
 
     request.setRedirectHandlingPolicy(Request.RedirectPolicy.DO_NOT_FOLLOW);
-    assertFalse(Helper.createHTTPRequest(request).getFetchOptions().getFollowRedirects());
+    assertFalse(Helper.createUrlFetchRequest(request).getFetchOptions().getFollowRedirects());
   }
 
   @Test
   public void itShouldSetDeadlineToTimeout() {
     request.setTimeout(42.0);
 
-    HTTPRequest httpRequest = Helper.createHTTPRequest(request);
+    HTTPRequest httpRequest = Helper.createUrlFetchRequest(request);
 
     assertEquals((Double) request.getTimeout(), httpRequest.getFetchOptions().getDeadline());
   }
@@ -81,7 +81,7 @@ public class HelperTest {
   public void itShouldRetainHeadersWhenConvertingToHTTPRequest() {
     request.getHeaders().put("foo", "bar");
 
-    HTTPRequest httpRequest = Helper.createHTTPRequest(request);
+    HTTPRequest httpRequest = Helper.createUrlFetchRequest(request);
 
     HTTPHeader header = httpRequest.getHeaders().get(0);
     assertEquals(header.getName(), "foo");
@@ -92,7 +92,7 @@ public class HelperTest {
   public void URL2URIShouldConvertURLToURI() throws Exception {
     String urlStr = "https://host.com/..path/file?q=e&q1=e1#frag";
     URL url = new URL(urlStr);
-    assertEquals(urlStr, URL2URI(url).toString());
+    assertEquals(urlStr, UrlToUri(url).toString());
   }
 
   @Test

@@ -1,11 +1,11 @@
 package io.github.notapresent.usersampler.common.sampling;
 
 import com.google.inject.Inject;
-import io.github.notapresent.usersampler.common.HTTP.HTTPError;
-import io.github.notapresent.usersampler.common.HTTP.Request;
-import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
-import io.github.notapresent.usersampler.common.HTTP.RequestMultiplexer;
-import io.github.notapresent.usersampler.common.HTTP.Response;
+import io.github.notapresent.usersampler.common.http.HttpError;
+import io.github.notapresent.usersampler.common.http.Request;
+import io.github.notapresent.usersampler.common.http.RequestFactory;
+import io.github.notapresent.usersampler.common.http.RequestMultiplexer;
+import io.github.notapresent.usersampler.common.http.Response;
 import io.github.notapresent.usersampler.common.site.FatalSiteError;
 import io.github.notapresent.usersampler.common.site.RetryableSiteError;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
@@ -93,7 +93,7 @@ public class Sampler {
         results.put(site, okSample(site));
       }
       return false;
-    } catch (HTTPError | FatalSiteError e) {    // Failed request considered a fatal error
+    } catch (HttpError | FatalSiteError e) {    // Failed request considered a fatal error
       inProgress.remove(site);
       results.put(site, errorSample(site));
       return false;

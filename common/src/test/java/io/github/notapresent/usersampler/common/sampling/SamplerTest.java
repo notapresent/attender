@@ -11,11 +11,11 @@ import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.Futures;
-import io.github.notapresent.usersampler.common.HTTP.HTTPError;
-import io.github.notapresent.usersampler.common.HTTP.Request;
-import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
-import io.github.notapresent.usersampler.common.HTTP.RequestMultiplexer;
-import io.github.notapresent.usersampler.common.HTTP.Response;
+import io.github.notapresent.usersampler.common.http.HttpError;
+import io.github.notapresent.usersampler.common.http.Request;
+import io.github.notapresent.usersampler.common.http.RequestFactory;
+import io.github.notapresent.usersampler.common.http.RequestMultiplexer;
+import io.github.notapresent.usersampler.common.http.Response;
 import io.github.notapresent.usersampler.common.site.FatalSiteError;
 import io.github.notapresent.usersampler.common.site.RetryableSiteError;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
@@ -87,7 +87,7 @@ public class SamplerTest {
   @SuppressWarnings("unchecked")
   public void itShouldMarkSampleAsFailedIfAnyRequestFails() throws Exception {
     Future failedFuture = mock(Future.class);
-    when(failedFuture.get()).thenThrow(new HTTPError("Fake"));
+    when(failedFuture.get()).thenThrow(new HttpError("Fake"));
     fakeMuxer.response = failedFuture;
 
     Sample sample = sampler.takeSamples(sites()).get(mockSite);

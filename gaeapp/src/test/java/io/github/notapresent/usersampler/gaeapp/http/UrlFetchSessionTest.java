@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler.gaeapp.HTTP;
+package io.github.notapresent.usersampler.gaeapp.http;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -13,8 +13,8 @@ import com.google.appengine.api.urlfetch.HTTPResponse;
 import com.google.appengine.api.urlfetch.URLFetchService;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import io.github.notapresent.usersampler.common.HTTP.Request;
-import io.github.notapresent.usersampler.common.HTTP.Response;
+import io.github.notapresent.usersampler.common.http.Request;
+import io.github.notapresent.usersampler.common.http.Response;
 import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.URL;
@@ -31,7 +31,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 
-public class URLFetchSessionTest {
+public class UrlFetchSessionTest {
 
   // Canned requests and responses
   private static final String url = "http://fake.url";
@@ -43,7 +43,7 @@ public class URLFetchSessionTest {
       new HTTPHeader("set-cookie", "foo=bar"));
   private static HTTPResponse okResponse, redirectResponse,
       redirectResponseWithCookie;
-  private URLFetchSession session;
+  private UrlFetchSession session;
   @Mock
   private URLFetchService mockURLFetch;
 
@@ -74,7 +74,7 @@ public class URLFetchSessionTest {
   @Before
   public void setUp() {
     MockitoAnnotations.initMocks(this);
-    session = new URLFetchSession(mockURLFetch);
+    session = new UrlFetchSession(mockURLFetch);
     request.setRedirectHandlingPolicy(Request.RedirectPolicy.FOLLOW);
   }
 
@@ -151,7 +151,7 @@ public class URLFetchSessionTest {
 
   @Test
   public void itShouldRetainCookies() throws IOException {
-    CookieHandler cookieManager = new URLFetchCookieManager();
+    CookieHandler cookieManager = new UrlFetchCookieManager();
     session.setCookieManager(cookieManager);
     ArgumentCaptor<HTTPRequest> captor = ArgumentCaptor
         .forClass(HTTPRequest.class);

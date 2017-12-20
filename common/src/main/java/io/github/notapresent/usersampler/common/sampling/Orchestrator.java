@@ -32,8 +32,8 @@ public class Orchestrator {
   public int run() {
     Instant now = timeProvider.get();
     List<SiteAdapter> sites = siteRegistry.getAdapters();
-    Map<SiteAdapter, Sample> site_to_samples = sampler.takeSamples(sites);
-    for (Map.Entry<SiteAdapter, Sample> e : site_to_samples.entrySet()) {
+    Map<SiteAdapter, Sample> siteToSamples = sampler.takeSamples(sites);
+    for (Map.Entry<SiteAdapter, Sample> e : siteToSamples.entrySet()) {
       Sample sample = e.getValue();
       Tube tube = tubeFactory.create(
           e.getKey().shortName(),
@@ -44,7 +44,7 @@ public class Orchestrator {
       storage.put(tube);
     }
 
-    return site_to_samples.size();
+    return siteToSamples.size();
   }
 }
 

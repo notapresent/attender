@@ -1,9 +1,9 @@
-package io.github.notapresent.usersampler.gaeapp.HTTP;
+package io.github.notapresent.usersampler.gaeapp.http;
 
 import com.google.appengine.api.urlfetch.HTTPHeader;
 import com.google.appengine.api.urlfetch.HTTPRequest;
 import com.google.appengine.api.urlfetch.HTTPResponse;
-import io.github.notapresent.usersampler.common.HTTP.HTTPError;
+import io.github.notapresent.usersampler.common.http.HttpError;
 import java.io.IOException;
 import java.net.CookieManager;
 import java.net.URI;
@@ -15,19 +15,19 @@ import java.util.List;
 import java.util.Map;
 
 // TODO move this class functionalito to helpers
-public class URLFetchCookieManager extends CookieManager {
+public class UrlFetchCookieManager extends CookieManager {
 
-  private List<String> cookiesForURL(URL url) {
+  private List<String> cookiesForUrl(URL url) {
     try {
-      URI uri = Helper.URL2URI(url);
+      URI uri = Helper.UrlToUri(url);
       return get(uri, new HashMap<>()).get("Cookie");
     } catch (IOException e) {
-      throw new HTTPError("Failed to load cookies for " + url, e);
+      throw new HttpError("Failed to load cookies for " + url, e);
     }
   }
 
   public void loadToRequest(HTTPRequest request) {
-    List<String> cookies = cookiesForURL(request.getURL());
+    List<String> cookies = cookiesForUrl(request.getURL());
     if (cookies != null && cookies.size() > 0) {
       request.addHeader(new HTTPHeader(
           "cookie",
@@ -58,9 +58,9 @@ public class URLFetchCookieManager extends CookieManager {
     }
 
     try {
-      put(Helper.URL2URI(url), setCookieHeaders);
+      put(Helper.UrlToUri(url), setCookieHeaders);
     } catch (IOException e) {
-      throw new HTTPError("Failed to save cookies for " + url, e);
+      throw new HttpError("Failed to save cookies for " + url, e);
     }
   }
 }

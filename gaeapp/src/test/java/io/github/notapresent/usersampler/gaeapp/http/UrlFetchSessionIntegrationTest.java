@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler.gaeapp.HTTP;
+package io.github.notapresent.usersampler.gaeapp.http;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -6,8 +6,8 @@ import static org.junit.Assert.assertEquals;
 import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalURLFetchServiceTestConfig;
-import io.github.notapresent.usersampler.common.HTTP.Request;
-import io.github.notapresent.usersampler.common.HTTP.Response;
+import io.github.notapresent.usersampler.common.http.Request;
+import io.github.notapresent.usersampler.common.http.Response;
 import io.github.notapresent.usersampler.common.IntegrationTest;
 import org.junit.After;
 import org.junit.Before;
@@ -15,20 +15,20 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(IntegrationTest.class)
-public class URLFetchSessionIntegrationTest {
+public class UrlFetchSessionIntegrationTest {
 
   private static final String HTTPBIN = "http://httpbin.org";
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(new LocalURLFetchServiceTestConfig());
-  private final URLFetchCookieManager cookieManager = new URLFetchCookieManager();
-  private URLFetchSession session;
+  private final UrlFetchCookieManager cookieManager = new UrlFetchCookieManager();
+  private UrlFetchSession session;
   private Request request;
   private Response response;
 
   @Before
   public void setUp() {
     helper.setUp();
-    session = new URLFetchSession(
+    session = new UrlFetchSession(
         URLFetchServiceFactory.getURLFetchService(), cookieManager);
   }
 

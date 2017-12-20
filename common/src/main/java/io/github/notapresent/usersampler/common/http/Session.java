@@ -1,10 +1,10 @@
-package io.github.notapresent.usersampler.common.HTTP;
+package io.github.notapresent.usersampler.common.http;
 
 import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.MalformedURLException;
 
-abstract public class Session {
+public abstract class Session {
 
   private static final int DEFAULT_MAX_REDIRECTS = 5;
   private int maxRedirects = DEFAULT_MAX_REDIRECTS;
@@ -26,7 +26,7 @@ abstract public class Session {
     this.maxRedirects = maxRedirects;
   }
 
-  public Response send(Request request) throws HTTPError {
+  public Response send(Request request) throws HttpError {
     Response response;
     try {
       if (request.getRedirectHandlingPolicy() == Request.RedirectPolicy.FOLLOW) {
@@ -35,9 +35,9 @@ abstract public class Session {
         response = doSend(request);
       }
     } catch (MalformedURLException e) {
-      throw new HTTPError("Malformed URL: " + request.getUrl(), e);
+      throw new HttpError("Malformed URL: " + request.getUrl(), e);
     } catch (IOException e) {
-      throw new HTTPError(e);
+      throw new HttpError(e);
     }
 
     return response;
@@ -63,5 +63,5 @@ abstract public class Session {
     return resp;
   }
 
-  abstract protected Response doSend(Request request) throws IOException;
+  protected abstract Response doSend(Request request) throws IOException;
 }

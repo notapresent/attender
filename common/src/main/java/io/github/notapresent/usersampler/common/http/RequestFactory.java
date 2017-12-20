@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler.common.HTTP;
+package io.github.notapresent.usersampler.common.http;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;

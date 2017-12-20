@@ -6,17 +6,17 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.googlecode.objectify.ObjectifyFilter;
-import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
-import io.github.notapresent.usersampler.common.HTTP.RequestMultiplexer;
-import io.github.notapresent.usersampler.common.HTTP.RetryingSinglePlexer;
-import io.github.notapresent.usersampler.common.HTTP.Session;
+import io.github.notapresent.usersampler.common.http.RequestFactory;
+import io.github.notapresent.usersampler.common.http.RequestMultiplexer;
+import io.github.notapresent.usersampler.common.http.RetryingSinglePlexer;
+import io.github.notapresent.usersampler.common.http.Session;
 import io.github.notapresent.usersampler.common.sampling.Orchestrator;
 import io.github.notapresent.usersampler.common.sampling.Sampler;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
 import io.github.notapresent.usersampler.common.storage.SampleStorage;
 import io.github.notapresent.usersampler.common.storage.TubeFactory;
-import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchCookieManager;
-import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchSession;
+import io.github.notapresent.usersampler.gaeapp.http.UrlFetchCookieManager;
+import io.github.notapresent.usersampler.gaeapp.http.UrlFetchSession;
 import io.github.notapresent.usersampler.gaeapp.storage.OfyStorage;
 import io.github.notapresent.usersampler.gaeapp.storage.OfyTubeFactory;
 import java.net.CookieHandler;
@@ -31,19 +31,19 @@ class ServicesModule extends AbstractModule {
 
     bind(RequestFactory.class).in(Singleton.class);
     bind(Sampler.class);
-    bind(Session.class).to(URLFetchSession.class);
+    bind(Session.class).to(UrlFetchSession.class);
     bind(Instant.class).toProvider(this::provideNow);
     bind(TubeFactory.class).to(OfyTubeFactory.class);
 
     bind(RequestMultiplexer.class).to(RetryingSinglePlexer.class);
-    bind(CookieHandler.class).to(URLFetchCookieManager.class);
+    bind(CookieHandler.class).to(UrlFetchCookieManager.class);
     bind(Orchestrator.class);
     bind(SampleStorage.class).to(OfyStorage.class);
     bind(SiteRegistry.class).in(Singleton.class);
   }
 
   @Provides
-  URLFetchService provideURLFetchService() {
+  URLFetchService provideUrlFetchService() {
     return URLFetchServiceFactory.getURLFetchService();
   }
 

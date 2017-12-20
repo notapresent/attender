@@ -2,7 +2,7 @@ package io.github.notapresent.usersampler.common.sampling;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import io.github.notapresent.usersampler.common.HTTP.Request;
+import io.github.notapresent.usersampler.common.http.Request;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 import java.util.HashMap;
 import java.util.List;

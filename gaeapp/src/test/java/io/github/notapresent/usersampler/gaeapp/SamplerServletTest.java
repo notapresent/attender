@@ -39,7 +39,7 @@ public class SamplerServletTest {
 
     when(mockOrchestrator.run()).thenReturn(42);
 
-    // Set up a fake HTTP response.
+    // Set up a fake http response.
     responseWriter = new StringWriter();
     when(mockResponse.getWriter()).thenReturn(new PrintWriter(responseWriter));
 

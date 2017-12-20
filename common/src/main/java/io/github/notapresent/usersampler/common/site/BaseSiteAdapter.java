@@ -1,6 +1,6 @@
 package io.github.notapresent.usersampler.common.site;
 
-abstract public class BaseSiteAdapter {
+public abstract class BaseSiteAdapter {
 
   protected boolean done = false;
 

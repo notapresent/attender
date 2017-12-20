@@ -38,7 +38,7 @@ public class SysinfoServletTest {
     MockitoAnnotations.initMocks(this);
     helper.setUp();
 
-    // Set up a fake HTTP response.
+    // Set up a fake http response.
     responseWriter = new StringWriter();
     when(mockResponse.getWriter()).thenReturn(new PrintWriter(responseWriter));
 

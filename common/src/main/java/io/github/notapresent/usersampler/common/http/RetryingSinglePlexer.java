@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler.common.HTTP;
+package io.github.notapresent.usersampler.common.http;
 
 import com.google.common.util.concurrent.Futures;
 import com.google.inject.Inject;
@@ -21,9 +21,9 @@ public class RetryingSinglePlexer implements RequestMultiplexer {
       try {
         Response response = session.send(request);
         return Futures.immediateFuture(response);
-      } catch (HTTPError e) {
+      } catch (HttpError e) {
         if (tries++ > MAX_RETRIES) {
-          throw new HTTPError("Giving up " + request + " after " + tries + " tries");
+          throw new HttpError("Giving up " + request + " after " + tries + " tries");
         }
       }
     }

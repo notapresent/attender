@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler.common.HTTP;
+package io.github.notapresent.usersampler.common.http;
 
 import com.google.common.io.ByteStreams;
 import java.io.BufferedInputStream;
@@ -8,7 +8,7 @@ import java.net.CookieHandler;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class HUCSession extends Session {
+public class HttpUrlConnectionSession extends Session {
 
   @Override
   public void setCookieManager(CookieHandler cookieManager) {

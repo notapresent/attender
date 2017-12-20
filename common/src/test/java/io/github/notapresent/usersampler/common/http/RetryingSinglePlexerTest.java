@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler.common.HTTP;
+package io.github.notapresent.usersampler.common.http;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.any;
@@ -38,7 +38,7 @@ public class RetryingSinglePlexerTest {
   @Test
   public void itShouldRetryFailedRequests() throws Exception {
     when(mockSession.send(any()))
-        .thenThrow(new HTTPError("Fake error"))
+        .thenThrow(new HttpError("Fake error"))
         .thenReturn(okResponse);
     Response resp = plexer.send(request).get();
 

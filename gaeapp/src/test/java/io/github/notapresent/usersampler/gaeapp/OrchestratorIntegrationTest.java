@@ -10,9 +10,9 @@ import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalURLFetchServiceTestConfig;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.util.Closeable;
-import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
-import io.github.notapresent.usersampler.common.HTTP.RequestMultiplexer;
-import io.github.notapresent.usersampler.common.HTTP.RetryingSinglePlexer;
+import io.github.notapresent.usersampler.common.http.RequestFactory;
+import io.github.notapresent.usersampler.common.http.RequestMultiplexer;
+import io.github.notapresent.usersampler.common.http.RetryingSinglePlexer;
 import io.github.notapresent.usersampler.common.IntegrationTest;
 import io.github.notapresent.usersampler.common.sampling.Orchestrator;
 import io.github.notapresent.usersampler.common.sampling.Sample;
@@ -21,7 +21,7 @@ import io.github.notapresent.usersampler.common.sampling.Sampler;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
 import io.github.notapresent.usersampler.common.storage.SampleStorage;
-import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchSession;
+import io.github.notapresent.usersampler.gaeapp.http.UrlFetchSession;
 import io.github.notapresent.usersampler.gaeapp.storage.OfyStorage;
 import io.github.notapresent.usersampler.gaeapp.storage.OfyTubeFactory;
 import java.time.Instant;
@@ -47,7 +47,7 @@ public class OrchestratorIntegrationTest {
       SiteRegistry registry,
       SampleStorage storage) {
     RequestMultiplexer muxer = new RetryingSinglePlexer(
-        new URLFetchSession(URLFetchServiceFactory.getURLFetchService())
+        new UrlFetchSession(URLFetchServiceFactory.getURLFetchService())
     );
 
     Sampler sampler = new Sampler(muxer, new RequestFactory());

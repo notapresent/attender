@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler.common.HTTP;
+package io.github.notapresent.usersampler.common.http;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -10,10 +10,10 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category(IntegrationTest.class)
-public class HUCSessionIntegrationTest {
+public class HttpUrlConnectionSessionIntegrationTest {
 
   private static final String HTTPBIN = "http://httpbin.org";
-  private final HUCSession session = new HUCSession();
+  private final HttpUrlConnectionSession session = new HttpUrlConnectionSession();
   private final CookieManager cookieMan = new CookieManager();
   private Response response;
   private Request request;
@@ -26,7 +26,7 @@ public class HUCSessionIntegrationTest {
     response = session.send(request);
 
     assertThat(response.getContentString())
-        .contains("httpbin(1): HTTP Request &amp; Response Service");
+        .contains("httpbin(1): http Request &amp; Response Service");
   }
 
   @Test
