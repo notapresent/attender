@@ -1,68 +1,85 @@
 package io.github.notapresent.usersampler.gaeapp.storage;
 
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.annotation.*;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Ignore;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.OnLoad;
+import com.googlecode.objectify.annotation.OnSave;
+import com.googlecode.objectify.annotation.Parent;
+import com.googlecode.objectify.annotation.Stringify;
 import io.github.notapresent.usersampler.common.sampling.Sample;
 import io.github.notapresent.usersampler.common.sampling.SampleStatus;
 import io.github.notapresent.usersampler.common.sampling.UserStatus;
 import io.github.notapresent.usersampler.common.storage.Tube;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
-@Entity(name="Tube")
+@Entity(name = "Tube")
 public class OfyTube implements Tube {
-    @Id private Long id;
-    @Parent private Key<Site> parent;
-    private SampleStatus st;
-    @Index private Instant ts;        // taken
-    @Stringify(UserStatusStringifier.class)
-    private Map<UserStatus, List<String>> pl;     // Payload
 
-    @Ignore
-    private String siteId;   // Converted to/from parent
+  @Id
+  private Long id;
+  @Parent
+  private Key<Site> parent;
+  private SampleStatus st;
+  @Index
+  private Instant ts;        // taken
+  @Stringify(UserStatusStringifier.class)
+  private Map<UserStatus, List<String>> pl;     // Payload
 
-    @Ignore
-    private Sample sample;  // Converted to/from payload
+  @Ignore
+  private String siteId;   // Converted to/from parent
 
-    private OfyTube() {} // Required by ofy
+  @Ignore
+  private Sample sample;  // Converted to/from payload
 
-    public OfyTube(String siteId, Instant taken, Sample sample, SampleStatus status) {
-        this.siteId = siteId;
-        parent = Key.create(Site.class, siteId);
-        st = status;
-        ts = taken;
-        this.sample = sample;
-    }
+  private OfyTube() {
+  } // Required by ofy
 
-    public Long getId() { return id; }
+  public OfyTube(String siteId, Instant taken, Sample sample, SampleStatus status) {
+    this.siteId = siteId;
+    parent = Key.create(Site.class, siteId);
+    st = status;
+    ts = taken;
+    this.sample = sample;
+  }
 
-    @Override
-    public String getSiteId() {
-        return siteId;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    @Override
-    public Instant getTaken() { return ts; }
+  @Override
+  public String getSiteId() {
+    return siteId;
+  }
 
-    public Sample getSample() {
-        return sample;
-    }
+  @Override
+  public Instant getTaken() {
+    return ts;
+  }
 
-    @Override
-    public SampleStatus getStatus() { return st; }
+  public Sample getSample() {
+    return sample;
+  }
 
-    @OnSave
-    void onSave() {
-        pl = SamplePayloadCompactor.deflate(sample.getPayload());
-    }
+  @Override
+  public SampleStatus getStatus() {
+    return st;
+  }
 
-    @OnLoad
-    void onLoad() {
-        sample = new Sample(SamplePayloadCompactor.inflate(pl), st);
-        this.siteId = parent.getName();
-    }
+  @OnSave
+  void onSave() {
+    pl = SamplePayloadCompactor.deflate(sample.getPayload());
+  }
+
+  @OnLoad
+  void onLoad() {
+    sample = new Sample(SamplePayloadCompactor.inflate(pl), st);
+    this.siteId = parent.getName();
+  }
 }
 
 

@@ -1,7 +1,6 @@
 package io.github.notapresent.usersampler.common.HTTP;
 
 import com.google.common.io.ByteStreams;
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,38 +8,39 @@ import java.net.CookieHandler;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class HUCSession extends Session  {
-    @Override
-    public void setCookieManager(CookieHandler cookieManager) {
-        super.setCookieManager(cookieManager);
-        CookieHandler.setDefault(cookieManager);
-    }
+public class HUCSession extends Session {
 
-    @Override
-    protected Response doSend(Request request) throws IOException {
-        HttpURLConnection conn;
+  @Override
+  public void setCookieManager(CookieHandler cookieManager) {
+    super.setCookieManager(cookieManager);
+    CookieHandler.setDefault(cookieManager);
+  }
 
-        URL url = new URL(request.getUrl());
-        conn = (HttpURLConnection) url.openConnection();
-        request.getHeaders().forEach(conn::setRequestProperty);
-        conn.setInstanceFollowRedirects(false);
+  @Override
+  protected Response doSend(Request request) throws IOException {
+    HttpURLConnection conn;
 
-        InputStream in = new BufferedInputStream(conn.getInputStream());
+    URL url = new URL(request.getUrl());
+    conn = (HttpURLConnection) url.openConnection();
+    request.getHeaders().forEach(conn::setRequestProperty);
+    conn.setInstanceFollowRedirects(false);
 
-        Response response = new Response(
-                conn.getResponseCode(),
-                ByteStreams.toByteArray(in),
-                request.getUrl()
-        );
+    InputStream in = new BufferedInputStream(conn.getInputStream());
 
-        conn.getHeaderFields()
-                .entrySet()
-                .stream()
-                .filter(e -> e.getKey() != null)
-                .forEach((e) -> response.setHeader(e.getKey(), e.getValue()));
+    Response response = new Response(
+        conn.getResponseCode(),
+        ByteStreams.toByteArray(in),
+        request.getUrl()
+    );
 
-        return response;
-    }
+    conn.getHeaderFields()
+        .entrySet()
+        .stream()
+        .filter(e -> e.getKey() != null)
+        .forEach((e) -> response.setHeader(e.getKey(), e.getValue()));
+
+    return response;
+  }
 
 
 }

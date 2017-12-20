@@ -19,36 +19,36 @@ import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchCookieManager;
 import io.github.notapresent.usersampler.gaeapp.HTTP.URLFetchSession;
 import io.github.notapresent.usersampler.gaeapp.storage.OfyStorage;
 import io.github.notapresent.usersampler.gaeapp.storage.OfyTubeFactory;
-
 import java.net.CookieHandler;
 import java.time.Instant;
 
 class ServicesModule extends AbstractModule {
-    @Override
-    protected void configure() {
-        OfyStorage.registerEntities();
-        bind(ObjectifyFilter.class).in(Singleton.class);
 
-        bind(RequestFactory.class).in(Singleton.class);
-        bind(Sampler.class);
-        bind(Session.class).to(URLFetchSession.class);
-        bind(Instant.class).toProvider(this::provideNow);
-        bind(TubeFactory.class).to(OfyTubeFactory.class);
+  @Override
+  protected void configure() {
+    OfyStorage.registerEntities();
+    bind(ObjectifyFilter.class).in(Singleton.class);
 
-        bind(RequestMultiplexer.class).to(RetryingSinglePlexer.class);
-        bind(CookieHandler.class).to(URLFetchCookieManager.class);
-        bind(Orchestrator.class);
-        bind(SampleStorage.class).to(OfyStorage.class);
-        bind(SiteRegistry.class).in(Singleton.class);
-    }
+    bind(RequestFactory.class).in(Singleton.class);
+    bind(Sampler.class);
+    bind(Session.class).to(URLFetchSession.class);
+    bind(Instant.class).toProvider(this::provideNow);
+    bind(TubeFactory.class).to(OfyTubeFactory.class);
 
-    @Provides
-    URLFetchService provideURLFetchService() {
-        return URLFetchServiceFactory.getURLFetchService();
-    }
+    bind(RequestMultiplexer.class).to(RetryingSinglePlexer.class);
+    bind(CookieHandler.class).to(URLFetchCookieManager.class);
+    bind(Orchestrator.class);
+    bind(SampleStorage.class).to(OfyStorage.class);
+    bind(SiteRegistry.class).in(Singleton.class);
+  }
 
-    @Provides
-    private Instant provideNow() {
-        return Instant.now();
-    }
+  @Provides
+  URLFetchService provideURLFetchService() {
+    return URLFetchServiceFactory.getURLFetchService();
+  }
+
+  @Provides
+  private Instant provideNow() {
+    return Instant.now();
+  }
 }

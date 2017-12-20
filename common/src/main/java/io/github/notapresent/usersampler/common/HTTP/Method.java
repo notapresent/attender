@@ -1,13 +1,13 @@
 package io.github.notapresent.usersampler.common.HTTP;
 
 public enum Method {
-    GET,
-    POST,
-    HEAD,
-    PUT,
-    DELETE,
-    PATCH;
+  GET,
+  POST,
+  HEAD,
+  PUT,
+  DELETE,
+  PATCH;
 
-    Method() {
-    }
+  Method() {
+  }
 }
