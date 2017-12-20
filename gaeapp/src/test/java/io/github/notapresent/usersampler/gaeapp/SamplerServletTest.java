@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import com.google.inject.Provider;
 import io.github.notapresent.usersampler.common.sampling.Orchestrator;
+import io.github.notapresent.usersampler.gaeapp.servlets.SamplerServlet;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import javax.servlet.http.HttpServletRequest;

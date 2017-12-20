@@ -1,6 +1,8 @@
 package io.github.notapresent.usersampler.gaeapp;
 
 import com.googlecode.objectify.ObjectifyFilter;
+import io.github.notapresent.usersampler.gaeapp.servlets.SamplerServlet;
+import io.github.notapresent.usersampler.gaeapp.servlets.SysinfoServlet;
 
 class ServletModule extends com.google.inject.servlet.ServletModule {
 

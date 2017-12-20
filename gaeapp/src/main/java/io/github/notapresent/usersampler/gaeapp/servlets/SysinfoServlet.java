@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler.gaeapp;
+package io.github.notapresent.usersampler.gaeapp.servlets;
 
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.inject.Singleton;

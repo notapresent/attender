@@ -1,4 +1,4 @@
-package io.github.notapresent.usersampler.gaeapp;
+package io.github.notapresent.usersampler.gaeapp.storage;
 
 import static java.time.ZoneOffset.UTC;
 import static org.junit.Assert.assertEquals;
