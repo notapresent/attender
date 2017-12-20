@@ -7,14 +7,14 @@ import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.cmd.Query;
 import io.github.notapresent.usersampler.common.sampling.AggregateSample;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
-import io.github.notapresent.usersampler.common.storage.SampleStorage;
+import io.github.notapresent.usersampler.common.storage.HotStorage;
 import io.github.notapresent.usersampler.common.storage.Tube;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 
-public class OfyStorage implements SampleStorage {
+public class OfyStorage implements HotStorage {
 
   public static void registerEntities() {
     ObjectifyService.factory().getTranslators().add(new InstantTranslatorFactory());

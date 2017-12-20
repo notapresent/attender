@@ -4,7 +4,7 @@ import io.github.notapresent.usersampler.common.sampling.AggregateSample;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 import java.time.LocalDate;
 
-public interface SampleStorage {
+public interface HotStorage {
 
   Long put(Tube tube);
 

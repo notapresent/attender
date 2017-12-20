@@ -20,7 +20,7 @@ import io.github.notapresent.usersampler.common.sampling.SampleStatus;
 import io.github.notapresent.usersampler.common.sampling.Sampler;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
-import io.github.notapresent.usersampler.common.storage.SampleStorage;
+import io.github.notapresent.usersampler.common.storage.HotStorage;
 import io.github.notapresent.usersampler.gaeapp.http.UrlFetchSession;
 import io.github.notapresent.usersampler.gaeapp.storage.OfyStorage;
 import io.github.notapresent.usersampler.gaeapp.storage.OfyTubeFactory;
@@ -45,7 +45,7 @@ public class OrchestratorIntegrationTest {
 
   private static Orchestrator makeOrchestrator(
       SiteRegistry registry,
-      SampleStorage storage) {
+      HotStorage storage) {
     RequestMultiplexer muxer = new RetryingSinglePlexer(
         new UrlFetchSession(URLFetchServiceFactory.getURLFetchService())
     );
@@ -77,7 +77,7 @@ public class OrchestratorIntegrationTest {
   @Test
   public void itShouldCreateOneSamplePerAdapter() {
     SiteRegistry registry = new SiteRegistry();
-    SampleStorage storage = new OfyStorage();
+    HotStorage storage = new OfyStorage();
     Instant now = Instant.now();
 
     Orchestrator orchestrator = makeOrchestrator(registry, storage);

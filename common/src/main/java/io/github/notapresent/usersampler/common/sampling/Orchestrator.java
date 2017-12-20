@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
-import io.github.notapresent.usersampler.common.storage.SampleStorage;
+import io.github.notapresent.usersampler.common.storage.HotStorage;
 import io.github.notapresent.usersampler.common.storage.Tube;
 import io.github.notapresent.usersampler.common.storage.TubeFactory;
 import java.time.Instant;
@@ -13,14 +13,14 @@ import java.util.Map;
 
 public class Orchestrator {
 
-  private final SampleStorage storage;
+  private final HotStorage storage;
   private final Sampler sampler;
   private final SiteRegistry siteRegistry;
   private final Provider<Instant> timeProvider;
   private final TubeFactory tubeFactory;
 
   @Inject
-  public Orchestrator(SampleStorage storage, Sampler sampler, SiteRegistry registry,
+  public Orchestrator(HotStorage storage, Sampler sampler, SiteRegistry registry,
       Provider<Instant> timeProvider, TubeFactory tubeFactory) {
     this.storage = storage;
     this.sampler = sampler;

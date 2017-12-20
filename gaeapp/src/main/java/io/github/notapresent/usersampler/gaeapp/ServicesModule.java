@@ -13,7 +13,7 @@ import io.github.notapresent.usersampler.common.http.Session;
 import io.github.notapresent.usersampler.common.sampling.Orchestrator;
 import io.github.notapresent.usersampler.common.sampling.Sampler;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
-import io.github.notapresent.usersampler.common.storage.SampleStorage;
+import io.github.notapresent.usersampler.common.storage.HotStorage;
 import io.github.notapresent.usersampler.common.storage.TubeFactory;
 import io.github.notapresent.usersampler.gaeapp.http.UrlFetchCookieManager;
 import io.github.notapresent.usersampler.gaeapp.http.UrlFetchSession;
@@ -38,7 +38,7 @@ class ServicesModule extends AbstractModule {
     bind(RequestMultiplexer.class).to(RetryingSinglePlexer.class);
     bind(CookieHandler.class).to(UrlFetchCookieManager.class);
     bind(Orchestrator.class);
-    bind(SampleStorage.class).to(OfyStorage.class);
+    bind(HotStorage.class).to(OfyStorage.class);
     bind(SiteRegistry.class).in(Singleton.class);
   }
 

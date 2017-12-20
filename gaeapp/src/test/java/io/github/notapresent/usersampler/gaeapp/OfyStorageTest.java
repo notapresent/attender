@@ -15,7 +15,7 @@ import com.googlecode.objectify.util.Closeable;
 import io.github.notapresent.usersampler.common.sampling.Sample;
 import io.github.notapresent.usersampler.common.sampling.SampleStatus;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
-import io.github.notapresent.usersampler.common.storage.SampleStorage;
+import io.github.notapresent.usersampler.common.storage.HotStorage;
 import io.github.notapresent.usersampler.common.storage.Tube;
 import io.github.notapresent.usersampler.gaeapp.storage.OfyStorage;
 import io.github.notapresent.usersampler.gaeapp.storage.OfyTube;
@@ -40,7 +40,7 @@ public class OfyStorageTest {
   );
   private final Instant now = Instant.now();
   private final LocalDate today = LocalDateTime.ofInstant(now, UTC).toLocalDate();
-  private SampleStorage storage;
+  private HotStorage storage;
   private Closeable ofySession;
   @Mock
   private SiteAdapter site;
