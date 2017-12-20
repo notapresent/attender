@@ -73,7 +73,6 @@ public class OfyTube implements SampleTube {
     void onLoad() {
         sample = new Sample(null, SamplePayloadCompactor.inflate(pl));
         this.siteId = this.parent.getName();
-        System.out.println("Set siteId to" + siteId);
     }
 }
 

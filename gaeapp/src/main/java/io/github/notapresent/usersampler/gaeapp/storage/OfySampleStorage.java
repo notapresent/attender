@@ -78,7 +78,6 @@ public class OfySampleStorage implements SampleStorage {
 
     private Query<OfyTube> querySamplesForSiteByDay(SiteAdapter site, LocalDate day) {
         Key<Site> ancestor = siteKey(site);
-        System.out.println("Querying with ancestor " + ancestor);
         LocalDateTime dayStart = day.atStartOfDay();
         LocalDateTime nextDayStart = dayStart.plusDays(1);
 
