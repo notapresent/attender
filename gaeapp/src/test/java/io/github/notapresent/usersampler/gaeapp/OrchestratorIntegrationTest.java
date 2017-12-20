@@ -4,15 +4,16 @@ import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalURLFetchServiceTestConfig;
-import com.google.inject.Provider;
-import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.util.Closeable;
 import io.github.notapresent.usersampler.common.HTTP.RequestFactory;
 import io.github.notapresent.usersampler.common.HTTP.RequestMultiplexer;
 import io.github.notapresent.usersampler.common.HTTP.RetryingSinglePlexer;
 import io.github.notapresent.usersampler.common.IntegrationTest;
-import io.github.notapresent.usersampler.common.sampling.*;
+import io.github.notapresent.usersampler.common.sampling.Orchestrator;
+import io.github.notapresent.usersampler.common.sampling.Sample;
+import io.github.notapresent.usersampler.common.sampling.SampleStatus;
+import io.github.notapresent.usersampler.common.sampling.Sampler;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
 import io.github.notapresent.usersampler.common.storage.SampleStorage;
@@ -26,7 +27,6 @@ import org.junit.experimental.categories.Category;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 import static java.time.ZoneOffset.UTC;
 import static org.junit.Assert.assertEquals;

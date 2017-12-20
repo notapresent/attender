@@ -1,21 +1,16 @@
 package io.github.notapresent.usersampler.gaeapp.storage;
 
-import com.google.inject.Inject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.cmd.Query;
 import io.github.notapresent.usersampler.common.sampling.AggregateSample;
-import io.github.notapresent.usersampler.common.sampling.Sample;
+import io.github.notapresent.usersampler.common.site.SiteAdapter;
 import io.github.notapresent.usersampler.common.storage.SampleStorage;
 import io.github.notapresent.usersampler.common.storage.Tube;
-import io.github.notapresent.usersampler.common.site.SiteAdapter;
-import io.github.notapresent.usersampler.common.site.SiteRegistry;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.stream.StreamSupport;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 

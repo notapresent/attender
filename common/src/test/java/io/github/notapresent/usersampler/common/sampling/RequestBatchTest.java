@@ -1,5 +1,3 @@
 package io.github.notapresent.usersampler.common.sampling;
 
-class RequestBatchTest {
-    // TODO
-}
+class RequestBatchTest {}

@@ -1,17 +1,14 @@
 package io.github.notapresent.usersampler.common.sampling;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import io.github.notapresent.usersampler.common.HTTP.*;
 import io.github.notapresent.usersampler.common.site.FatalSiteError;
 import io.github.notapresent.usersampler.common.site.RetryableSiteError;
 import io.github.notapresent.usersampler.common.site.SiteAdapter;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
 
 
 public class Sampler {

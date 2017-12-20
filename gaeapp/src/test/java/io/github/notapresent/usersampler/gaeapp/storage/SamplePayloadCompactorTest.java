@@ -11,7 +11,8 @@ import java.util.Map;
 
 import static io.github.notapresent.usersampler.gaeapp.storage.SamplePayloadCompactor.deflate;
 import static io.github.notapresent.usersampler.gaeapp.storage.SamplePayloadCompactor.inflate;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class SamplePayloadCompactorTest {
 
