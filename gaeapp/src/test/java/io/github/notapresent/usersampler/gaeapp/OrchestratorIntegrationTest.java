@@ -26,8 +26,12 @@ import io.github.notapresent.usersampler.gaeapp.storage.OfyStorage;
 import io.github.notapresent.usersampler.gaeapp.storage.OfyTubeFactory;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -59,6 +63,12 @@ public class OrchestratorIntegrationTest {
         Instant::now,
         new OfyTubeFactory()
     );
+  }
+
+  @BeforeClass
+  public static void setUpClass() {
+    Logger.getLogger("com.google.appengine.api.datastore.dev.LocalDatastoreService")
+            .setLevel(Level.WARNING);
   }
 
   @Before
