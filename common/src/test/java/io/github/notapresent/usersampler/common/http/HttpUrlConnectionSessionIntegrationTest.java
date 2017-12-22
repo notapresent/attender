@@ -26,7 +26,7 @@ public class HttpUrlConnectionSessionIntegrationTest {
     response = session.send(request);
 
     assertThat(response.getContentString())
-        .contains("httpbin(1): http Request &amp; Response Service");
+        .contains("httpbin(1): HTTP Client Testing Service");
   }
 
   @Test
