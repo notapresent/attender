@@ -1,12 +1,16 @@
 package io.github.notapresent.usersampler.common.http;
 
+import static java.net.HttpURLConnection.HTTP_MOVED_PERM;
+import static java.net.HttpURLConnection.HTTP_MOVED_TEMP;
+import static java.net.HttpURLConnection.HTTP_SEE_OTHER;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
 class Util {
 
   public static boolean isRedirect(int code) {
-    return code >= 301 && code <= 303;
+    return code == HTTP_MOVED_PERM || code == HTTP_MOVED_TEMP || code == HTTP_SEE_OTHER;
   }
 
   public static String absoluteUrl(String base, String url) {
