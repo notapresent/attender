@@ -1,8 +1,6 @@
 package io.github.notapresent.usersampler.common.http;
 
 import com.google.common.collect.ImmutableMap;
-import edu.emory.mathcs.backport.java.util.Arrays;
-import io.github.notapresent.usersampler.common.sampling.UserStatus;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +27,6 @@ public class SessionTest {
 
     private SessionStub session;
     private CookieManager cookieHandler;
-    private CookieStore cookieJar;
 
     private Request request = new Request(url);
     private Response okResponse = new Response(200, ("ok").getBytes(), url);
@@ -39,7 +36,7 @@ public class SessionTest {
         public LinkedList<Request> requests = new LinkedList<>();
 
         @Override
-        protected Response doSend(Request request) throws IOException {
+        protected Response doSend(Request request) {
             requests.add(request);
             try {
                 return responses.pop();
@@ -52,7 +49,7 @@ public class SessionTest {
     @Before
     public void setUp() throws URISyntaxException {
         cookieHandler = new CookieManager();
-        cookieJar = cookieHandler.getCookieStore();
+        CookieStore cookieJar = cookieHandler.getCookieStore();
         session = new SessionStub();
         session.setCookieManager(cookieHandler);
         uri = new URI(url);

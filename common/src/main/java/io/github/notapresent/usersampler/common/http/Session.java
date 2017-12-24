@@ -1,6 +1,5 @@
 package io.github.notapresent.usersampler.common.http;
 
-import com.google.common.collect.ImmutableMap;
 import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.MalformedURLException;

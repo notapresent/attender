@@ -14,7 +14,7 @@ class SamplePayloadCompactor {
     return payload.entrySet().stream()
         .collect(Collectors.toMap(
             Map.Entry::getValue,
-            (e) -> new ArrayList<String>(Collections.singletonList(e.getKey())),
+            (e) -> new ArrayList<>(Collections.singletonList(e.getKey())),
             (left, right) -> {
               left.addAll(right);
               return left;

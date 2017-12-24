@@ -13,7 +13,6 @@ import io.github.notapresent.usersampler.common.http.Request;
 import io.github.notapresent.usersampler.common.http.Response;
 import io.github.notapresent.usersampler.common.http.Session;
 import java.io.IOException;
-import java.net.CookieHandler;
 
 public class UrlFetchSession extends Session {
 

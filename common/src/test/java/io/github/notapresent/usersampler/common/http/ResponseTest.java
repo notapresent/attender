@@ -4,7 +4,6 @@ import static java.net.HttpURLConnection.HTTP_OK;
 import static org.junit.Assert.*;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.HashMap;
 import java.util.Map;
 import org.junit.Test;
 
