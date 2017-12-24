@@ -9,6 +9,7 @@ import com.google.appengine.tools.development.testing.LocalURLFetchServiceTestCo
 import io.github.notapresent.usersampler.common.http.Request;
 import io.github.notapresent.usersampler.common.http.Response;
 import io.github.notapresent.usersampler.common.IntegrationTest;
+import java.net.CookieManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +21,7 @@ public class UrlFetchSessionIntegrationTest {
   private static final String HTTPBIN = "http://httpbin.org";
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(new LocalURLFetchServiceTestConfig());
-  private final UrlFetchCookieManager cookieManager = new UrlFetchCookieManager();
+  private final CookieManager cookieManager = new CookieManager();
   private UrlFetchSession session;
   private Request request;
   private Response response;
@@ -29,7 +30,7 @@ public class UrlFetchSessionIntegrationTest {
   public void setUp() {
     helper.setUp();
     session = new UrlFetchSession(
-        URLFetchServiceFactory.getURLFetchService(), cookieManager);
+        URLFetchServiceFactory.getURLFetchService());
   }
 
   @After
@@ -66,6 +67,7 @@ public class UrlFetchSessionIntegrationTest {
   public void itShouldRetainCookiesAfterRedirect() {
     request = new Request(HTTPBIN + "/cookies/set?k2=v2&k1=v1");
     request.setRedirectHandlingPolicy(Request.RedirectPolicy.FOLLOW);
+    session.setCookieManager(cookieManager);
     response = session.send(request);
     String body = response.getContentString();
     assertThat(body).containsMatch("\"k1\":\\s+\"v1\"");

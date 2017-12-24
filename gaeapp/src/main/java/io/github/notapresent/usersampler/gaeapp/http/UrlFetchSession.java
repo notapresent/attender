@@ -19,39 +19,18 @@ public class UrlFetchSession extends Session {
 
   private final URLFetchService urlFetch;
 
-  private UrlFetchCookieManager cookieManager = null;
-
+  @Inject
   public UrlFetchSession(URLFetchService urlFetch) {
     this.urlFetch = urlFetch;
   }
 
-  @Inject
-  public UrlFetchSession(URLFetchService urlFetch, CookieHandler cookieManager) {
-    this.urlFetch = urlFetch;
-    this.cookieManager = (UrlFetchCookieManager) cookieManager;
-  }
-
   protected Response doSend(Request request) throws HttpError {
     HTTPRequest req = createUrlFetchRequest(request);
-
-    if (cookieManager != null) {
-      cookieManager.loadToRequest(req);
-    }
-
     try {
       HTTPResponse httpResponse = urlFetch.fetch(req);
-      if (cookieManager != null) {
-        cookieManager.saveFromResponse(req.getURL(), httpResponse);
-      }
-
       return createResponse(httpResponse, request.getUrl());
     } catch (IOException | ApiProxy.ApiProxyException e) {
       throw new HttpError(e);
     }
-  }
-
-  @Override
-  public void setCookieManager(CookieHandler cookieManager) {
-    this.cookieManager = (UrlFetchCookieManager) cookieManager;
   }
 }

@@ -15,11 +15,11 @@ import io.github.notapresent.usersampler.common.sampling.Sampler;
 import io.github.notapresent.usersampler.common.site.SiteRegistry;
 import io.github.notapresent.usersampler.common.storage.HotStorage;
 import io.github.notapresent.usersampler.common.storage.TubeFactory;
-import io.github.notapresent.usersampler.gaeapp.http.UrlFetchCookieManager;
 import io.github.notapresent.usersampler.gaeapp.http.UrlFetchSession;
 import io.github.notapresent.usersampler.gaeapp.storage.OfyStorage;
 import io.github.notapresent.usersampler.gaeapp.storage.OfyTubeFactory;
 import java.net.CookieHandler;
+import java.net.CookieManager;
 import java.time.Instant;
 
 class ServicesModule extends AbstractModule {
@@ -35,7 +35,7 @@ class ServicesModule extends AbstractModule {
     bind(TubeFactory.class).to(OfyTubeFactory.class);
 
     bind(RequestMultiplexer.class).to(RetryingSinglePlexer.class);
-    bind(CookieHandler.class).to(UrlFetchCookieManager.class);
+    bind(CookieHandler.class).to(CookieManager.class);
     bind(Orchestrator.class);
     bind(HotStorage.class).to(OfyStorage.class);
     bind(SiteRegistry.class).in(Singleton.class);

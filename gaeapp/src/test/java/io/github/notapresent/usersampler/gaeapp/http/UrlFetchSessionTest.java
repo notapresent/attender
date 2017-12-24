@@ -17,6 +17,7 @@ import io.github.notapresent.usersampler.common.http.Request;
 import io.github.notapresent.usersampler.common.http.Response;
 import java.io.IOException;
 import java.net.CookieHandler;
+import java.net.CookieManager;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -151,7 +152,7 @@ public class UrlFetchSessionTest {
 
   @Test
   public void itShouldRetainCookies() throws IOException {
-    CookieHandler cookieManager = new UrlFetchCookieManager();
+    CookieHandler cookieManager = new CookieManager();
     session.setCookieManager(cookieManager);
     ArgumentCaptor<HTTPRequest> captor = ArgumentCaptor
         .forClass(HTTPRequest.class);
